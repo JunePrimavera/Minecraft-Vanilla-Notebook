@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.event.KeyEvent;
+
 import static com.jwg.coord_book.CoordBook.BOOK_ICON;
 
 
