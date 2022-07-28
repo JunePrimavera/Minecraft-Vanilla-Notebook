@@ -168,10 +168,10 @@ public class menuScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         int code = getExtendedKeyCodeForChar(keyCode);
         char key = (char) code;
-        String keystring = String.valueOf(key);
-        System.out.println(code);
+        String keystring = String.valueOf(key).toLowerCase();
         ++o;
         if (code == 0) {
+            keystring = "";
             nextCharacterSpecial = true;
             o = 1;
         } else if (code == 16777475){
@@ -187,11 +187,23 @@ public class menuScreen extends Screen {
                 }
             }
         }
-
         if (nextCharacterSpecial && o == 2) {
             keystring = keystring.toUpperCase(Locale.ROOT);
-
             nextCharacterSpecial = false;
+            keystring = switch (keystring) {
+                case "1" -> "!";
+                case "2" -> "\"";
+                case "3" -> "£";
+                case "4" -> "$";
+                case "5" -> "%";
+                case "6" -> "^";
+                case "7" -> "&";
+                case "8" -> "*";
+                case "9" -> "(";
+                case "0" -> ")";
+                case "'" -> "@";
+                default -> keystring;
+            };
         }
         StringBuilder fulldata = new StringBuilder();
         try {
