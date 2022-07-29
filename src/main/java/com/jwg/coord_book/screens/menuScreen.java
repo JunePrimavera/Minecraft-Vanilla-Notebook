@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
@@ -50,7 +51,7 @@ public class menuScreen extends Screen {
         this.contents = "";
         this.versionText = "";
         this.cachedPage = Collections.emptyList();
-        this.pageIndexText = ScreenTexts.EMPTY;
+        this.pageIndexText = ScreenTexts.SENTENCE_SEPARATOR;
         this.pageTurnSound = bl;
 
     }
@@ -111,7 +112,7 @@ public class menuScreen extends Screen {
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
         int i = (this.width - 192) / 2;
         this.drawTexture(matrices, i, 2, 0, 0, 192, 192);
-        this.pageIndexText = Text.translatable("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File("CoordinateBook/").list()).length), 1));
+        this.pageIndexText = new TranslatableText("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File("CoordinateBook/").list()).length), 1));
 
 
         drawStringWithShadow(matrices, this.textRenderer, String.valueOf(versionText), 2, this.height - 10, 16777215);
