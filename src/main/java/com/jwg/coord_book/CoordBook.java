@@ -1,9 +1,8 @@
 package com.jwg.coord_book;
 
 import com.jwg.coord_book.util.ensureFileStructureExists;
+import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +17,10 @@ public class CoordBook implements ModInitializer {
 
 
 	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
+
 	@Override
-	public void onInitialize(ModContainer mod) {
-		LOGGER.info("{} has started initializing!", mod.metadata().name());
+	public void onInitialize() {
+		LOGGER.info("{} has started initializing!", project);
 		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists("CoordinateBook/"));
 		File firstPage = new File("CoordinateBook/0.json");
 		try {
@@ -34,6 +34,6 @@ public class CoordBook implements ModInitializer {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		LOGGER.info("{} has finished initializing!", mod.metadata().name());
+		LOGGER.info("{} has finished initializing!", project);
 	}
 }

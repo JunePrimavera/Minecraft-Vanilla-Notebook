@@ -46,6 +46,6 @@ public abstract class TitleScreenMixin extends Screen implements BookScreen.Cont
 			//Code is run when the button is clicked
 			assert this.client != null;
 			this.client.setScreen(new menuScreen(this));
-		}, Text.translatable("jwg.button.bookmenu")));
+		}));
 	}
 }
