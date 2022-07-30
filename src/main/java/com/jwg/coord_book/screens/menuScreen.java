@@ -64,7 +64,7 @@ public class menuScreen extends Screen {
             this.client.setScreen(null);
         }));
         //Delete page button
-        this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
             if (page != 0) {
                 int oldpage = page;
                 goToPreviousPage();
