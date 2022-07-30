@@ -52,7 +52,7 @@ public class menuScreen extends Screen {
         this.cachedPage = Collections.emptyList();
         this.pageIndexText = ScreenTexts.EMPTY;
         this.pageTurnSound = bl;
-        pageLimit = pageLimit -2;
+        pageLimit = pageLimit -1;
 
     }
 
