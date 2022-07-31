@@ -2,6 +2,8 @@ package com.jwg.coord_book;
 
 import com.jwg.coord_book.util.ensureFileStructureExists;
 import com.jwg.coord_book.util.generateConfig;
+import com.jwg.coord_book.util.readConfig;
+import com.jwg.coord_book.util.resetConfig;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -15,7 +17,7 @@ public class CoordBook implements ModInitializer {
 	public static final boolean developerMode = true;
 	public static final String version = "0.3.1";
 	public static final String project = "Coordinate-Book";
-	public static final String pageLocation = "CoordinateBook";
+	public static String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
 
@@ -36,18 +38,22 @@ public class CoordBook implements ModInitializer {
 				NEEDS_SETUP = true;
 			}
 			else{
-				if (!new File("config/coordinate-book/config.cfg").createNewFile()) {
+				if (!new File("config/coordinate-book/config.cfg").exists()) {
 					NEEDS_SETUP = true;
-				} else {
-					LOGGER.info("Config exists, setup not required.");
 				}
+				boolean tmp = new File("config/coordinate-book/config.cfg").createNewFile();
 			}
 		} catch (IOException e) {
 			System.out.println(e);
 		}
-
 		if (NEEDS_SETUP) {
 			generateConfig.generate(0);
+			resetConfig.reset();
+		}
+		readConfig.read();
+
+		if (pageLocation != "CoordinateBook" && !new File(pageLocation).exists()) {
+			boolean tmp = new File(pageLocation).mkdirs();
 		}
 		LOGGER.info("{} has finished initializing!", mod.metadata().name());
 	}
