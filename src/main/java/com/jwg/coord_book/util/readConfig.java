@@ -27,17 +27,22 @@ public class readConfig {
             throw new RuntimeException(e);
         }
 
-
         try {
             pageLimit = Integer.parseInt(readCfg("pagelimi", 4));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-
         try {
             System.out.println(readCfg("startpag", 6));
             page = Integer.parseInt(readCfg("startpag", 6));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            System.out.println(readCfg("deletebutto", 8));
+            deletePageButtonShown = Boolean.parseBoolean(readCfg("deletebutto", 8));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
