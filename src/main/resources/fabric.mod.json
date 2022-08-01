@@ -23,7 +23,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "coord_book.mixins.json"
   ],
 
   "depends": {
