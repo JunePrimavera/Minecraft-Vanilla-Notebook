@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class CoordBook implements ModInitializer {
 	public static final boolean developerMode = false;
-	public static final String version = "0.4.0";
+	public static final String version = "1.0.0";
 	public static final String project = "Coordinate-Book";
 	public static String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
@@ -25,6 +25,7 @@ public class CoordBook implements ModInitializer {
 	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/cross.png");
 
 	public static boolean NEEDS_SETUP = false;
+
 	@Override
 	public void onInitialize(ModContainer mod) {
 		LOGGER.info("{} has started initializing!", mod.metadata().name());
@@ -32,6 +33,7 @@ public class CoordBook implements ModInitializer {
 		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"/"));
 		File firstPage = new File(pageLocation+"/0.jdat");
 		LOGGER.info("Page folder is \"{}\"", pageLocation);
+		boolean tmp = false;
 		try {
 			if (firstPage.createNewFile()){
 				LOGGER.info("Created first page of the book..");
@@ -41,7 +43,7 @@ public class CoordBook implements ModInitializer {
 				if (!new File("config/coordinate-book/config.cfg").exists()) {
 					NEEDS_SETUP = true;
 				}
-				boolean tmp = new File("config/coordinate-book/config.cfg").createNewFile();
+				tmp = new File("config/coordinate-book/config.cfg").createNewFile();
 			}
 		} catch (IOException e) {
 			System.out.println(e);
@@ -53,7 +55,10 @@ public class CoordBook implements ModInitializer {
 		readConfig.read();
 
 		if (!pageLocation.equals("CoordinateBook") && !new File(pageLocation).exists()) {
-			boolean tmp = new File(pageLocation).mkdirs();
+			tmp = new File(pageLocation).mkdirs();
+		}
+		if (tmp) {
+			LOGGER.info("Possible first time use! Thank you for using my mod!");
 		}
 		LOGGER.info("{} has finished initializing!", mod.metadata().name());
 	}
