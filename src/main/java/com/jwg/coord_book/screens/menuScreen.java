@@ -97,8 +97,8 @@ public class menuScreen extends Screen {
                 removePage(page);
             }, Text.translatable("jwg.button.close")));
         }
-        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width-175, this.height-215, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page;assert this.client != null;this.client.setScreen(this);}, Text.translatable("jwg.button.bookmark")));}
-        else {this.addDrawableChild(new TexturedButtonWidget(this.width-175, this.height-215, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1;this.client.setScreen(this);}, Text.translatable("jwg.button.bookmark")));}
+        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width-250, this.height-228, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page;assert this.client != null;this.client.setScreen(this);}, Text.translatable("jwg.button.bookmark")));}
+        else {this.addDrawableChild(new TexturedButtonWidget(this.width-250, this.height-228, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1;this.client.setScreen(this);}, Text.translatable("jwg.button.bookmark")));}
 
 
         this.addDrawableChild(new TexturedButtonWidget(this.width-275, this.height-231, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
