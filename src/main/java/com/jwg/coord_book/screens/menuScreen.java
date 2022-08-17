@@ -115,9 +115,14 @@ public class menuScreen extends Screen {
         //Marker button to take you to the bookmarked page
         this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
             if (page != bookmarkedpage && bookmarkedpage >= 0) {
-                page = bookmarkedpage;
-                assert this.client != null;
-                this.client.setScreen(this);
+                if (new File(pageLocation+"/"+bookmarkedpage+".jdat").exists()) {
+                    page = bookmarkedpage;
+                    assert this.client != null;
+                    this.client.setScreen(this);
+                } else {
+                    bookmarkedpage = -1;
+                }
+
             }
         }, Text.translatable("jwg.button.bookmark-marker")));
 
