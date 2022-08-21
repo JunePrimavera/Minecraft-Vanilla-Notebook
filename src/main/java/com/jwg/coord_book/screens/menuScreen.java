@@ -209,6 +209,38 @@ public class menuScreen extends Screen {
         }
         super.render(matrices, mouseX, mouseY, delta);
     }
+    public boolean handleTextClick(Style style) {
+        assert style != null;
+        ClickEvent clickEvent = style.getClickEvent();
+        if (clickEvent == null) {
+            return false;
+        } else if (clickEvent.getAction() == ClickEvent.Action.CHANGE_PAGE) {
+            String string = clickEvent.getValue();
+
+            try {
+                int i = Integer.parseInt(string) - 1;
+                return this.goToPage(i);
+            } catch (Exception var5) {
+                return false;
+            }
+        } else {
+            boolean bl = super.handleTextClick(style);
+            if (bl && clickEvent.getAction() == ClickEvent.Action.RUN_COMMAND) {
+                this.closeScreen();
+            }
+
+            return bl;
+        }
+    }
+
+    private boolean goToPage(int i) {
+        page = i;
+        this.client.setScreen(this);
+        return true;
+    }
+
+    public void closeScreen() { this.client.setScreen(null); }
+
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             Style style = this.getTextStyleAt(mouseX, mouseY);
@@ -326,12 +358,12 @@ public class menuScreen extends Screen {
                 Objects.requireNonNull(this.textRenderer);
                 int k = Math.min(128 / 9, this.cachedPage.size());
                 if (i <= 114) {
-                    Objects.requireNonNull(Objects.requireNonNull(this.client).textRenderer);
+                    Objects.requireNonNull(this.client.textRenderer);
                     if (j < 9 * k + k) {
                         Objects.requireNonNull(this.client.textRenderer);
                         int l = j / 9;
                         if (l >= 0 && l < this.cachedPage.size()) {
-                            OrderedText orderedText = this.cachedPage.get(l);
+                            OrderedText orderedText = (OrderedText)this.cachedPage.get(l);
                             return this.client.textRenderer.getTextHandler().getStyleAt(orderedText, i);
                         }
 
