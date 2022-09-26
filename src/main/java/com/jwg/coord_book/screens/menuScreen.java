@@ -4,6 +4,7 @@ import com.jwg.coord_book.CoordBook;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
@@ -12,6 +13,7 @@ import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.NarratorManager;
+import net.minecraft.client.util.SelectionManager;
 import net.minecraft.client.util.math.MatrixStack;
 
 import net.minecraft.text.*;
@@ -25,8 +27,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static com.jwg.coord_book.CoordBook.*;
+import static java.awt.event.KeyEvent.KEY_PRESSED;
 import static java.awt.event.KeyEvent.getExtendedKeyCodeForChar;
 
 @Environment(EnvType.CLIENT)
@@ -43,6 +47,7 @@ public class menuScreen extends Screen {
     public static boolean deletePageButtonShown = true;
     private String versionText;
     private String contents;
+    private SelectionManager selectionManager;
 
     public menuScreen() {
         this(true);
@@ -65,7 +70,7 @@ public class menuScreen extends Screen {
     protected void removePage(int rmpage) {
         int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
         int pagesToRename = files - rmpage;
-        boolean tmp;
+        boolean tmp = false;
         if (rmpage == 0) { LOGGER.warn("Can't delete first page"); }
         else if (rmpage == files-1) { goToPreviousPage(); tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete(); }
         else {
@@ -87,6 +92,14 @@ public class menuScreen extends Screen {
         } catch (IOException e) { e.printStackTrace(); }
     }
     protected void addButtons() {
+        //Make selection manager
+        this.selectionManager = new SelectionManager(() -> {
+            return this.contents = "";
+        }, (text) -> {
+            this.contents = "";
+        }, SelectionManager.makeClipboardGetter(this.client), SelectionManager.makeClipboardSetter(this.client), (text) -> {
+            return this.client.textRenderer.getWidth(text) <= 90;
+        });
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> {
             assert this.client != null;
@@ -102,7 +115,7 @@ public class menuScreen extends Screen {
 
         //Bookmark button
         //The placement is temporary
-        //In 1.2.0 I will redo all of the GUI bits, so it's a bit nicer
+        //In the future I will redo all of the GUI bits, so it's a bit nicer
         //I feel like the GUI currently is not great
         if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2-45, 12, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
         else {this.addDrawableChild(new TexturedButtonWidget(this.width/2-45, 12, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
@@ -251,76 +264,12 @@ public class menuScreen extends Screen {
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
-    int o = 0;
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        int code = getExtendedKeyCodeForChar(keyCode);
-        char key = (char) code;
-        String keystring = String.valueOf(key).toLowerCase();
-        if (!deletePageButtonShown) {
-            if (code == 16777473) {
-                keystring = "";
-                removePage(page);
-            }
-        }
+    char ltchr;
 
-        if (developerMode) {
-            System.out.println(code + "\n" + key);
-        }
-
-        keystring = switch (code) {
-            case 192, 16777473, 16777559, 16777563, 16777481, 16777479, 16777547 -> "";
-            case 16777549 -> "-";
-            default -> keystring = keystring;
-        };
-        ++o;
-        if (code == 0) {
-            keystring = "";
-            nextCharacterSpecial = true;
-            o = 1;
-        } else if (code == 16777475 || code == 16777547){
-            keystring = "";
-            if (!Objects.equals(this.contents, "")) {
-                this.contents = this.contents.substring(0, this.contents.length() - 1);
-                try {
-                    FileWriter updatePage = new FileWriter(pageLocation+"/" + page + ".jdat");
-                    updatePage.write(this.contents);
-                    updatePage.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        if (nextCharacterSpecial && o == 2) {
-            keystring = keystring.toUpperCase(Locale.ROOT);
-            nextCharacterSpecial = false;
-            //Avert your eyes from this awful code
-            //If it works, don't touch it. And it does work, kinda...
-            //Needs improvement but it works-ish.
-            keystring = switch (keystring) {
-                case "1" -> "!";
-                case "2" -> "\"";
-                case "3" -> "£";
-                case "4" -> "$";
-                case "5" -> "%";
-                case "6" -> "^";
-                case "7" -> "&";
-                case "8" -> "*";
-                case "9" -> "(";
-                case "0" -> ")";
-                case "-" -> "_";
-                case "=" -> "+";
-                case "[" -> "{";
-                case "]" -> "}";
-                case ";" -> ":";
-                case "#" -> "~";
-                case "\\" -> "|";
-                case "," -> "<";
-                case "." -> ">";
-                case "/" -> "?";
-                case "'" -> "@";
-                default -> keystring;
-            };
-        }
+    public boolean charTyped(char chr, int modifiers) {
+        ltchr = chr;
+        this.selectionManager.insert(chr);
+        String keystring = String.valueOf(ltchr);
         StringBuilder fulldata = new StringBuilder();
         try {
             Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
@@ -345,7 +294,22 @@ public class menuScreen extends Screen {
             e.printStackTrace();
         }
         Objects.requireNonNull(this.client).setScreen(this);
-        return false;
+
+
+        return true;
+    }
+    int o = 0;
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+
+        if (keyCode == 265) {
+            this.selectionManager.putCursorAtEnd();
+            return true;
+        }
+        else {
+            this.selectionManager.putCursorAtEnd();
+            return true;
+        }
+
     }
     @Nullable
     public Style getTextStyleAt(double x, double y) {
