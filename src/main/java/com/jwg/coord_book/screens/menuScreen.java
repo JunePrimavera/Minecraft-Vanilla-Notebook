@@ -26,7 +26,6 @@ import static com.jwg.coord_book.CoordBook.*;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
-
     public static int page = 0;
     public static int bookmarkedpage = 0;
     public static int pageLimit = -1;
@@ -69,9 +68,6 @@ public class menuScreen extends Screen {
                 tmp = new File(pageLocation + "/" + l + ".jdat").renameTo(new File(pageLocation + "/" + m + ".jdat"));
             }
         }
-
-
-
         if (developerMode) { LOGGER.info(String.valueOf(tmp)); }
     }
     private void writeBookmark() {
@@ -185,18 +181,18 @@ public class menuScreen extends Screen {
         }
         super.render(matrices, mouseX, mouseY, delta);
     }
-    public void renderSideBar(MatrixStack matrices, int mouseX, int mouseY, float delta){
+    public void renderSideBar(MatrixStack matrices2, int mouseX, int mouseY, float delta){
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.enableTexture();
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
         int i = (this.width - -100) / 2;
 
-        this.drawTexture(matrices, i, 2, 0, 0, 34, 180);
-        super.render(matrices, mouseX, mouseY, delta);
+        this.drawTexture(matrices2, i, 2, 0, 0, 34, 180);
+        super.render(matrices2, mouseX, mouseY, delta);
     }
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         MatrixStack matrices2 = matrices;
-        LOGGER.info(String.valueOf(matrices2));
         this.renderBackground(matrices);
         renderBookText(matrices, mouseX, mouseY, delta);
         renderSideBar(matrices2, mouseX, mouseY, delta);
