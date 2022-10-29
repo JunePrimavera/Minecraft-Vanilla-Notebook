@@ -4,7 +4,7 @@ This is a small, vanilla styled mod that lets you write notes, or coordinates. T
 
 It uses the same GUI as a traditional book, but it's completely client-side, for each coordinate you can keep notes, to keep track of why you were there.
 
-If you die, you keep it in your menu, and it's not individual per each world; however you can still access it if you aren't in the same world. 
+If you die, you keep it in your menu, and it's not individual per each world; you can still access it if you aren't in the same world. 
 
 While this is supposed to be used for coordinates, you can write whatever you want in this.
 
