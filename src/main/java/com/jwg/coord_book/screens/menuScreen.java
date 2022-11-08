@@ -39,10 +39,13 @@ public class menuScreen extends Screen {
     private String contents;
     private SelectionManager selectionManager;
     private int loc;
+
     public menuScreen() {
         this(true);
     }
+
     char ltchr;
+
     private menuScreen(boolean bl) {
         super(NarratorManager.EMPTY);
         this.contents = "";
@@ -52,23 +55,26 @@ public class menuScreen extends Screen {
         this.pageTurnSound = bl;
         this.loc = 0;
         this.ltchr = 0;
-        pageLimit = pageLimit -1;
+        pageLimit = pageLimit - 1;
     }
 
-    protected void init() { assert this.client != null; this.client.keyboard.setRepeatEvents(true); this.addButtons(); selectionMgr(); }
+    protected void init() {
+        assert this.client != null;
+        this.client.keyboard.setRepeatEvents(true);
+        this.addButtons();
+        selectionMgr();
+    }
+
+    //To fix, currently just clears the page
     protected void removePage(int rmpage) {
-        int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
-        int pagesToRename = files - rmpage;
+        //int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
+
         boolean tmp = false;
-        if (rmpage == 0) { LOGGER.warn("Can't delete first page"); }
-        else if (rmpage == files-1) { goToPreviousPage(); tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete(); }
-        else {
-            for (int i = 1; i < pagesToRename; i++) {
-                int l = rmpage+i; int m = l-1;
-                tmp = new File(pageLocation + "/" + l + ".jdat").renameTo(new File(pageLocation + "/" + m + ".jdat"));
-            }
-        }
-        if (developerMode) { LOGGER.info(String.valueOf(tmp)); }
+        if (rmpage == 0) LOGGER.warn("Can't delete first page");
+
+        tmp = new File(pageLocation + "/" + rmpage + ".jdat").delete();
+        try { tmp = new File(pageLocation + "/" + rmpage + ".jdat").createNewFile();
+        } catch (IOException e) { throw new RuntimeException(e); }
     }
     private void writeBookmark() {
         try {
@@ -82,10 +88,17 @@ public class menuScreen extends Screen {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> { assert this.client != null; this.client.setScreen(null); }));
 
         //Delete page button
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +91, 20, 6, 6, 0, 0, 0, DELETE_ICON, 6, 12, (button) -> removePage(page), Text.translatable("jwg.button.close")));
-
-        //Marker button to take you to the bookmarked page
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 20, 17, 17, 0, 0, 17, DELETE_ICON, 17, 34, (button) -> removePage(page), Text.translatable("jwg.button.close")));
+        //Bookmark button
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 38, 17, 17, 0, 0, 17, BOOKMARK_ICON, 17, 34, (button) -> page = bookmarkedpage, Text.translatable("jwg.button.bookmark")));
+        //Export button
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 55, 17, 17, 0, 0, 17, EXPORT_ICON, 17, 34, (button) -> page = bookmarkedpage, Text.translatable("jwg.button.export")));
+        //Import button
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 72, 17, 17, 0, 0, 17, IMPORT_ICON, 17, 34, (button) -> page = bookmarkedpage, Text.translatable("jwg.button.import")));
+        //Bookmark button
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> { bookmarkedpage = page; writeBookmark(); }, Text.translatable("jwg.button.bookmark-marker")));
+        //Go to bookmark page button
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 38, 17, 17, 0, 0, 17, BOOKMARK_ICON, 17, 34, (button) -> {
             if (page != bookmarkedpage && bookmarkedpage >= 0) {
                 if (new File(pageLocation+"/"+bookmarkedpage+".jdat").exists()) { page = bookmarkedpage; assert this.client != null; this.client.setScreen(this);
                 } else { bookmarkedpage = -1; }
