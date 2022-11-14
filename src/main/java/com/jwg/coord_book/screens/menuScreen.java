@@ -67,14 +67,18 @@ public class menuScreen extends Screen {
 
     //To fix, currently just clears the page
     protected void removePage(int rmpage) {
-        //int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
-
+        int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
+        int pagesToRename = files - rmpage;
         boolean tmp = false;
-        if (rmpage == 0) LOGGER.warn("Can't delete first page");
-
-        tmp = new File(pageLocation + "/" + rmpage + ".jdat").delete();
-        try { tmp = new File(pageLocation + "/" + rmpage + ".jdat").createNewFile();
-        } catch (IOException e) { throw new RuntimeException(e); }
+        if (rmpage == 0) { LOGGER.warn("Can't delete first page"); }
+        else if (rmpage == files-1) { goToPreviousPage(); tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete(); }
+        else {
+            for (int i = 1; i < pagesToRename; i++) {
+                int l = rmpage+i; int m = l-1;
+                tmp = new File(pageLocation + "/" + l + ".jdat").renameTo(new File(pageLocation + "/" + m + ".jdat"));
+            }
+        }
+        if (developerMode) { LOGGER.info(String.valueOf(tmp)); }
     }
     private void writeBookmark() {
         try {
