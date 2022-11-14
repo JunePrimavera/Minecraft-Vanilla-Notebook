@@ -1,8 +1,6 @@
 package com.jwg.coord_book.screens;
 
 import com.jwg.coord_book.CoordBook;
-import com.jwg.coord_book.bookload.exportBook;
-import com.jwg.coord_book.bookload.importBook;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -93,16 +91,7 @@ public class menuScreen extends Screen {
         this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 20, 17, 17, 0, 0, 17, DELETE_ICON, 17, 34, (button) -> removePage(page), Text.translatable("jwg.button.close")));
         //Bookmark button
         this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 38, 17, 17, 0, 0, 17, BOOKMARK_ICON, 17, 34, (button) -> page = bookmarkedpage, Text.translatable("jwg.button.bookmark")));
-        //Export button
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 55, 17, 17, 0, 0, 17, EXPORT_ICON, 17, 34, (button) -> exportBook.export(), Text.translatable("jwg.button.export")));
-        //Import button
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 72, 17, 17, 0, 0, 17, IMPORT_ICON, 17, 34, (button) -> {
-            try {
-                importBook.imprt();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }, Text.translatable("jwg.button.import")));
+
         //Bookmark button
         this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> { bookmarkedpage = page; writeBookmark(); }, Text.translatable("jwg.button.bookmark-marker")));
         //Go to bookmark page button
@@ -130,6 +119,7 @@ public class menuScreen extends Screen {
     }
     //I have no clue what this does but i think it can do what i want it to
     //It did not but if anyone wants to fix the rest of issue #22 be my guest
+    //I will try fix this by 1.4.0.... maybe.... probably not but, hey, we can hope, right?
     protected void selectionMgr() {
         assert this.client != null;
         this.selectionManager = new SelectionManager(() -> this.contents, (text) -> this.contents = text, SelectionManager.makeClipboardGetter(this.client), SelectionManager.makeClipboardSetter(this.client), (text) -> this.client.textRenderer.getWidth(text) <= this.loc);
