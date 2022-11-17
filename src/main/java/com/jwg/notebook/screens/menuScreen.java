@@ -100,8 +100,8 @@ public class menuScreen extends Screen {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> { assert this.client != null; this.client.setScreen(null); }));
 
         //Sidebar buttons
-        this.addDrawableChild(sidebar.addSidebarButton(0, DELETE_ICON, this, "delete"));
-        this.addDrawableChild(sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark"));
+        this.addDrawableChild(sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8));
+        this.addDrawableChild(sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark", 8));
 
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
@@ -109,7 +109,7 @@ public class menuScreen extends Screen {
             if (page != pageLimit || pageLimit < 0) { if (page >= pageLimit && pageLimit > 0) { page = pageLimit; }this.goToNextPage(); assert this.client != null; this.client.setScreen(this); }
         }, this.pageTurnSound));
         this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (button) -> {
-            this.goToPreviousPage();
+            goToPreviousPage();
             assert this.client != null;
             this.client.setScreen(this);
         }, this.pageTurnSound));
