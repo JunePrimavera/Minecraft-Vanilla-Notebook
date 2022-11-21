@@ -15,8 +15,8 @@ import java.io.IOException;
 import static com.jwg.notebook.keybinds.OpenBook.openBookKeybindRegister;
 
 public class Notebook implements ModInitializer {
-	public static final boolean developerMode = true;
-	public static final String version = "2.0.0-Alpha";
+	public static final boolean developerMode = false;
+	public static final String version = "2.0.0-Beta";
 	public static final String project = "Vanilla-Notebook";
 	public static String pageLocation = "Notebook/Default";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
