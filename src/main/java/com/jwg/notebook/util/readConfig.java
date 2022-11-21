@@ -33,10 +33,6 @@ public class readConfig {
         } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
-            deletePageButtonShown = Boolean.parseBoolean(readCfg("deletebutto", 8));
-        } catch (IOException e) { throw new RuntimeException(e); }
-
-        try {
             getBookmarkPage();
         } catch (IOException e) { throw new RuntimeException(e); }
     }
