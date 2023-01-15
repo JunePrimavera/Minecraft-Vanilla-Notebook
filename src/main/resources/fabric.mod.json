@@ -6,7 +6,7 @@
   "name": "Vanilla Notebook",
   "description": "Adds a simple coordinate book in the menus.",
   "authors": [
-    "JWGardiner"
+    "Juniper"
   ],
   "contact": {
     "homepage": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook",
@@ -16,10 +16,11 @@
   "license": "MIT",
   "icon": "assets/notebook/icon.png",
 
+
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.jwg.notebook.Notebook"
+      "com.june.notebook.Notebook"
     ]
   },
   "mixins": [
@@ -27,22 +28,12 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.6",
-    "fabric": "*",
-    "minecraft": "~1.19",
+    "fabricloader": ">=0.14.11",
+    "fabric-api": "*",
+    "minecraft": "~1.19.3",
     "java": ">=17"
   },
   "suggests": {
     "another-mod": "*"
-  },
-  "custom": {
-    "modmenu": {
-      "parent": {
-        "id": "vanilla-notebook",
-        "name": "Vanilla Notebook",
-        "description": "Adds a notebook to your GUI.",
-        "icon": "assets/notebook/icon.png"
-      }
-    }
   }
 }
