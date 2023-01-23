@@ -15,8 +15,8 @@ import java.io.IOException;
 import static com.june.notebook.keybinds.OpenBook.openBookKeybindRegister;
 
 public class Notebook implements ModInitializer {
-	public static final boolean developerMode = false;
-	public static final String version = "2.0.0-Beta";
+	public static final boolean developerMode = true;
+	public static final String version = "2.0.0";
 	public static final String project = "Vanilla-Notebook";
 	public static String pageLocation = "Notebook/Default";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
@@ -34,15 +34,32 @@ public class Notebook implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("{} has started initializing!", project);
-		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"/"));
-		File firstPage = new File(pageLocation+"/0.jdat");
+		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"1/"));
+		File firstPage = new File(pageLocation+"1/0.jdat");
 		LOGGER.info("Page folder is \"{}\"", pageLocation);
 		boolean tmp = false;
-
 		if (NEEDS_SETUP) { generateConfig.generate(0); resetConfig.reset();  }
 		try {
 			if (firstPage.createNewFile()){ LOGGER.info("Created first page of the book.."); NEEDS_SETUP = true; }
 		} catch (IOException e) { System.out.println(e); }
+		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"2/"));
+		firstPage = new File(pageLocation+"2/0.jdat");
+		LOGGER.info("Page folder is \"{}\"", pageLocation);
+		tmp = false;
+		if (NEEDS_SETUP) { generateConfig.generate(0); resetConfig.reset();  }
+		try {
+			if (firstPage.createNewFile()){ LOGGER.info("Created first page of the book.."); NEEDS_SETUP = true; }
+		} catch (IOException e) { System.out.println(e); }
+		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"3/"));
+		firstPage = new File(pageLocation+"3/0.jdat");
+		LOGGER.info("Page folder is \"{}\"", pageLocation);
+		tmp = false;
+		if (NEEDS_SETUP) { generateConfig.generate(0); resetConfig.reset();  }
+		try {
+			if (firstPage.createNewFile()){ LOGGER.info("Created first page of the book.."); NEEDS_SETUP = true; }
+		} catch (IOException e) { System.out.println(e); }
+
+
 
 		if (!new File("config/vanilla-notebook/config.cfg").exists()) NEEDS_SETUP = true;
 		try {
@@ -56,7 +73,9 @@ public class Notebook implements ModInitializer {
 
 		readConfig.read();
 
-		if (!pageLocation.equals("notebook") && !new File(pageLocation).exists()) { tmp = new File(pageLocation).mkdirs(); }
+		if (!pageLocation.equals("notebook") && !new File(pageLocation+"1").exists()) { tmp = new File(pageLocation+"1").mkdirs(); }
+		if (!pageLocation.equals("notebook") && !new File(pageLocation+"2").exists()) { tmp = new File(pageLocation+"2").mkdirs(); }
+		if (!pageLocation.equals("notebook") && !new File(pageLocation+"3").exists()) { tmp = new File(pageLocation+"3").mkdirs(); }
 		if (tmp) { LOGGER.info("Possible first time use! Thank you for using my mod!"); }
 
 		LOGGER.info("Registering keybinds...");
