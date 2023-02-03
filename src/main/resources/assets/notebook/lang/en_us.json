@@ -4,5 +4,9 @@
   "key.notebook.open": "Open Book",
   "tooltip.notebook.delete": "Delete Page",
   "tooltip.notebook.bookmark.goto": "Go to bookmarked page",
-  "tooltip.notebook.bookmark.create": "Bookmark page"
+  "tooltip.notebook.bookmark.create": "Bookmark page",
+  "bookconfig.dir": "Book Storage Directory (Default: Notebook/Default)",
+  "bookconfig.startpage": "Starting Page (Default: 0)",
+  "bookconfig.limit": "Page Limit (Default: -1)",
+  "bookconfig.warning": "Warning: Messing with these can break your installation. Here be dragons!"
 }
