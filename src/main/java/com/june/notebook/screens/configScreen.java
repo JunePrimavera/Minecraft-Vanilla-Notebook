@@ -21,14 +21,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.june.notebook.Notebook.re_init;
+
 @Environment(EnvType.CLIENT)
 public class configScreen extends Screen {
     private TextFieldWidget dir;
     private TextFieldWidget pg;
     private TextFieldWidget lim;
-    private String newdir = Notebook.pageLocation;
-    private int pagelim = menuScreen.pageLimit;
-    private int startpg = menuScreen.page;
+    private String newdir = Notebook.verified_page_location;
+    private String pagelim = String.valueOf(menuScreen.pageLimit);
+    private String startpg = String.valueOf(menuScreen.page);
     private ButtonWidget presetButton;
     public configScreen() {
         super(Text.of(""));
@@ -46,13 +48,13 @@ public class configScreen extends Screen {
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
             try {
                 FileWriter fileOverwriter = new FileWriter("config/vanilla-notebook/config.cfg");
-                fileOverwriter.write("# You need to reload for these to take affect!\n# Directory for the pages to be stored in (e.g .minecraft/CoordinateBook)\npagedirectory="+dir+"\n# Set page limits, negative numbers mean no limit\npagelimit="+pagelim+"\n# Page to start on after opening the book\nstartpage="+startpg+"\n# Presets enabled?\npresets="+Notebook.presetsEnabled);
+                fileOverwriter.write("# You need to reload for these to take affect!\n# Directory for the pages to be stored in (e.g .minecraft/CoordinateBook)\npagedirectory="+newdir+"\n# Set page limits, negative numbers mean no limit\npagelimit="+pagelim+"\n# Page to start on after opening the book\nstartpage="+startpg+"\n# Presets enabled?\npresets="+Notebook.presetsEnabled);
                 fileOverwriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
 
             }
-            Util.readConfig.read();
+            re_init(false);
             assert this.client != null;
             this.client.setScreen(null);
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
@@ -67,13 +69,17 @@ public class configScreen extends Screen {
 
         // Page directory
         this.dir = new TextFieldWidget(this.textRenderer, 15, 62, 150, 20, Text.translatable("bookconfig.dir")) {};
-        this.dir.setChangedListener((l) -> newdir = String.valueOf(l));
+        this.dir.setChangedListener((l) -> {
+            if (!Objects.equals(l, "")) {
+                newdir = l;
+            }
+        });
 
         // Page to start on when book opened
         this.pg = new TextFieldWidget(this.textRenderer, 15, 92, 150, 20, Text.translatable("bookconfig.startpage")) {};
         this.pg.setChangedListener((l) -> {
             if (!Objects.equals(l, "")) {
-                startpg = Integer.parseInt(l);
+                startpg = l;
             }
         });
 
@@ -81,7 +87,7 @@ public class configScreen extends Screen {
         this.lim = new TextFieldWidget(this.textRenderer, 15, 122, 150, 20, Text.translatable("bookconfig.limit")) {};
         this.lim.setChangedListener((l) -> {
             if (!Objects.equals(l, "")) {
-                pagelim = Integer.parseInt(l);
+                pagelim = l;
             }
         });
 
@@ -98,12 +104,13 @@ public class configScreen extends Screen {
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("category.notebook.presets").getString(), this.width / 2 - 20 , 12, 16777215);
+        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("category.notebook.config").getString(), this.width / 2 - 20 , 12, 16777215);
 
         drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.dir").getString(), 177, 65, 16777215);
         drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.startpage").getString(), 177, 95, 16777215);
         drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.limit").getString(), 177, 125, 16777215);
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.warning").getString(), 15, this.height-15, 16777215);
+        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.warning_reset").getString(), 5, this.height-15, 16777215);
+        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.warning").getString(), 5, this.height-30, 16777215);
         presetButton.setMessage(Text.of("Presets: " + Notebook.presetsEnabled));
         super.render(matrices, mouseX, mouseY, delta);
 
