@@ -85,7 +85,7 @@ public class bookSelectScreen extends Screen {
 
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("category.notebook.presets").getString(), this.width / 2 - 20 , 12, 16777215);
+        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("category.notebook.presets").getString(), (int) (this.width / 2 - (Text.translatable("category.notebook.presets").getString().length()/2 * 5)), 12, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
 
     }
