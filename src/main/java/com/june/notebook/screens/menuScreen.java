@@ -96,8 +96,8 @@ public class menuScreen extends Screen {
         this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> Gui.button.gotobookmark.onPress())));
         this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> Gui.button.bookmark.onPress())));
 
-        this.addDrawableChild(importB = sidebar.addSidebarButton(3, IMPORT_ICON, this, "import", 8, 8, (button -> Gui.button.importButton.onPress())));
-        this.addDrawableChild(exportB = sidebar.addSidebarButton(4, EXPORT_ICON, this, "export", 8, 8, (button -> Gui.button.exportButton.onPress())));
+        this.addDrawableChild(importB = sidebar.addSidebarButton(3, IMPORT_ICON, this, "import", 8, 8, (button -> Gui.button.importButton.onPress(pageLocation))));
+        this.addDrawableChild(exportB = sidebar.addSidebarButton(4, EXPORT_ICON, this, "export", 8, 8, (button -> Gui.button.exportButton.onPress(pageLocation))));
 
 
 
