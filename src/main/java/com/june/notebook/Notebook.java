@@ -24,6 +24,8 @@ public class Notebook implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
 	public static final Identifier BOOK_ICON = new Identifier("notebook:textures/gui/book.png");
+	public static final Identifier IMPORT_ICON = new Identifier("notebook:textures/gui/import.png");
+	public static final Identifier EXPORT_ICON = new Identifier("notebook:textures/gui/export.png");
 	public static final Identifier BOOKMARK_ICON = new Identifier("notebook:textures/gui/bookmark-goto.png");
 	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("notebook:textures/gui/bookmark.png");
 	public static final Identifier DELETE_ICON = new Identifier("notebook:textures/gui/del-page.png");

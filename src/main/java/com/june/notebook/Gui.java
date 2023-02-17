@@ -49,9 +49,17 @@ public class Gui {
                     page = bookmarkedpage;
                 }
             }
-
-
         }
 
+        public class importButton {
+            public static void onPress() {
+
+            }
+        }
+        public class exportButton {
+            public static void onPress() {
+
+            }
+        }
     }
 }
