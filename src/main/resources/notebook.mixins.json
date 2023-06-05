@@ -5,8 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
-    "TitleScreenMixin",
-    "GameScreenMixin"
+    "TitleScreenButton"
   ],
   "injectors": {
     "defaultRequire": 1

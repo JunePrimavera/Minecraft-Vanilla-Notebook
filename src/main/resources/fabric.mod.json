@@ -1,22 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "vanilla-notebook",
-  "version": "2.2.0",
-
-  "name": "Vanilla Notebook",
-  "description": "Adds a simple coordinate book in the menus.",
+  "id": "notebook",
+  "version": "${version}",
+  "name": "Notebook",
+  "description": "Keep track of everything!",
   "authors": [
     "Juniper"
   ],
   "contact": {
-    "homepage": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook",
-    "sources": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook"
+    "repo": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook "
   },
-
   "license": "MIT",
   "icon": "assets/notebook/icon.png",
-
-
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -26,14 +21,9 @@
   "mixins": [
     "notebook.mixins.json"
   ],
-
   "depends": {
-    "fabricloader": ">=0.14.18",
-    "minecraft": "~1.20-alpha.23.12.a",
+    "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "java": ">=17"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "minecraft": "1.20-rc.1"
   }
 }
