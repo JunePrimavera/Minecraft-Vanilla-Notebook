@@ -99,6 +99,7 @@ public class NotebookScreen extends Screen {
         }
     }
 
+    // Innit mate
     protected void init() {
         this.cursorIndex = readPage(BookFolder, pageIndex).length();;
         this.totalPages = getPageCount(BookFolder);
@@ -122,17 +123,7 @@ public class NotebookScreen extends Screen {
 
         this.updatePageButtons();
     }
-    public boolean charTyped(char chr, int modifiers) {
-        String pageContent = this.readPage(BookFolder, pageIndex);
-        if (cursorIndex > pageContent.length()) {
-            cursorIndex = pageContent.length();
-        }
-        pageContent = pageContent.substring(0, cursorIndex) + chr + pageContent.substring(cursorIndex);
 
-        this.writePage(pageContent, BookFolder, pageIndex);
-        this.cursorIndex += 1;
-        return true;
-    }
 
     // Button related functions
     protected void goToPreviousPage() {
@@ -209,6 +200,17 @@ public class NotebookScreen extends Screen {
         }
 
     }
+    // Normal typing
+    public boolean charTyped(char chr, int modifiers) {
+        String pageContent = this.readPage(BookFolder, pageIndex);
+        if (cursorIndex > pageContent.length()) {
+            cursorIndex = pageContent.length();
+        }
+        pageContent = pageContent.substring(0, cursorIndex) + chr + pageContent.substring(cursorIndex);
+        this.writePage(pageContent, BookFolder, pageIndex);
+        this.cursorIndex += 1;
+        return true;
+    }
 
     // The code I am going to avoid like the plague
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -218,12 +220,11 @@ public class NotebookScreen extends Screen {
         if (this.totalPages > this.pageIndex) {
             String pageContent = readPage(BookFolder, pageIndex);
             // Cursor rendering
-            // TODO : Make blink
-            assert this.client != null;
 
+            assert this.client != null;
             if (cursorIndex < pageContent.length()) {pageContent = pageContent.substring(0, cursorIndex) + "|" + pageContent.substring(cursorIndex);
             } else {cursorIndex = pageContent.length();}
-            if (cursorIndex == pageContent.length()) {pageContent = pageContent + "_";}
+            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = pageContent + "_";}
 
             StringVisitable stringVisitable = StringVisitable.plain(pageContent);
             this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
