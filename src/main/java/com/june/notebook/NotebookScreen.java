@@ -35,8 +35,6 @@ public class NotebookScreen extends Screen {
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
     private TextFieldWidget bookNameField;
-    private ButtonWidget nextBookButton;
-    private ButtonWidget lastBookButton;
     private ButtonWidget newPageButton;
     private ButtonWidget delPageButton;
     private PageTurnWidget nextPageButton;
@@ -153,11 +151,11 @@ public class NotebookScreen extends Screen {
         }, Text.translatable("notebook.button.delete")));
 
         // Top bar buttons
-        this.bookNameField = this.addDrawableChild(new TextFieldWidget(this.textRenderer, 5, 5, 108, 20, Text.translatable("boop.the.snoot")));
+        this.bookNameField = this.addDrawableChild(new TextFieldWidget(this.textRenderer, 5, 5, 108, 20, Text.translatable("notebook.text.field")));
         this.bookNameField.setEditable(true);
         this.bookNameField.setText(BookName);
 
-        this.nextBookButton = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, 0, 0, 20, NEXT_BOOK_ICON, 32, 64, (button) -> {
+        ButtonWidget nextBookButton = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, 0, 0, 20, NEXT_BOOK_ICON, 32, 64, (button) -> {
             int bookIndex = getBookIndex();
             if (bookIndex < Objects.requireNonNull(new File(BookFolder + "/").list()).length - 1) {
                 BookName = Objects.requireNonNull(new File(BookFolder + "/").list())[bookIndex + 1];
@@ -165,7 +163,7 @@ public class NotebookScreen extends Screen {
                 this.updatePageButtons();
             }
         }, Text.translatable("notebook.button.next")));
-        this.lastBookButton = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, 0, 0, 20, LAST_BOOK_ICON, 32, 64, (button) -> {
+        ButtonWidget lastBookButton = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, 0, 0, 20, LAST_BOOK_ICON, 32, 64, (button) -> {
             int bookIndex = getBookIndex();
             if (bookIndex > 0) {
                 BookName = Objects.requireNonNull(new File(BookFolder + "/").list())[bookIndex - 1];
@@ -202,7 +200,9 @@ public class NotebookScreen extends Screen {
         if (!this.bookNameField.isSelected()) {
             if (super.keyPressed(keyCode, scanCode, modifiers)) { return true;
             } else {
-                System.out.println(keyCode);
+                if (Notebook.DEV_ONLY) {
+                    System.out.println(keyCode);
+                }
                 switch (keyCode) {
                     case 266 -> { this.previousPageButton.onPress(); return true; }
                     case 267 -> { this.nextPageButton.onPress(); return true; }
@@ -272,7 +272,7 @@ public class NotebookScreen extends Screen {
         int k = this.textRenderer.getWidth(this.pageIndexText);
         context.drawText(this.textRenderer, Text.of("Alpha Build - Expect bugs or missing features!"), 5, this.height - 22, Colors.RED, true);
         if (Notebook.DEV_ONLY) {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.0.0 - Development build"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v3.0.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
             context.drawText(this.textRenderer, Text.of("Notebook v3.0.0"), 5, this.height - 10, Colors.WHITE, true);
         }
@@ -292,6 +292,7 @@ public class NotebookScreen extends Screen {
 
             }
         }
+
         context.drawText(this.textRenderer, this.pageIndexText, i - k + 192 - 44, 18, 0, false);
         Objects.requireNonNull(this.textRenderer);
         int l = Math.min(128 / 9, this.cachedPage.size());
