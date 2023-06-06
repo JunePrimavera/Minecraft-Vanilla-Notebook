@@ -28,5 +28,6 @@ public class Notebook implements ModInitializer {
 
     public static final Identifier MAIN_BUTTON_ICON = new Identifier("notebook:textures/gui/book.png");
     public static final Identifier NEW_PAGE_ICON = new Identifier("notebook:textures/gui/new_page.png");
+    public static final Identifier DEL_PAGE_ICON = new Identifier("notebook:textures/gui/delete_page.png");
     public static final boolean DEV_ONLY = true;
 }
