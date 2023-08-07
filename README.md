@@ -16,7 +16,7 @@ While this is supposed to be used for coordinates, you can write whatever you wa
 
 Whichever stay relevant, I'm hoping to keep it up to date on the latest version, but I most likely won't update to 1.17 or earlier.
 
-Currently, it's on 1.18.x and 1.19.x
+Currently, it's on 1.20.x
 
 > Forge/Fabric?
 
@@ -36,10 +36,7 @@ Go to the releases tab on the right to see it here, or go to a different site;
 
 - Modrinth: https://modrinth.com/mod/notebook
 
-
 ## Support 
-
-If you like the mod, or other projects, please consider [buying me a coffee](https://ko-fi.com/juneDeveloper)
 
 You can also [join my discord](https://discord.gg/EqTwbVYEWx) if you have any questions, need help, or want to talk to me directly.
 

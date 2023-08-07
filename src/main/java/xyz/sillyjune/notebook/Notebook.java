@@ -1,4 +1,4 @@
-package com.june.notebook;
+package xyz.sillyjune.notebook;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
@@ -12,8 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Scanner;
-
-import static com.june.notebook.NotebookKeybind.openBookKeybindRegister;
 
 public class Notebook implements ModInitializer {
 
@@ -37,7 +35,7 @@ public class Notebook implements ModInitializer {
                 System.err.println("Failed to create config file! Make a bug report if you see this\n " + e.getMessage());
             }
         }
-        openBookKeybindRegister();
+        NotebookKeybind.openBookKeybindRegister();
 
         // Read config file
         try {
