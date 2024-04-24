@@ -19,19 +19,20 @@ public record NotebookData(String[] content, String location) {
         return location;
     }
 
-    public NotebookData read() { // Read the record from a file
-        File config = new File(STR."notebook/\{location}.json");
+
+    public static NotebookData read(String location) { // Read the record from a file
+        File jsondata = new File(BOOK_FOLDER + STR."/\{location}");
         StringBuilder d = new StringBuilder();
         try {
-            Scanner reader = new Scanner(config);
+            Scanner reader = new Scanner(jsondata);
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
                 d.append(data);
             }
             reader.close();
         } catch (FileNotFoundException e) { // If it fails, create a new one
-            LOGGER.error("Failed to read book!");
-            NotebookData data = new NotebookData(new String[0], STR."notebook/\{location}");
+            LOGGER.error(STR."Failed to read book!\n\{e}");
+            NotebookData data = new NotebookData(new String[0], STR."\{location}");
             write(data); // Write it to file
         }
         String json = d.toString();

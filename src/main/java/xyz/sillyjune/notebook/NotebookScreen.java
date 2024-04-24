@@ -2,7 +2,6 @@ package xyz.sillyjune.notebook;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
@@ -15,18 +14,15 @@ import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static xyz.sillyjune.notebook.Notebook.*;
 
 public class NotebookScreen extends Screen {
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
+    private static NotebookData DATA;
 
     public static ButtonWidget closeButton;
     public static ButtonWidget buttonNext;
@@ -57,69 +53,57 @@ public class NotebookScreen extends Screen {
 
     }
 
-
-
     // Returns the amount of pages stored
-    protected int getPageCount(String path) {
-        if (new File(path).exists()) {
-            return Objects.requireNonNull(new File(path).list()).length;
-        }
-        return 0;
+    protected int getPageCount() {
+        return DATA.content().length;
     }
     /// Creates a new blank page
-    protected void newPage(String path, int pagei) {
-        try {
-            if (!new File(path).exists()) {
-                if (!new File(path).mkdirs()) {
-                    System.err.println("Couldn't create page! Report on the bug tracker");
-                }
-            }
-            if (!new File(path + "/" + pagei + ".notebookpage").createNewFile()) {
-                System.err.println("Couldn't create page! Report on the bug tracker");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    protected void newPage() {
+        String[] pages = DATA.content();
+        String[] new_pages = new String[pages.length+1];
+        int i = 0;
+        for (String page : pages) {
+            new_pages[i] = page;
+            i++;
         }
-        this.totalPages = getPageCount(BOOK_FOLDER + "/" + BookName);
+        new_pages[new_pages.length-1] = " ";
+        DATA = new NotebookData(new_pages, DATA.location());
+        NotebookData.write(DATA);
+        totalPages += 1;
     }
     // Removes the last page
-    protected void delPage(String path) {
-        if (!new File(path + "/" + (totalPages-1) + ".notebookpage").delete()) {
-            System.err.println("Couldn't remove page! Report on the bug tracker");
+    protected void delPage() {
+        String[] pages = DATA.content();
+        String[] new_pages = new String[pages.length-1];
+        int i = 0;
+        for (String _ : new_pages) {
+            new_pages[i] = pages[i];
+            i++;
         }
-        this.totalPages = getPageCount(BOOK_FOLDER + "/" + BookName);
+        DATA = new NotebookData(new_pages, DATA.location());
+        NotebookData.write(DATA);
+        totalPages -= 1;
     }
     // Reads an existing page from storage
-    protected String readPage(String path, int pagei) {
-        StringBuilder text = new StringBuilder();
-        try {
-            File f = new File(path + "/" + pagei + ".notebookpage");
-            Scanner r = new Scanner(f);
-            while (r.hasNextLine()) {
-                String d = r.nextLine();
-                text.append(d);
-            }
-            r.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+    protected String readPage(int pagei) {
+        if (pagei >= DATA.content().length) {
+            newPage();
         }
-        return text.toString();
+        String content = DATA.content()[pagei];
+        if (content == null) {
+            return "";
+        }
+        return content;
     }
     // Overwrites an existing page
-    protected void writePage(String data, String path, int pagei) {
-        try {
-            FileWriter w = new FileWriter(path + "/" + pagei + ".notebookpage");
-            w.write(data);
-            w.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    protected void writePages() {
+        NotebookData.write(DATA);
     }
 
     // Get index of book in folder
     protected int getBookIndex() {
-        for (int i = 0; i < Objects.requireNonNull(new File(BOOK_FOLDER + "/").list()).length; i++) {
-            if (Objects.equals(Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[i], BookName)) {
+        for (int i = 0; i < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length; i++) {
+            if (Objects.equals(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[i], BookName)) {
                 return i;
             }
         }
@@ -127,32 +111,31 @@ public class NotebookScreen extends Screen {
     }
     // Innit mate
     protected void init() {
-        this.totalPages = getPageCount(BOOK_FOLDER + "/" + BookName);
-        if (totalPages < 1) {
-            newPage(BOOK_FOLDER + "/" + BookName, 0);
-        }
-        this.cursorIndex = readPage(BOOK_FOLDER + "/" + BookName, pageIndex).length();
+        DATA = NotebookData.read("default.json");
+        pageIndex = 0;
+        this.cursorIndex = readPage(pageIndex).length();
+        this.totalPages = getPageCount();
         // Add done/close button
-        this.closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+        closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (_) -> {
             this.close();
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         // Page buttons
         int i = (this.width - 192) / 2;
-        this.nextPageButton = this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
+        this.nextPageButton = this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (_) -> {
             this.goToNextPage();
         }, this.pageTurnSound));
-        this.previousPageButton = this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (button) -> {
+        this.previousPageButton = this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (_) -> {
             this.goToPreviousPage();
         }, this.pageTurnSound));
 
-        this.newPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 119, 155, 20, 20, NEW_PAGE_ICON, (button) -> {
-            newPage(BOOK_FOLDER + "/" + BookName, totalPages);
+        this.newPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 119, 155, 20, 20, NEW_PAGE_ICON, (_) -> {
+            newPage();
             this.goToNextPage();
         }, Text.translatable("notebook.button.new")));
-        this.delPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 99, 155, 20, 20, DEL_PAGE_ICON, (button) -> {
+        this.delPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 99, 155, 20, 20, DEL_PAGE_ICON, (_) -> {
             if (totalPages > 1) {
-                delPage(BOOK_FOLDER + "/" + BookName);
+                delPage();
                 this.goToPreviousPage();
             }
         }, Text.translatable("notebook.button.delete")));
@@ -162,15 +145,15 @@ public class NotebookScreen extends Screen {
         this.bookNameField.setEditable(true);
         this.bookNameField.setText(BookName);
 
-       this.buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (button) -> {
+       buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (button) -> {
             int bookIndex = getBookIndex();
-            if (bookIndex < Objects.requireNonNull(new File(BOOK_FOLDER + "/").list()).length - 1) {
-                BookName = Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex + 1];
+            if (bookIndex < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length - 1) {
+                BookName = Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[bookIndex + 1];
                 this.bookNameField.setText(BookName);
                 this.updatePageButtons();
             }
         }, Text.translatable("notebook.button.next")));
-        this.buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (button) -> {
+        buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (_) -> {
             int bookIndex = getBookIndex();
             if (bookIndex > 0) {
                 BookName = Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex - 1];
@@ -188,12 +171,12 @@ public class NotebookScreen extends Screen {
     // Button related functions
     protected void goToPreviousPage() {
         if (this.pageIndex > 0) { --this.pageIndex; }
-        this.cursorIndex = readPage(BOOK_FOLDER + "/" + BookName, pageIndex).length();
+        this.cursorIndex = readPage(pageIndex).length();
         this.updatePageButtons();
     }
     protected void goToNextPage() {
         if (this.pageIndex < this.totalPages- 1) { ++this.pageIndex; }
-        this.cursorIndex = readPage(BOOK_FOLDER + "/" + BookName, pageIndex).length();
+        this.cursorIndex = readPage(pageIndex).length();
         this.updatePageButtons();
     }
     private void updatePageButtons() {
@@ -205,14 +188,14 @@ public class NotebookScreen extends Screen {
     }
     // Deselects all buttons
     private void deselButtons() {
-        if (this.closeButton != null) {
-            this.closeButton.setFocused(false);
+        if (closeButton != null) {
+            closeButton.setFocused(false);
         }
-       if (this.buttonNext != null) {
-           this.buttonNext.setFocused(false);
+       if (buttonNext != null) {
+           buttonNext.setFocused(false);
        }
-       if (this.buttonLast != null) {
-           this.buttonLast.setFocused(false);
+       if (buttonLast != null) {
+           buttonLast.setFocused(false);
        }
         this.bookNameField.setFocused(false);
         this.nextPageButton.setFocused(false);
@@ -233,24 +216,30 @@ public class NotebookScreen extends Screen {
                     case 266 -> { this.previousPageButton.onPress(); return true; }
                     case 267 -> { this.nextPageButton.onPress(); return true; }
                     case 259 -> {
-                        String pageContent = this.readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
+                        String pageContent = this.readPage(pageIndex);
                         if (cursorIndex > 0) {
                             pageContent = pageContent.substring(0, cursorIndex - 1) + pageContent.substring(cursorIndex);
-                            this.writePage(pageContent, BOOK_FOLDER + "/" + BookName, pageIndex);
+                            String[] content = DATA.content();
+                            content[pageIndex] = pageContent;
+                            DATA = new NotebookData(content, DATA.location());
+                            NotebookData.write(DATA);
                             this.cursorIndex -= 1;
                         }
                         return true;
                     }
                     case 261 -> {
-                        String pageContent = this.readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
+                        String pageContent = this.readPage(pageIndex);
                         if (cursorIndex < pageContent.length()) {
                             pageContent = pageContent.substring(0, cursorIndex) + pageContent.substring(cursorIndex + 1);
-                            this.writePage(pageContent, BOOK_FOLDER + "/" + BookName, pageIndex);
+                            String[] content = DATA.content();
+                            content[pageIndex] = pageContent;
+                            DATA = new NotebookData(content, DATA.location());
+                            NotebookData.write(DATA);
                         }
                         return true;
                     }
                     case 262 -> {
-                        String pageContent = this.readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
+                        String pageContent = this.readPage( pageIndex);
                         this.deselButtons();
                         if (cursorIndex < pageContent.length()) {
                             cursorIndex += 1;
@@ -270,7 +259,7 @@ public class NotebookScreen extends Screen {
         } else {
             if (keyCode == 257) {
                 this.bookNameField.setFocused(false);
-            } else if (keyCode == 259 && this.bookNameField.getText().length() > 0) {
+            } else if (keyCode == 259 && !this.bookNameField.getText().isEmpty()) {
                 this.bookNameField.setText(this.bookNameField.getText().substring(0, this.bookNameField.getText().length() - 1));
             }
             return true;
@@ -279,10 +268,13 @@ public class NotebookScreen extends Screen {
     // Normal typing
     public boolean charTyped(char chr, int modifiers) {
         if (!this.bookNameField.isSelected()) {
-            String pageContent = this.readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
+            String pageContent = this.readPage(pageIndex);
             if (cursorIndex > pageContent.length()) { cursorIndex = pageContent.length(); }
             pageContent = pageContent.substring(0, cursorIndex) + chr + pageContent.substring(cursorIndex);
-            this.writePage(pageContent, BOOK_FOLDER + "/" + BookName, pageIndex);
+            String[] content = DATA.content();
+            content[pageIndex] = pageContent;
+            DATA = new NotebookData(content, DATA.location());
+            NotebookData.write(DATA);
             this.cursorIndex += 1;
             return true;
         } else {
@@ -304,7 +296,7 @@ public class NotebookScreen extends Screen {
                 }
             }
             if (!bookExists) {
-                if (!new File(BOOK_FOLDER + "/" + BookName).renameTo(new File(BOOK_FOLDER + "/" + this.bookNameField.getText()))) {
+                if (!new File(STR."\{BOOK_FOLDER}/\{BookName}").renameTo(new File(STR."\{BOOK_FOLDER}/\{this.bookNameField.getText()}"))) {
                     System.err.println("Couldn't change book name! Make a bug report.");
                 } else {
                     BookName = bookNameField.getText();
@@ -316,21 +308,21 @@ public class NotebookScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
         context.drawText(this.textRenderer, Text.of("Beta Build - Expect minor bugs or missing features!"), 5, this.height - 22, Colors.RED / 2, true);
         if (CONFIG.debug()) {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of(STR."Notebook v4.0.0 - \{Text.translatable("devwarning.info").getString()}"), 5, this.height - 10, Colors.WHITE, true);
         } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v4.0.0"), 5, this.height - 10, Colors.WHITE, true);
         }
     }
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         int i = (this.width - 192) / 2;
         super.renderBackground(context, mouseX, mouseY, delta);
         if (this.totalPages > this.pageIndex) {
-            String pageContent = readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
+            String pageContent = readPage(pageIndex);
             // Cursor rendering
             assert this.client != null;
-            if (cursorIndex < pageContent.length()) {pageContent = pageContent.substring(0, cursorIndex) + "|" + pageContent.substring(cursorIndex);
+            if (cursorIndex < pageContent.length()) {pageContent = STR."\{pageContent.substring(0, cursorIndex)}|\{pageContent.substring(cursorIndex)}";
             } else {cursorIndex = pageContent.length();}
-            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = pageContent + "_";}
+            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = STR."\{pageContent}_";}
 
             StringVisitable stringVisitable = StringVisitable.plain(pageContent);
             this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
