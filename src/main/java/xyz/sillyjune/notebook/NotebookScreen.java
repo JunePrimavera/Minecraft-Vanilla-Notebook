@@ -26,9 +26,9 @@ public class NotebookScreen extends Screen {
     private static NotebookData DATA;
 
     public static ButtonWidget closeButton;
+    public static ButtonWidget buttonGo;
     public static ButtonWidget buttonNext;
     public static ButtonWidget buttonLast;
-    public static String BookName = "Default";
     private int pageIndex;
     private int totalPages;
     private int cursorIndex;
@@ -104,7 +104,7 @@ public class NotebookScreen extends Screen {
     // Get index of book in folder
     protected int getBookIndex() {
         for (int i = 0; i < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length; i++) {
-            if (Objects.equals(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[i], BookName)) {
+            if (Objects.equals(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[i], DATA.location())) {
                 return i;
             }
         }
@@ -144,24 +144,30 @@ public class NotebookScreen extends Screen {
         // Top bar buttons
         this.bookNameField = this.addDrawableChild(new TextFieldWidget(this.textRenderer, 5, 5, 108, 20, Text.translatable("notebook.text.field")));
         this.bookNameField.setEditable(true);
-        this.bookNameField.setText(BookName);
-
+        this.bookNameField.setText("default");
        buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (button) -> {
             int bookIndex = getBookIndex();
             if (bookIndex < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length - 1) {
-                BookName = Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[bookIndex + 1];
-                this.bookNameField.setText(BookName);
+                DATA = NotebookData.read(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[bookIndex + 1]);
+                this.bookNameField.setText(DATA.location().replace(".json", ""));
+                this.pageIndex = 0;
+                this.totalPages = DATA.content().length;
                 this.updatePageButtons();
             }
         }, Text.translatable("notebook.button.next")));
         buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (_) -> {
             int bookIndex = getBookIndex();
             if (bookIndex > 0) {
-                BookName = Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex - 1];
-                this.bookNameField.setText(BookName);
+                DATA = NotebookData.read(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[bookIndex - 1]);
+                this.bookNameField.setText(DATA.location().replace(".json", ""));
+                this.pageIndex = 0;
+                this.totalPages = DATA.content().length;
                 this.updatePageButtons();
             }
-        }, Text.translatable("notebook.button.last")));
+        }, Text.translatable("notebook.button.rename")));
+        buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (_) -> {
+            DATA = new NotebookData(DATA.content(), STR."\{this.bookNameField.getText()}.json");
+        }, Text.translatable("notebook.button.rename")));
 
 
 
@@ -188,22 +194,7 @@ public class NotebookScreen extends Screen {
         this.previousPageButton.visible = this.pageIndex > 0;
     }
     // Deselects all buttons
-    private void deselButtons() {
-        if (closeButton != null) {
-            closeButton.setFocused(false);
-        }
-       if (buttonNext != null) {
-           buttonNext.setFocused(false);
-       }
-       if (buttonLast != null) {
-           buttonLast.setFocused(false);
-       }
-        this.bookNameField.setFocused(false);
-        this.nextPageButton.setFocused(false);
-        this.previousPageButton.setFocused(false);
-        this.newPageButton.setFocused(false);
 
-    }
 
     // Special keys (delete, backspace, etc)
     @Override
@@ -237,28 +228,24 @@ public class NotebookScreen extends Screen {
                         NotebookData.write(DATA);
                     }
                     return true;
-                }case 262 -> {
+                }
+                case 262 -> {
                     String pageContent = this.readPage( pageIndex);
-                    this.deselButtons();
                     if (cursorIndex < pageContent.length()) {
                         cursorIndex += 1;
                     }
                     return true;
                 }
                 case 263 -> {
-                    this.deselButtons();
                     if (cursorIndex > 0) {
                         cursorIndex -= 1;
                     }
                     return true;
                 }
                 default -> { return false; }
-
             }
         } else {
-            if (keyCode == 257) {
-                this.bookNameField.setFocused(false);
-            } else if (keyCode == 259 && !this.bookNameField.getText().isEmpty()) {
+            if (keyCode == 259 && !this.bookNameField.getText().isEmpty()) {
                 this.bookNameField.setText(this.bookNameField.getText().substring(0, this.bookNameField.getText().length() - 1));
             }
             return true;
@@ -267,6 +254,7 @@ public class NotebookScreen extends Screen {
     // Normal typing
     @Override
     public boolean charTyped(char chr, int modifiers) {
+        System.out.println(STR."\{chr} \{modifiers}");
         if (!this.bookNameField.isSelected()) {
             String pageContent = this.readPage(pageIndex);
             if (cursorIndex > pageContent.length()) { cursorIndex = pageContent.length(); }
@@ -285,25 +273,7 @@ public class NotebookScreen extends Screen {
 
     // The code I am going to avoid like the plague
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        int i = (this.width - 192) / 2;
 
-
-        if (!Objects.equals(this.bookNameField.getText(), BookName) && !Objects.equals(this.bookNameField.getText(), "")) {
-           boolean bookExists = false;
-            for (int it = 0; it == Objects.requireNonNull(new File(BOOK_FOLDER).list()).length; it++) {
-                if (Objects.equals(BookName, Objects.requireNonNull(new File(BOOK_FOLDER).list())[it])) {
-                    bookExists = true;
-                }
-            }
-            if (!bookExists) {
-                if (!new File(STR."\{BOOK_FOLDER}/\{BookName}").renameTo(new File(STR."\{BOOK_FOLDER}/\{this.bookNameField.getText()}"))) {
-                    System.err.println("Couldn't change book name! Make a bug report.");
-                } else {
-                    BookName = bookNameField.getText();
-                }
-
-            }
-        }
         renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         context.drawText(this.textRenderer, Text.of("Beta Build - Expect minor bugs or missing features!"), 5, this.height - 22, Colors.RED / 2, true);

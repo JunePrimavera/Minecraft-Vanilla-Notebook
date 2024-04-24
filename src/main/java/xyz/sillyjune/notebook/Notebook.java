@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
@@ -84,6 +83,7 @@ public class Notebook implements ModInitializer {
     public static final ButtonTextures NEW_PAGE_ICON = b_id("new_page");
     public static final ButtonTextures DEL_PAGE_ICON = b_id("delete_page");
     public static final ButtonTextures LAST_BOOK_ICON = b_id("last_book");
+    public static final ButtonTextures RENAME_BOOK_ICON = b_id("rename_book");
     public static final ButtonTextures NEXT_BOOK_ICON = b_id("next_book");
     public static NotebookConfig CONFIG;
     public static String BOOK_FOLDER = "Notebook";
