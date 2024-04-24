@@ -5,14 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public record NotebookConfig(boolean debug, int button_offset) {
-    public boolean debug() {
+    public boolean debug() { // Is debug mode enabled?
         return debug;
     }
-    public int button_offset() {
+    public int button_offset() { // Button offset config option for compatibility with mods with buttons in the same place (e.g. create)
         return button_offset;
     }
 
-    static String read_config() {
+    static String read_config() { // Read config from file
         try {
             File config = new File("config/notebook.json");
             Scanner reader = new Scanner(config);
@@ -24,7 +24,6 @@ public record NotebookConfig(boolean debug, int button_offset) {
             reader.close();
             return d.toString();
         } catch (FileNotFoundException e) {
-            System.out.println("Couldn't read config!");
             return null;
         }
     }
