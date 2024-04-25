@@ -1,6 +1,5 @@
 package xyz.sillyjune.notebook;
 
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -29,7 +28,6 @@ public class NotebookScreen extends Screen {
     private int pageIndex;
     private int cursorIndex;
     private List<OrderedText> cachedPage;
-    private Text pageIndexText;
     private TextFieldWidget bookNameField;
     private ButtonWidget newPageButton;
     private ButtonWidget delPageButton;
@@ -44,7 +42,7 @@ public class NotebookScreen extends Screen {
     private NotebookScreen(boolean playPageTurnSound) {
         super(NarratorManager.EMPTY);
         this.cachedPage = Collections.emptyList();
-        this.pageIndexText = ScreenTexts.EMPTY;
+        //this.pageIndexText = ScreenTexts.EMPTY;
         this.pageTurnSound = playPageTurnSound;
 
     }
@@ -81,10 +79,8 @@ public class NotebookScreen extends Screen {
             newPage();
         }
         String content = DATA.content[pagei];
-        if (content == null) {
-            return "";
-        }
-        return content;
+        // Prevents a crash if pages become corrupted somehow
+        return Objects.requireNonNullElse(content, "");
     }
 
     // Get index of book in folder
@@ -245,13 +241,13 @@ public class NotebookScreen extends Screen {
             if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = STR."\{pageContent}_";}
             // Render cursor and book content
             this.cachedPage = this.textRenderer.wrapLines(StringVisitable.plain(pageContent), 114);
-            this.pageIndexText = Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1));
         }
         // Render book background
         context.drawTexture(BOOK_TEXTURE, (this.width - 192) / 2, 2, 0, 0, 192, 192);
         for(int m = 0; m < Math.min(128 / 9, this.cachedPage.size()); ++m) {
             context.drawText(this.textRenderer, this.cachedPage.get(m), ((this.width - 192) / 2) + 36, 32 + m * 9, 0, false);
         }
-        context.drawText(this.textRenderer, this.pageIndexText, ((this.width - 192) / 2) - this.textRenderer.getWidth(this.pageIndexText) + 192 - 44, 18, 0, false);
+        // long
+        context.drawText(this.textRenderer, Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1)), ((this.width - 192) / 2) - this.textRenderer.getWidth(Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1))) + 192 - 44, 18, 0, false);
     }
 }

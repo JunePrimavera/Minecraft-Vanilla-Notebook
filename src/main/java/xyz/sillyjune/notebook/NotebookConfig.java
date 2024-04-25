@@ -11,7 +11,6 @@ public record NotebookConfig(boolean debug, int button_offset) {
     public int button_offset() { // Button offset config option for compatibility with mods with buttons in the same place (e.g. create)
         return button_offset;
     }
-
     static String read_config() { // Read config from file
         try {
             File config = new File("config/notebook.json");

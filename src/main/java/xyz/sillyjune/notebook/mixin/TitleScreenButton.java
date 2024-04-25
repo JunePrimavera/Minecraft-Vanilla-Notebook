@@ -24,10 +24,7 @@ public abstract class TitleScreenButton extends Screen {
     }
     @Inject(at = @At("RETURN"), method="initWidgetsNormal")
     private void addCustomButton(int y, int spacingY, CallbackInfo ci) {
-        this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104), y + spacingY + CONFIG.button_offset(), 20, 20, MAIN_BUTTON_ICON, (button) -> {
-            assert this.client != null;
-            this.client.setScreen(new NotebookScreen());
-        }));
+        this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104), y + spacingY + CONFIG.button_offset(), 20, 20, MAIN_BUTTON_ICON, (_) -> this.client.setScreen(new NotebookScreen())));
     }
 }
 
