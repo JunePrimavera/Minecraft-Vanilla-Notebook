@@ -147,33 +147,35 @@ public class NotebookScreen extends Screen {
         if (!this.bookNameField.isSelected()) {
             if (CONFIG.debug()) { LOGGER.debug(String.valueOf(keyCode)); }
             switch (keyCode) {
-                case 266 -> { this.previousPageButton.onPress(); return true; }
-                case 267 -> { this.nextPageButton.onPress(); return true; }
+                case 266 -> this.previousPageButton.onPress();
+                case 267 -> this.nextPageButton.onPress();
                 case 259 -> {
                     // Backspace
                     if (cursorIndex > 0) {
                         DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex - 1) + DATA.content[pageIndex].substring(cursorIndex); DATA.write();
                         this.cursorIndex -= 1;
                     }
-                    return true;
                 }
                 case 261 -> {
                     // Delete key
                     if (cursorIndex < DATA.content[pageIndex].length()) {
                         DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex) + DATA.content[pageIndex].substring(cursorIndex + 1); DATA.write();
                     }
-                    return true;
                 }
-                case 262 -> { if (cursorIndex < DATA.content[pageIndex].length()) { cursorIndex += 1; } return true; }
-                case 263 -> { if (cursorIndex > 0) { cursorIndex -= 1; } return true; }
+                case 262 -> { if (cursorIndex < DATA.content[pageIndex].length()) { cursorIndex += 1; }  }
+                case 263 -> { if (cursorIndex > 0) { cursorIndex -= 1; } }
+                case 257 ->   {
+                    DATA.content[pageIndex] += "\n";
+                    this.cursorIndex += 1;
+                }
                 default -> { return false; }
             }
         } else {
             if (keyCode == 259 && !this.bookNameField.getText().isEmpty()) {
                 this.bookNameField.setText(this.bookNameField.getText().substring(0, this.bookNameField.getText().length() - 1));
             }
-            return true;
         }
+        return true;
     }
     // Normal typing
     @Override
