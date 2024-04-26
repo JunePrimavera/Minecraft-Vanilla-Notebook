@@ -26,8 +26,8 @@ public class Notebook implements ModInitializer {
     private static KeyBinding openBookKeybind;
     public static ButtonTextures b_id(String id) {
         return new ButtonTextures( // For whatever reason, you can't specify .png at the end of these. I have questions for mojang.
-                new Identifier("notebook", STR."\{id}/unfocused"),
-                new Identifier("notebook", STR."\{id}/focused")
+                new Identifier("notebook", id + "/unfocused"),
+                new Identifier("notebook", id + "/focused")
         );
     }
 
@@ -49,13 +49,13 @@ public class Notebook implements ModInitializer {
         }
         CONFIG = cfg; // Set the config
         openBookKeybindRegister(); // Register keybind for opening the notebook, ";" by default
-        if (!new File(BOOK_FOLDER).exists() || !new File(STR."\{BOOK_FOLDER}/default.json").exists()) {
+        if (!new File(BOOK_FOLDER).exists() || !new File(BOOK_FOLDER + "/default.json").exists()) {
             try {
                 Files.createDirectories(Paths.get(BOOK_FOLDER));
                 NotebookData data = new NotebookData(new String[0], "default.json");
                 data.write();
             } catch (IOException e) {
-                LOGGER.error(STR."failed to create \{BOOK_FOLDER}");
+                LOGGER.error("failed to create " + BOOK_FOLDER);
             }
         }
         if (CONFIG.debug()) { LOGGER.error("June is very silly. Continue with extreme caution."); }
