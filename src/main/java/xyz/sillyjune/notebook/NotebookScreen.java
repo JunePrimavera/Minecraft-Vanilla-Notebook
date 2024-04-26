@@ -111,7 +111,7 @@ public class NotebookScreen extends Screen {
     protected void init() {
         DATA = NotebookData.read("default.json");
         pageIndex = 0;
-        this.cursorIndex = readPage(pageIndex).length();
+
         // Add done/close button
         closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (_) -> this.close()).dimensions(this.width / 2 - 100, 196, 200, 20).build());
         // Page buttons
@@ -128,6 +128,7 @@ public class NotebookScreen extends Screen {
         buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (_) -> last_book()));
         buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (_) -> DATA = new NotebookData(DATA.content, STR."\{this.bookNameField.getText()}.json")));
         this.updatePageButtons();
+        this.cursorIndex = readPage(pageIndex).length();
     }
     // Refresh page buttons
     private void updatePageButtons() {
