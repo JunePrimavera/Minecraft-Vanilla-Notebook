@@ -91,9 +91,12 @@ public class NotebookScreen extends Screen {
         int bookIndex = getBookIndex();
         if (bookIndex > 0) {
             DATA = NotebookData.read(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[bookIndex - 1]);
-            this.bookNameField.setText(DATA.location.replace(".json", ""));
-            this.pageIndex = 0;
-            this.updatePageButtons();
+            if (DATA != null) {
+                this.bookNameField.setText(DATA.location.replace(".json", ""));
+                this.pageIndex = 0;
+                this.updatePageButtons();
+            }
+
         }
     }
     protected void goToPreviousPage() {
