@@ -13,5 +13,6 @@
   "bookconfig.limit": "Page Limit (Default: -1)",
   "bookconfig.warning": "Warning: Messing with these can break your installation. Here be dragons!",
   "bookconfig.warning_reset": "You may experience bugs if you don't restart your game after changing these!",
-  "devwarning.info": "(Developer build)"
+  "devwarning.info": "(Developer build)",
+  "notebook.gay" : "Happy pride month! :3"
 }
