@@ -26,8 +26,8 @@ public class Notebook implements ModInitializer {
     private static KeyBinding openBookKeybind;
     public static ButtonTextures b_id(String id) {
         return new ButtonTextures( // For whatever reason, you can't specify .png at the end of these. I have questions for mojang.
-                new Identifier("notebook", id + "/unfocused"),
-                new Identifier("notebook", id + "/focused")
+                Identifier.of("notebook", id + "/unfocused"),
+                Identifier.of("notebook", id + "/focused")
         );
     }
 
@@ -81,7 +81,7 @@ public class Notebook implements ModInitializer {
     public static final ButtonTextures RENAME_BOOK_ICON = b_id("rename_book");
     public static final ButtonTextures NEXT_BOOK_ICON = b_id("next_book");
     public static NotebookConfig CONFIG;
-    public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
+    public static final Identifier BOOK_TEXTURE = Identifier.of("textures/gui/book.png");
     public static String BOOK_FOLDER = "Notebook";
     public static boolean GAY = true;
 }
