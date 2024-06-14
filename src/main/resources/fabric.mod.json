@@ -5,7 +5,14 @@
   "name": "Notebook",
   "description": "Keep track of everything!",
   "authors": [
-    "Juniper"
+    "Juniper Primavera (aka June)"
+  ],
+  "contributors": [
+    "JustAPotota (Emotional support)",
+    "Amirhan-Taipovjan-Greatest-I (Tatar translations)",
+    "Alex Gazmanovich (Belarusian translations)",
+    "NightMite (Polish translations)",
+    "Niorgamer (Portuguese translations)"
   ],
   "contact": {
     "repo": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook "
