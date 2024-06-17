@@ -202,9 +202,9 @@ public class NotebookScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
         if (GAY) { context.drawText(this.textRenderer, Text.translatable("notebook.gay"), 5, this.height - 22, Colors.WHITE, true); }
         if (CONFIG.debug()) {
-            context.drawText(this.textRenderer, Text.of("Notebook v4.0.1 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v4.0.2 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v4.0.1"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v4.0.2"), 5, this.height - 10, Colors.WHITE, true);
         }
     }
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
