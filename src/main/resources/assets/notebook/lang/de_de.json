@@ -1,0 +1,18 @@
+{
+  "category.notebook.keys": "Vanilla Notebook",
+  "category.notebook.presets": "Bücher",
+  "category.notebook.config": "Konfiguration",
+  "key.notebook.open": "Buch Öffnen",
+  "tooltip.notebook.delete": "Seite Löschen",
+  "tooltip.notebook.bookmark.goto": "Zu Markierter Seite Gehen",
+  "tooltip.notebook.bookmark.create": "Seite Markieren",
+  "tooltip.notebook.import": "Importieren",
+  "tooltip.notebook.export": "Exportieren",
+  "bookconfig.dir": "Book Storage Directory (Default: Notebook/Default)",
+  "bookconfig.startpage": "Anfangsseite (Default: 0)",
+  "bookconfig.limit": "Maximale Seitenanzahl (Default: -1)",
+  "bookconfig.warning": "Warnung: Änderungen hier könnten deine Installation kaputtmachen. Sei vorsichtig!",
+  "bookconfig.warning_reset": "Du wirst eventuell Bugs antreffen, wenn du dein Spiel nach Änderung dieser Einstellungen nicht neu startest!",
+  "devwarning.info": "(Entwicklermodus)",
+  "notebook.gay" : "§cF§6r§eö§ah§9l§5i§cc§6h§ee§ar §bP§dr§fi§dd§be §cM§6o§en§at§9h §d:3"
+}
