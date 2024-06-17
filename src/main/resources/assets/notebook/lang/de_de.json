@@ -9,7 +9,7 @@
   "tooltip.notebook.import": "Importieren",
   "tooltip.notebook.export": "Exportieren",
   "bookconfig.dir": "Book Storage Directory (Default: Notebook/Default)",
-  "bookconfig.startpage": "Angfangsseite (Default: 0)",
+  "bookconfig.startpage": "Anfangsseite (Default: 0)",
   "bookconfig.limit": "Maximale Seitenanzahl (Default: -1)",
   "bookconfig.warning": "Warnung: Änderungen hier könnten deine Installation kaputtmachen. Sei vorsichtig!",
   "bookconfig.warning_reset": "Du wirst eventuell Bugs antreffen, wenn du dein Spiel nach Änderung dieser Einstellungen nicht neu startest!",
