@@ -1,0 +1,17 @@
+{
+  "category.notebook.keys": "Vanilla Notebook",
+  "category.notebook.presets": "Livros",
+  "category.notebook.config": "Config",
+  "key.notebook.open": "Abrir Livro",
+  "tooltip.notebook.delete": "Apagar Página",
+  "tooltip.notebook.bookmark.goto": "Ir para página marcada",
+  "tooltip.notebook.bookmark.create": "Marcar página",
+  "tooltip.notebook.import": "Importar",
+  "tooltip.notebook.export": "Exportar",
+  "bookconfig.dir": "Diretório do Armazenamento do Livro (Padrão: Notebook/Default)",
+  "bookconfig.startpage": "Página de início (Padrão: 0)",
+  "bookconfig.limit": "Limite de páginas (Padrão: -1)",
+  "bookconfig.warning": "Aviso: Mexer com as pré-definições pode quebrar a tua instalação. Aqui há dragões!",
+  "bookconfig.warning_reset": "Tu podes encontrar erros se não recomeçares o teu jogo após mudar as pré-definições!",
+  "devwarning.info": "(Modo de desenvolvedor)"
+}
