@@ -192,21 +192,11 @@ public class menuScreen extends Screen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
 
-        if (delete.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.delete").getString(), this.width/2 +115, 7+12, 16777215);
-        }
-        else if (bookmark.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.create").getString(), this.width/2 +115, 7+(12*2), 16777215);
-        }
-        else if (bookmarkPgB.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.goto").getString(), this.width/2 +115, 7+(12*3), 16777215);
-        }
-        else if (importB.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.import").getString(), this.width/2 +115, 7+(12*4), 16777215);
-        }
-        else if (exportB.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.export").getString(), this.width/2 +115, 7+(12*5), 16777215);
-        }
+        if (delete.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.delete").getString(), this.width/2 +115, 7+12, 16777215); }
+        else if (bookmark.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.create").getString(), this.width/2 +115, 7+(12*2), 16777215); }
+        else if (bookmarkPgB.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.goto").getString(), this.width/2 +115, 7+(12*3), 16777215); }
+        else if (importB.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.import").getString(), this.width/2 +115, 7+(12*4), 16777215); }
+        else if (exportB.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.export").getString(), this.width/2 +115, 7+(12*5), 16777215); }
 
     }
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
