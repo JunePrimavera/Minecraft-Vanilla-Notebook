@@ -38,6 +38,7 @@ public class NotebookScreen extends Screen {
     private List<OrderedText> cachedPage;
     private int cachedPageIndex;
     private Text pageIndexText;
+    private ButtonWidget closeButton;
     private ButtonWidget newPageButton;
     private PageTurnWidget nextPageButton;
     private PageTurnWidget previousPageButton;
@@ -102,7 +103,7 @@ public class NotebookScreen extends Screen {
         this.cursorIndex = readPage(BookFolder, pageIndex).length();;
         this.totalPages = getPageCount(BookFolder);
         // Add done/close button
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+        this.closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
             this.close();
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
@@ -157,6 +158,7 @@ public class NotebookScreen extends Screen {
 
     // Special keys (delete, backspace, etc)
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+
         if (super.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         } else {
@@ -205,6 +207,7 @@ public class NotebookScreen extends Screen {
                 }
             }
         }
+
     }
 
     // The code I am going to avoid like the plague
@@ -231,7 +234,7 @@ public class NotebookScreen extends Screen {
         int k = this.textRenderer.getWidth(this.pageIndexText);
 
 
-        context.drawText(this.textRenderer, Text.of("Alpha Build - Expect bugs!"), 5, this.height - 22, Colors.RED, true);
+        context.drawText(this.textRenderer, Text.of("Alpha Build - Expect bugs or missing features!"), 5, this.height - 22, Colors.RED, true);
         if (Notebook.DEV_ONLY) {
             context.drawText(this.textRenderer, Text.of("Notebook v3.0.0 - Development build"), 5, this.height - 10, Colors.WHITE, true);
         } else {
@@ -250,77 +253,8 @@ public class NotebookScreen extends Screen {
             context.drawText(var10001, orderedText, var10003, 32 + m * 9, 0, false);
         }
 
-        Style style = this.getTextStyleAt(mouseX, mouseY);
-        if (style != null) {
-            context.drawHoverEvent(this.textRenderer, style, mouseX, mouseY);
-        }
-
         super.render(context, mouseX, mouseY, delta);
     }
 
-    @Nullable
-    public Style getTextStyleAt(double x, double y) {
-        if (this.cachedPage.isEmpty()) {
-            return null;
-        } else {
-            int i = MathHelper.floor(x - (double)((this.width - 192) / 2) - 36.0);
-            int j = MathHelper.floor(y - 2.0 - 30.0);
-            if (i >= 0 && j >= 0) {
-                Objects.requireNonNull(this.textRenderer);
-                int k = Math.min(128 / 9, this.cachedPage.size());
-                if (i <= 114) {
-                    assert this.client != null;
-                    Objects.requireNonNull(this.client.textRenderer);
-                    if (j < 9 * k + k) {
-                        Objects.requireNonNull(this.client.textRenderer);
-                        int l = j / 9;
-                        if (l < this.cachedPage.size()) {
-                            OrderedText orderedText = (OrderedText)this.cachedPage.get(l);
-                            return this.client.textRenderer.getTextHandler().getStyleAt(orderedText, i);
-                        }
 
-                        return null;
-                    }
-                }
-
-                return null;
-            } else {
-                return null;
-            }
-        }
-    }
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
-            Style style = this.getTextStyleAt(mouseX, mouseY);
-            if (style != null && this.handleTextClick(style)) {
-                return true;
-            }
-        }
-
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
-    public boolean handleTextClick(Style style) {
-        assert style != null;
-        ClickEvent clickEvent = style.getClickEvent();
-        if (clickEvent == null) {
-            return false;
-        } else if (clickEvent.getAction() == ClickEvent.Action.CHANGE_PAGE) {
-            String string = clickEvent.getValue();
-
-            try {
-                this.pageIndex = Integer.parseInt(string) - 1;
-                return true;
-            } catch (Exception var5) {
-                return false;
-            }
-        } else {
-            boolean bl = super.handleTextClick(style);
-            if (bl && clickEvent.getAction() == ClickEvent.Action.RUN_COMMAND) {
-                assert this.client != null;
-                this.client.setScreen(null);
-            }
-
-            return bl;
-        }
-    }
 }
