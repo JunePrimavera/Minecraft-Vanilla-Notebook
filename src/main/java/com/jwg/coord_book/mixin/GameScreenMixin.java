@@ -1,10 +1,10 @@
 package com.jwg.coord_book.mixin;
 
+import com.jwg.coord_book.screens.menuScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.advancement.AdvancementsScreen;
-import net.minecraft.client.gui.screen.option.AccessibilityOptionsScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screen.ingame.BookScreen;
+import net.minecraft.client.gui.screen.option.LanguageOptionsScreen;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -26,7 +26,8 @@ public abstract class GameScreenMixin extends Screen {
 	private void addCustomButton(CallbackInfo ci) {
 		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, l + 72 + 12, 20, 20, 0, 0, 20, ACCESSIBILITY_ICON_TEXTURE, 32, 64, (button) -> {
 			//Code is run when the button is clicked
-			//this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
+			assert this.client != null;
+			this.client.setScreen(new menuScreen((BookScreen.Contents) this));
 		}, Text.translatable("jwg.button.bookmenu")));
 	}
 }
