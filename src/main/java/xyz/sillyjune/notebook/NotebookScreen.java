@@ -226,7 +226,7 @@ public class NotebookScreen extends Screen {
         if (!this.bookNameField.isSelected()) {
             if (super.keyPressed(keyCode, scanCode, modifiers)) { return true;
             } else {
-                if (Notebook.DEV_ONLY) {
+                if (CONFIG.debug()) {
                     System.out.println(keyCode);
                 }
                 switch (keyCode) {
@@ -315,7 +315,7 @@ public class NotebookScreen extends Screen {
         renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         context.drawText(this.textRenderer, Text.of("Beta Build - Expect minor bugs or missing features!"), 5, this.height - 22, Colors.RED / 2, true);
-        if (Notebook.DEV_ONLY) {
+        if (CONFIG.debug()) {
             context.drawText(this.textRenderer, Text.of("Notebook v3.1.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
             context.drawText(this.textRenderer, Text.of("Notebook v3.1.0"), 5, this.height - 10, Colors.WHITE, true);

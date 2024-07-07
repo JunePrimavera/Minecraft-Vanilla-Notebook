@@ -67,7 +67,9 @@ jar {
         rename { "${it}_${project.archivesBaseName}"}
     }
 }
-
+compileJava {
+    options.compilerArgs += ['--enable-preview']
+}
 // configure the maven publication
 publishing {
     publications {
