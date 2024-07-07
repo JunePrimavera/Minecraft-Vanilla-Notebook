@@ -3,15 +3,38 @@
 This is a small, vanilla-styled mod that lets you write notes in-game.
 
 It uses a similar GUI as a traditional book, but it's completely client-side and global - It will persist across worlds and servers.
+
+### Important notice for people updating the mod
+
+I try and avoid breaking changes, alas, the way I stored books previously was bad and changing it requires some user intervention.
+
+Versions older than v4.0.0 will be incompatible with newer versions, your notebooks will be reset otherwise.
+
+Updating them is simple, head into `.minecraft/Notebook` and you will see folders, each containing files with the contents of each page (Who thought this was a good way to store them.... oh wait, that was me. oh the regrets.)
+
+Now, create a file `[bookname].json` for each book, replacing `[bookname]` with whatever you want the book to be called.
+In the file, copy the below, replacing `default.json` with whatever you named the file;
+
+```json
+{
+  "content" : ["page 1 content","page 2 content"],
+  "location" : "default.json"
+}
+```
+
+Now, in `content`, you can add comma separated values, surrounded by `""`, containing the text for each page, replacing `"page 1 content"` and `"page 2 content"`.
+
+After that, you can reload the game and they should appear. 
+
 ## FAQ
 
 > What versions?
 
-I try and keep it on the latest version, but if people stick to specific versions I will support those for longer, until something else becomes more relevant. Versions older than 1.20.5 may not be supported, as some changes in java 21 are very useful.
+I try and keep it on the latest version, but if people stick to specific versions I will support those for longer, until something else becomes more relevant. Versions older than 1.20.5 may not be supported for very long, as some changes in Java 21 are very useful.
 
 > Forge/Fabric?
 
-The mod should work on fabric and quilt already. However forge is probably not going to get an official port.
+The mod should work on fabric and quilt already. However, forge is probably not going to get an official port.
 
 If you want to port it to forge yourself, you're more than welcome to - I will accept PRs and add branches to support forge if someone wants to maintain them.
 
