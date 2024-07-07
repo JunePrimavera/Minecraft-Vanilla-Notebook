@@ -14,13 +14,11 @@ While this is supposed to be used for coordinates, you can write whatever you wa
 
 ## FAQ
 
-> When will it be released?
-
-I don't know, it will take as long as it takes.
-
 > What versions?
 
 Whichever stay relevant, I'm hoping to keep it up to date on the latest version, but I probably won't update to 1.17 or earlier.
+
+Currently, it's on 1.18.x and 1.19.x
 
 > Forge/Fabric?
 
@@ -34,9 +32,13 @@ Yes, you can use it in your modpack. You don't need to credit me (Of course, if 
 
 > Where do I download it?
 
-Currently, it's only downloadable here, on GitHub.
+It's downloadable here, modrinth and curseforge.
 
-When it's done, it'll be downloadable on Curseforge and Modrinth.
+Go to the releases tab on the right to see it here;
+
+- Modrinth: https://modrinth.com/mod/notebook
+
+- CurseForge: (Waiting on approval)
 
 ## Support 
 
