@@ -34,55 +34,41 @@ public class NotebookScreen extends Screen {
     private PageTurnWidget nextPageButton;
     private PageTurnWidget previousPageButton;
     private final boolean pageTurnSound;
-
     public NotebookScreen() {
         this(false);
     }
-
     private NotebookScreen(boolean playPageTurnSound) {
         super(NarratorManager.EMPTY);
         this.cachedPage = Collections.emptyList();
-        //this.pageIndexText = ScreenTexts.EMPTY;
         this.pageTurnSound = playPageTurnSound;
-
     }
     /// Creates a new blank page
     protected void newPage() {
-        String[] pages = DATA.content;
-        String[] new_pages = new String[pages.length+1];
+        String[] new_pages = new String[DATA.content.length+1];
         int i = 0;
-        for (String page : pages) {
-            new_pages[i] = page;
-            i++;
+        for (String page : DATA.content) {
+            new_pages[i] = page; i++;
         }
         new_pages[new_pages.length-1] = " ";
-        DATA.content = new_pages;
-        DATA.write();
+        DATA.content = new_pages; DATA.write();
         this.goToNextPage();
     }
     // Removes the last page
     protected void delPage() {
-        String[] pages = DATA.content;
-        String[] new_pages = new String[pages.length-1];
+        String[] new_pages = new String[DATA.content.length-1];
         int i = 0;
         for (String _ : new_pages) {
-            new_pages[i] = pages[i];
-            i++;
+            new_pages[i] = DATA.content[i]; i++;
         }
-        DATA.content = new_pages;
-        DATA.write();
+        DATA.content = new_pages; DATA.write();
         this.goToPreviousPage();
     }
     // Reads an existing page from storage
     protected String readPage(int pagei) {
-        if (pagei >= DATA.content.length) {
-            newPage();
-        }
-        String content = DATA.content[pagei];
+        if (pagei >= DATA.content.length) { newPage(); }
         // Prevents a crash if pages become corrupted somehow
-        return Objects.requireNonNullElse(content, "");
+        return Objects.requireNonNullElse(DATA.content[pagei], "");
     }
-
     // Get index of book in folder
     protected int getBookIndex() {
         for (int i = 0; i < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length; i++) {
@@ -92,7 +78,6 @@ public class NotebookScreen extends Screen {
         }
         return 0;
     }
-
     void next_book() {
         int bookIndex = getBookIndex();
         if (bookIndex < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length - 1) {
@@ -111,8 +96,6 @@ public class NotebookScreen extends Screen {
             this.updatePageButtons();
         }
     }
-
-    // Button related functions
     protected void goToPreviousPage() {
         if (this.pageIndex > 0) { --this.pageIndex; }
         this.cursorIndex = readPage(pageIndex).length();
@@ -131,14 +114,12 @@ public class NotebookScreen extends Screen {
         this.cursorIndex = readPage(pageIndex).length();
         // Add done/close button
         closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (_) -> this.close()).dimensions(this.width / 2 - 100, 196, 200, 20).build());
-
         // Page buttons
         int i = (this.width - 192) / 2;
         this.nextPageButton = this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (_) -> this.goToNextPage(), this.pageTurnSound));
         this.previousPageButton = this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (_) -> this.goToPreviousPage(), this.pageTurnSound));
         this.newPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 119, 155, 20, 20, NEW_PAGE_ICON, (_) -> newPage()));
         this.delPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 99, 155, 20, 20, DEL_PAGE_ICON, (_) -> delPage()));
-
         // Top bar buttons
         this.bookNameField = this.addDrawableChild(new TextFieldWidget(this.textRenderer, 5, 5, 108, 20, Text.translatable("notebook.text.field")));
         this.bookNameField.setEditable(true);
@@ -156,7 +137,6 @@ public class NotebookScreen extends Screen {
         this.delPageButton.visible = onFinalPage;
         this.previousPageButton.visible = this.pageIndex > 0;
     }
-
     // Special keys (delete, backspace, etc)
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -168,8 +148,7 @@ public class NotebookScreen extends Screen {
                 case 259 -> {
                     // Backspace
                     if (cursorIndex > 0) {
-                        DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex - 1) + DATA.content[pageIndex].substring(cursorIndex);
-                        DATA.write();
+                        DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex - 1) + DATA.content[pageIndex].substring(cursorIndex); DATA.write();
                         this.cursorIndex -= 1;
                     }
                     return true;
@@ -177,24 +156,12 @@ public class NotebookScreen extends Screen {
                 case 261 -> {
                     // Delete key
                     if (cursorIndex < DATA.content[pageIndex].length()) {
-                        DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex) + DATA.content[pageIndex].substring(cursorIndex + 1);
-                        DATA.write();
+                        DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex) + DATA.content[pageIndex].substring(cursorIndex + 1); DATA.write();
                     }
                     return true;
                 }
-                case 262 -> {
-                    String pageContent = this.readPage(pageIndex);
-                    if (cursorIndex < pageContent.length()) {
-                        cursorIndex += 1;
-                    }
-                    return true;
-                }
-                case 263 -> {
-                    if (cursorIndex > 0) {
-                        cursorIndex -= 1;
-                    }
-                    return true;
-                }
+                case 262 -> { if (cursorIndex < DATA.content[pageIndex].length()) { cursorIndex += 1; } return true; }
+                case 263 -> { if (cursorIndex > 0) { cursorIndex -= 1; } return true; }
                 default -> { return false; }
             }
         } else {
@@ -218,13 +185,11 @@ public class NotebookScreen extends Screen {
         }
         return false;
     }
-
     // The code I am going to avoid like the plague
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         if (GAY) { context.drawText(this.textRenderer, Text.of("Happy pride month! :3"), 5, this.height - 22, Colors.RED / 2, true); }
-
         if (CONFIG.debug()) {
             context.drawText(this.textRenderer, Text.of(STR."Notebook v4.0.0 - \{Text.translatable("devwarning.info").getString()}"), 5, this.height - 10, Colors.WHITE, true);
         } else {
