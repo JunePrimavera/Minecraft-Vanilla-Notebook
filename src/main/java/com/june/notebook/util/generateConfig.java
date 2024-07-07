@@ -1,6 +1,6 @@
-package com.jwg.notebook.util;
+package com.june.notebook.util;
 
-import com.jwg.notebook.Notebook;
+import com.june.notebook.Notebook;
 
 import java.io.File;
 import java.io.IOException;

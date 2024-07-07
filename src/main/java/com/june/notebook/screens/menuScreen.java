@@ -1,13 +1,14 @@
-package com.jwg.notebook.screens;
+package com.june.notebook.screens;
 
-import com.jwg.notebook.Notebook;
-import com.jwg.notebook.gui.button.gotobookmark;
-import com.jwg.notebook.gui.sidebar;
-import com.jwg.notebook.util.addCharacter;
+import com.june.notebook.Notebook;
+import com.june.notebook.gui.button.gotobookmark;
+import com.june.notebook.gui.sidebar;
+import com.june.notebook.util.addCharacter;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.GameModeSelectionScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.jwg.notebook.Notebook.*;
+import static com.june.notebook.Notebook.*;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
@@ -69,7 +70,6 @@ public class menuScreen extends Screen {
 
     protected void init() {
         assert this.client != null;
-        this.client.keyboard.setRepeatEvents(true);
         this.addButtons();
     }
 
@@ -77,13 +77,15 @@ public class menuScreen extends Screen {
 
     protected void addButtons() {
         //Done button
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> { assert this.client != null; this.client.setScreen(null); }));
-
+        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+            assert this.client != null;
+            this.client.setScreen(null);
+        }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         //Sidebar buttons
-        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> com.jwg.notebook.gui.button.delete.onPress(page))));
-        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> com.jwg.notebook.gui.button.gotobookmark.onPress())));
-        this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> com.jwg.notebook.gui.button.bookmark.onPress())));
+        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> com.june.notebook.gui.button.delete.onPress(page))));
+        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> com.june.notebook.gui.button.gotobookmark.onPress())));
+        this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> com.june.notebook.gui.button.bookmark.onPress())));
         assert this.client != null;
 
         //Page buttons (arrows)
@@ -120,7 +122,7 @@ public class menuScreen extends Screen {
         }
     }
     public void renderBookText(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
         int i = (this.width - 192) / 2;
@@ -162,7 +164,7 @@ public class menuScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
     public void renderSideBar(MatrixStack matrices, int mouseX, int mouseY, float delta){
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
         int i = (this.width - -150) / 2;
@@ -171,7 +173,7 @@ public class menuScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
     public void renderTooltips(MatrixStack matrices){
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
 
