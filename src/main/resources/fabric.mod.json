@@ -4,9 +4,9 @@
   "version": "2.0.0",
 
   "name": "Vanilla Notebook",
-  "description": "Adds a simple coordinate book in the menus.",
+  "description": "Adds a simple notebook to your GUIs.",
   "authors": [
-    "JWGardiner"
+    "Juniper"
   ],
   "contact": {
     "homepage": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook",
@@ -40,7 +40,7 @@
       "parent": {
         "id": "vanilla-notebook",
         "name": "Vanilla Notebook",
-        "description": "Adds a notebook to your GUI.",
+        "description": "Adds a simple notebook to your GUIs.",
         "icon": "assets/notebook/icon.png"
       }
     }
