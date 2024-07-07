@@ -23,7 +23,7 @@ public class Notebook implements ModInitializer {
         // Create config file if it doesn't exist
         if (!new File("config/notebook.conf").exists()) {
             try {
-                if (!new File("config/notebook.json").createNewFile()) {
+                if (!new File("config/notebook.conf").createNewFile()) {
                     System.err.println("Failed to create config file! Make a bug report if you see this");
                 } else {
                     FileWriter w = new FileWriter("config/notebook.conf");
@@ -45,6 +45,7 @@ public class Notebook implements ModInitializer {
                 String d = r.nextLine();
                 if (line == 0) { if (Objects.equals(d, "0")) { DEV_ONLY = false; } else { DEV_ONLY = true; } }
                 else if (line == 1) { BOOK_FOLDER = d; }
+                else if (line == 2) { BUTTON_OFFSET = Integer.parseInt(d); }
                 line += 1;
             }
             r.close();
@@ -71,5 +72,6 @@ public class Notebook implements ModInitializer {
     public static final Identifier LAST_BOOK_ICON = new Identifier("notebook:textures/gui/last_book.png");
     public static final Identifier NEXT_BOOK_ICON = new Identifier("notebook:textures/gui/next_book.png");
     public static String BOOK_FOLDER = "Notebook";
-    public static boolean DEV_ONLY = true;
+    public static boolean DEV_ONLY = false;
+    public static int BUTTON_OFFSET = 0;
 }
