@@ -15,13 +15,16 @@ import java.io.IOException;
 
 public class CoordBook implements ModInitializer {
 	public static final boolean developerMode = false;
-	public static final String version = "1.0.0";
+	public static final String version = "1.1.0";
 	public static final String project = "Coordinate-Book";
 	public static String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
 
 	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
+	public static final Identifier BOOKMARK_ICON = new Identifier("coordbook:textures/gui/bookmark.png");
+	public static final Identifier BOOKMARK_ENABLED_ICON = new Identifier("coordbook:textures/gui/bookmark-enabled.png");
+	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("coordbook:textures/gui/bookmark-tab.png");
 	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/cross.png");
 
 	public static boolean NEEDS_SETUP = false;
