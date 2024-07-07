@@ -78,12 +78,18 @@ public class menuScreen extends Screen {
             }
         }
     }
+
+    protected void closeBookScreen() {
+        assert this.client != null;
+        this.client.setScreen((Screen)null);
+    }
     protected void addButtons() {
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> {
             assert this.client != null;
             this.client.setScreen(null);
         }));
+
         //Delete page button
         if (deletePageButtonShown) {
             this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
@@ -120,7 +126,6 @@ public class menuScreen extends Screen {
             page = 0;
         }
     }
-
     protected void goToNextPage() {
         ++page;
         if (!new File(pageLocation+"/"+page+".jdat").exists()) {
@@ -144,9 +149,7 @@ public class menuScreen extends Screen {
         this.drawTexture(matrices, i, 2, 0, 0, 192, 192);
         this.pageIndexText = Text.translatable("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File(pageLocation+"/").list()).length), 1));
 
-
         drawStringWithShadow(matrices, this.textRenderer, String.valueOf(versionText), 2, this.height - 10, 16777215);
-
 
         StringBuilder fulldata = new StringBuilder();
         try {
@@ -166,10 +169,8 @@ public class menuScreen extends Screen {
         StringVisitable stringVisitable = StringVisitable.plain(this.contents);
         this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
 
-
         int k = this.textRenderer.getWidth(this.pageIndexText);
         this.textRenderer.draw(matrices, this.pageIndexText, (float)(i - k + 192 - 44), 18.0F, 1);
-
 
         Objects.requireNonNull(this.textRenderer);
         int l = Math.min(128 / 9, this.cachedPage.size());
@@ -200,20 +201,30 @@ public class menuScreen extends Screen {
         int code = getExtendedKeyCodeForChar(keyCode);
         char key = (char) code;
         String keystring = String.valueOf(key).toLowerCase();
-        if (code == 16777473) {
-            keystring = "";
-            removePage(page);
+        if (!deletePageButtonShown) {
+            if (code == 16777473) {
+                keystring = "";
+                removePage(page);
+            }
         }
 
         if (developerMode) {
             System.out.println(code + "\n" + key);
         }
+
+        keystring = switch (code) {
+            case 192, 16777473, 16777559, 16777563, 16777481, 16777479 -> "";
+            case 16777549 -> "-";
+            case 16777547 -> "/";
+            default -> throw new IllegalStateException("Unexpected value: " + code);
+        };
+        
         ++o;
         if (code == 0) {
             keystring = "";
             nextCharacterSpecial = true;
             o = 1;
-        } else if (code == 16777475){
+        } else if (code == 16777475 || code == 16777547){
             keystring = "";
             if (!Objects.equals(this.contents, "")) {
                 this.contents = this.contents.substring(0, this.contents.length() - 1);
