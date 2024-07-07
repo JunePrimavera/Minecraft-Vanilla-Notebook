@@ -60,7 +60,7 @@ public class configScreen extends Screen {
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         // Preset toggle
-        presetButton = ButtonWidget.builder(Text.of("Presets: " + Notebook.presetsEnabled), (button) -> {
+        presetButton = ButtonWidget.builder(Text.of(Text.translatable("category.notebook.presets").getString()+": " + Notebook.presetsEnabled), (button) -> {
             Notebook.presetsEnabled = !Notebook.presetsEnabled;
 
         } ).dimensions(15, 32, 80, 20).build();
