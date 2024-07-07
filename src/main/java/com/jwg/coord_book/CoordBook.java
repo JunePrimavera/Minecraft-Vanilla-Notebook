@@ -1,5 +1,6 @@
 package com.jwg.coord_book;
 
+import com.jwg.coord_book.util.ensureFileStructureExists;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.slf4j.Logger;
@@ -11,8 +12,8 @@ public class CoordBook implements ModInitializer {
 	@Override
 	public void onInitialize(ModContainer mod) {
 		LOGGER.info("{} has started initializing!", mod.metadata().name());
-
-
+		boolean importantFilesExist = ensureFileStructureExists.exists("CoordinateBook/", "coords.json");
+		ensureFileStructureExists.createFiles(importantFilesExist);
 		LOGGER.info("{} has finished initializing!", mod.metadata().name());
 	}
 }
