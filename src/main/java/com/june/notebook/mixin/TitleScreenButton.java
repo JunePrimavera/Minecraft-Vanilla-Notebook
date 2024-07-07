@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.june.notebook.Notebook.BUTTON_OFFSET;
 import static com.june.notebook.Notebook.MAIN_BUTTON_ICON;
 
 
@@ -24,7 +25,7 @@ public abstract class TitleScreenButton extends Screen implements BookScreen.Con
     }
     @Inject(at = @At("RETURN"), method="initWidgetsNormal")
     private void addCustomButton(int y, int spacingY, CallbackInfo ci) {
-        this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104), y + spacingY, 20, 20, 0, 0, 20, MAIN_BUTTON_ICON, 32, 64, (button) -> {
+        this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104), y + spacingY + BUTTON_OFFSET, 20, 20, 0, 0, 20, MAIN_BUTTON_ICON, 32, 64, (button) -> {
             assert this.client != null;
             NotebookScreen.BookName = "Default";
             this.client.setScreen(new NotebookScreen());
