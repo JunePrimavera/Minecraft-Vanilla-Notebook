@@ -1,5 +1,6 @@
 package com.june.notebook.mixin;
 
+import com.june.notebook.screens.bookSelectScreen;
 import com.june.notebook.screens.menuScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -29,7 +30,7 @@ public abstract class TitleScreenMixin extends Screen implements BookScreen.Cont
 		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, y + spacingY, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
 			//Code is run when the button is clicked
 			assert this.client != null;
-			this.client.setScreen(new menuScreen());
+			this.client.setScreen(new bookSelectScreen());
 		}, Text.translatable("jwg.button.bookmenu")));
 	}
 }
