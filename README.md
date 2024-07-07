@@ -1,6 +1,6 @@
 # Minecraft Coordinate Book
 
-This is a small, vanilla styled mod that lets you write notes, or coordinates. This mod is made for quilt, but should work on fabric as well (UNTESTED!)
+This is a small, vanilla styled mod that lets you write notes, or coordinates. This mod is made for quilt, but should work on fabric as well.
 
 It uses the same GUI as a traditional book, but it's completely client-side, for each coordinate you can keep notes, to keep track of why you were there.
 
