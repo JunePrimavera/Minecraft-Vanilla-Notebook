@@ -50,11 +50,10 @@ public class Gui {
                 }
             }
         }
-
-        public class importButton {
+        public static class importButton {
             public static void onPress(String loc) { Util.ports.imports(loc, "Notebook/book.export"); }
         }
-        public class exportButton {
+        public static class exportButton {
             public static void onPress(String loc) { Util.ports.exports(loc); }
         }
     }
