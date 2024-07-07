@@ -271,9 +271,9 @@ public class NotebookScreen extends Screen {
         int k = this.textRenderer.getWidth(this.pageIndexText);
         context.drawText(this.textRenderer, Text.of("Alpha Build - Expect bugs or missing features!"), 5, this.height - 22, Colors.RED, true);
         if (Notebook.DEV_ONLY) {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.0.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v3.0.1 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.0.0"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v3.0.1"), 5, this.height - 10, Colors.WHITE, true);
         }
         if (!Objects.equals(this.bookNameField.getText(), BookName) && !Objects.equals(this.bookNameField.getText(), "")) {
            boolean bookExists = false;
