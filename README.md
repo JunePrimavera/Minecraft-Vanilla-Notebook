@@ -31,7 +31,7 @@ Yes, you can use it in your modpack. Preferably, with credit (Of course, if you 
 
 > Where do I download it?
 
-It's downloadable here, modrinth and ~~curseforge~~ (As of v1.3.0, curse is no longer supported).
+It's downloadable here, modrinth and curseforge - Curseforge is still pending.
 
 Go to the releases tab on the right to see it here, or go to a different site;
 
