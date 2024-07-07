@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class CoordBook implements ModInitializer {
-	public static final boolean developerMode = true;
+	public static final boolean developerMode = false;
 	public static final String version = "1.1.0";
 	public static final String project = "Coordinate-Book";
 	public static String pageLocation = "CoordinateBook";
