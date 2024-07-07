@@ -114,7 +114,7 @@ public class menuScreen extends Screen {
             this.client.setScreen(this);
         }, this.pageTurnSound));
 
-        if (developerMode) { this.versionText = "Vanilla Notebook "+version+" Developer build";
+        if (developerMode) { this.versionText = "Vanilla Notebook "+version+Text.translatable("devwarning.info").getString();
         } else { this.versionText = "Vanilla Notebook " + version; }
     }
     public static void goToPreviousPage() {
