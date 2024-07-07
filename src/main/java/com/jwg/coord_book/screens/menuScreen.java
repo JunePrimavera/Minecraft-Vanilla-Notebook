@@ -38,6 +38,7 @@ public class menuScreen extends Screen {
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
+    public static boolean deletePageButtonShown = true;
     private final boolean pageTurnSound;
     private String versionText;
     private String contents;
@@ -86,10 +87,11 @@ public class menuScreen extends Screen {
             this.client.setScreen(null);
         }));
         //Delete page button
-        this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
-            removePage(page);
-        }, new TranslatableText("jwg.button.bookmenu")));
-
+        if (deletePageButtonShown) {
+            this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
+                removePage(page);
+            }, new TranslatableText("jwg.button.bookmenu")));
+        }
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
