@@ -211,7 +211,7 @@ public class menuScreen extends Screen {
         keystring = switch (code) {
             case 192, 16777473, 16777559, 16777563, 16777481, 16777479, 16777547 -> "";
             case 16777549 -> "-";
-            default -> throw new IllegalStateException("Unexpected value: " + code);
+            default -> keystring = keystring;
         };
         if (!deletePageButtonShown) {
             if (code == 16777473) {
