@@ -15,7 +15,7 @@
 				"issues": "https://github.com/JWGardiner/Minecraft-Coordinate-Book/issues",
 				"sources": "https://github.com/JWGardiner/Minecraft-Coordinate-Book"
 			},
-			"icon": "assets/icon.png"
+			"icon": "assets/coordbook/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
