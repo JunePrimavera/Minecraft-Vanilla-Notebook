@@ -138,7 +138,7 @@ public class menuScreen extends Screen {
                 if (!fulldata.toString().equals("")) {
                     data = "\n" + data;
                 }
-                fulldata.append(data);
+                fulldata.append("\n").append(data);
             }
             readPageContent.close();
         } catch (FileNotFoundException e) {
@@ -240,36 +240,45 @@ public class menuScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
     public boolean charTyped(char chr, int modifiers) {
-        this.ltchr = chr;
-        String keystring = String.valueOf(this.ltchr);
-        StringBuilder fulldata = new StringBuilder();
-        try {
-            Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
-            while (readPageContent.hasNextLine()) {
-                String data = readPageContent.nextLine();
-                if (!fulldata.toString().equals("")) {
-                    data = "\n" + data;
-                }
-                fulldata.append(data);
-            }
-            readPageContent.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        fulldata = new StringBuilder(addCharacter.add(String.valueOf(fulldata), cursorLoc, keystring));
+            int i = 0;
+            this.ltchr = chr;
+            String keystring = String.valueOf(this.ltchr);
+            StringBuilder fulldata = new StringBuilder();
+            try {
+                Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
+                while (readPageContent.hasNextLine()) {
+                    String data = readPageContent.nextLine();
+                    i++;
+                    if (i == 0) {
+                        fulldata.append("\n").append(data);
+                    } else {
+                        fulldata.append(data);
+                    }
 
-        try {
-            FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
-            updatePage.write(String.valueOf(fulldata));
-            updatePage.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Objects.requireNonNull(this.client).setScreen(this);
+                }
+                readPageContent.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            fulldata = new StringBuilder(addCharacter.add(String.valueOf(fulldata), cursorLoc, keystring));
+
+            try {
+                FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
+                updatePage.write(String.valueOf(fulldata));
+                updatePage.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Objects.requireNonNull(this.client).setScreen(this);
+
         return true;
+
     }
+
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        System.out.println(keyCode);
+
+
+        //Backspace/Delete
         if (keyCode == 259) {
             StringBuilder fulldata = new StringBuilder();
             Scanner readFile = null;
@@ -309,16 +318,26 @@ public class menuScreen extends Screen {
         }
 
         int location = cursorLoc;
+        //Right/left arrows
         if (keyCode == 262 && location++ > 0) cursorLoc--;
-
-        //Left arrow
         if (keyCode == 263 && location-- < this.contents.length()-1) cursorLoc++;
 
+        //Escape
         if (keyCode == 256) {
             assert this.client != null;
             this.client.setScreen(null);
         }
 
+        //Enter
+        if (keyCode == 257) {
+            this.contents = "\n ";
+
+            try {
+                FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
+                updatePage.write(this.contents);
+                updatePage.close();
+            } catch (IOException e) { e.printStackTrace(); }
+        }
 
         return true;
     }
