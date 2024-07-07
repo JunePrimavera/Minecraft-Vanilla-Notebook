@@ -113,10 +113,8 @@ public class Util {
                 int it = 0;
                 while (r.hasNextLine()) {
                     String data = r.nextLine();
-                    System.out.println(data);
                     if (Objects.equals(data, "{_ENDOFPAGE_}")) {
                         boolean b = new File(pagelocation + "/" + it + ".jdat").createNewFile();
-                        System.out.println("WEWEEW");
                         try {
                             FileWriter f = new FileWriter(pagelocation + "/" + it + ".jdat");
                             f.write(String.valueOf(import_file_data));
