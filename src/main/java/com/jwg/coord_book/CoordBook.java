@@ -11,9 +11,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class CoordBook implements ModInitializer {
-	public static final boolean developerMode = false;
-	public static final String version = "0.2.0";
+	public static final boolean developerMode = true;
+	public static final String version = "0.3.0";
 	public static final String project = "Coordinate-Book";
+	public static final String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
 
@@ -21,8 +22,9 @@ public class CoordBook implements ModInitializer {
 	@Override
 	public void onInitialize(ModContainer mod) {
 		LOGGER.info("{} has started initializing!", mod.metadata().name());
-		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists("CoordinateBook/"));
-		File firstPage = new File("CoordinateBook/0.json");
+		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"/"));
+		File firstPage = new File(pageLocation+"/0.jdat");
+		LOGGER.info("Page folder is \"{}\"", pageLocation);
 		try {
 			if (firstPage.createNewFile()){
 				LOGGER.info("Created first page of the coordinate book");
