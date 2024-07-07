@@ -322,9 +322,34 @@ public class menuScreen extends Screen {
                     e.printStackTrace();
                 }
             }
-
         }
-
+        if (keyCode == 257) {
+            StringBuilder fulldata = new StringBuilder();
+            try {
+                Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
+                while (readPageContent.hasNextLine()) {
+                    String data = readPageContent.nextLine();
+                    if (!fulldata.toString().equals("")) {
+                        data = "\n" + data;
+                    }
+                    fulldata.append(data);
+                }
+                readPageContent.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (!fulldata.toString().equals("")) {
+                fulldata = new StringBuilder(fulldata + "\n ");
+                this.contents = String.valueOf(fulldata);
+                try {
+                    FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
+                    updatePage.write(String.valueOf(fulldata));
+                    updatePage.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return true;
     }
     @Nullable
