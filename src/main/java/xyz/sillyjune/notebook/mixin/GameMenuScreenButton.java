@@ -1,11 +1,8 @@
-package com.june.notebook.mixin;
+package xyz.sillyjune.notebook.mixin;
 
-import com.june.notebook.NotebookScreen;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import xyz.sillyjune.notebook.NotebookScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,8 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.june.notebook.Notebook.BUTTON_OFFSET;
-import static com.june.notebook.Notebook.MAIN_BUTTON_ICON;
+import static xyz.sillyjune.notebook.Notebook.MAIN_BUTTON_ICON;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenButton extends Screen {
