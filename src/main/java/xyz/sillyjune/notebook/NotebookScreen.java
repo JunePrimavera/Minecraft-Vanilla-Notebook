@@ -296,12 +296,6 @@ public class NotebookScreen extends Screen {
         int i = (this.width - 192) / 2;
 
 
-        context.drawText(this.textRenderer, Text.of("Beta Build - Expect minor bugs or missing features!"), 5, this.height - 22, Colors.RED / 2, true);
-        if (Notebook.DEV_ONLY) {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
-        } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0"), 5, this.height - 10, Colors.WHITE, true);
-        }
         if (!Objects.equals(this.bookNameField.getText(), BookName) && !Objects.equals(this.bookNameField.getText(), "")) {
            boolean bookExists = false;
             for (int it = 0; it == Objects.requireNonNull(new File(BOOK_FOLDER).list()).length; it++) {
@@ -318,11 +312,14 @@ public class NotebookScreen extends Screen {
 
             }
         }
-
-
         renderBackground(context, mouseX, mouseY, delta);
-
         super.render(context, mouseX, mouseY, delta);
+        context.drawText(this.textRenderer, Text.of("Beta Build - Expect minor bugs or missing features!"), 5, this.height - 22, Colors.RED / 2, true);
+        if (Notebook.DEV_ONLY) {
+            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+        } else {
+            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0"), 5, this.height - 10, Colors.WHITE, true);
+        }
     }
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         int i = (this.width - 192) / 2;
