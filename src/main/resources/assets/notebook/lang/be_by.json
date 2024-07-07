@@ -1,0 +1,17 @@
+{
+  "category.notebook.keys": "Vanilla Notebook",
+  "category.notebook.presets": "Кнігі",
+  "category.notebook.config": "Налады",
+  "key.notebook.open": "Адкрыць кнігу",
+  "tooltip.notebook.delete": "Выдаліць старонку",
+  "tooltip.notebook.bookmark.goto": "Вярнуцца на закладзеную старонку",
+  "tooltip.notebook.bookmark.create": "Закладзеная старонка",
+  "tooltip.notebook.import": "Імпарт",
+  "tooltip.notebook.export": "Экспарт",
+  "bookconfig.dir": "Папка для захоўвання кніг (Па змаўчанні: Notebook/Default)",
+  "bookconfig.startpage": "Starting Page (Па змаўчанні: 0)",
+  "bookconfig.limit": "Ліміт старонак (Па змаўчанни: -1)",
+  "bookconfig.warning": "Увага: Гульня з гэтымі наладамі можа зламаць ваш свет. Тут ё цмокі!",
+  "bookconfig.warning_reset": "Вы можаце сустрэць некаторыя памылкі, калі вы не перазапусціце гульню пасля змянення гэтых налад!",
+  "devwarning.info": "(Рэжым распрацоўшчыка)"
+}
