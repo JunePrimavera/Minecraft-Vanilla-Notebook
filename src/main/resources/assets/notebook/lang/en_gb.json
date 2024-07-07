@@ -1,0 +1,17 @@
+{
+  "category.notebook.keys": "Vanilla Notebook",
+  "category.notebook.presets": "Books",
+  "category.notebook.config": "Config",
+  "key.notebook.open": "Open Book",
+  "tooltip.notebook.delete": "Delete Page",
+  "tooltip.notebook.bookmark.goto": "Go to bookmarked page",
+  "tooltip.notebook.bookmark.create": "Bookmark page",
+  "tooltip.notebook.import": "Import",
+  "tooltip.notebook.export": "Export",
+  "bookconfig.dir": "Book Storage Directory (Default: Notebook/Default)",
+  "bookconfig.startpage": "Starting Page (Default: 0)",
+  "bookconfig.limit": "Page Limit (Default: -1)",
+  "bookconfig.warning": "Warning: Messing with these can break your installation. Here be dragons!",
+  "bookconfig.warning_reset": "You may experience bugs if you don't restart your game after changing these!",
+  "devwarning.info": "(Developer build)"
+}
