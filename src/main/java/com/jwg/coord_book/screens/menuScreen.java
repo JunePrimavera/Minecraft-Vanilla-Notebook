@@ -13,15 +13,11 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -30,20 +26,8 @@ import java.util.Objects;
 public class menuScreen extends Screen {
 
     public static int page = 0;
-    public static final BookScreen.Contents EMPTY_PROVIDER = new BookScreen.Contents() {
-        public int getPageCount() {
-            return page;
-        }
-
-        public StringVisitable getPageUnchecked(int index) {
-            return StringVisitable.EMPTY;
-        }
-    };
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
-    private BookScreen.Contents contents;
-    private int pageIndex;
-    private List<OrderedText> cachedPage;
-    private int cachedPageIndex;
+    private final List<OrderedText> cachedPage;
     private Text pageIndexText;
     private final boolean pageTurnSound;
 
@@ -51,36 +35,23 @@ public class menuScreen extends Screen {
         this(contents, true);
     }
 
-    public menuScreen() {
-        this(EMPTY_PROVIDER, false);
-    }
-
     private menuScreen(BookScreen.Contents contents, boolean bl) {
         super(NarratorManager.EMPTY);
         this.cachedPage = Collections.emptyList();
-        this.cachedPageIndex = -1;
         this.pageIndexText = ScreenTexts.EMPTY;
-        this.contents = contents;
         this.pageTurnSound = bl;
-    }
-
-    public boolean setPage(int index) {
-        page = index;
-        return true;
-    }
-
-    protected boolean jumpToPage(int page) {
-        return this.setPage(page);
     }
 
     protected void init() {
         this.addButtons();
     }
     protected void addButtons() {
+        //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> {
             assert this.client != null;
-            this.client.setScreen((Screen)null);
+            this.client.setScreen(null);
         }));
+        //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
             this.goToNextPage();
@@ -121,18 +92,16 @@ public class menuScreen extends Screen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
         int i = (this.width - 192) / 2;
-        boolean j = true;
         this.drawTexture(matrices, i, 2, 0, 0, 192, 192);
         this.pageIndexText = Text.translatable("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File("CoordinateBook/").list()).length), 1));
 
-        this.cachedPageIndex = this.pageIndex;
         int k = this.textRenderer.getWidth(this.pageIndexText);
         this.textRenderer.draw(matrices, this.pageIndexText, (float)(i - k + 192 - 44), 18.0F, 0);
         Objects.requireNonNull(this.textRenderer);
         int l = Math.min(128 / 9, this.cachedPage.size());
 
         for(int m = 0; m < l; ++m) {
-            OrderedText orderedText = (OrderedText)this.cachedPage.get(m);
+            OrderedText orderedText = this.cachedPage.get(m);
             TextRenderer var10000 = this.textRenderer;
             float var10003 = (float)(i + 36);
             Objects.requireNonNull(this.textRenderer);
@@ -141,22 +110,4 @@ public class menuScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    protected void closeBookScreen() {
-        this.client.setScreen((Screen)null);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static abstract class WritableBookContents implements BookScreen.Contents {
-        public int getPageCount() {
-            return Objects.requireNonNull(new File("CoordinateBook/").list()).length;
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static abstract class WrittenBookContents implements BookScreen.Contents {
-
-        public int getPageCount() {
-            return Objects.requireNonNull(new File("CoordinateBook/").list()).length;
-        }
-    }
 }
