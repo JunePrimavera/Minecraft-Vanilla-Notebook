@@ -1,16 +1,22 @@
 package com.june.notebook.screens;
 
+import com.june.notebook.Gui;
 import com.june.notebook.Notebook;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.*;
-import net.minecraft.util.Identifier;
+
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.june.notebook.Notebook.*;
 
 
 @Environment(EnvType.CLIENT)
@@ -34,30 +40,45 @@ public class bookSelectScreen extends Screen {
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         // Preset buttons
+
+        AtomicReference<String> location = new AtomicReference<>(Notebook.pageLocation);
         this.addDrawableChild(ButtonWidget.builder(Text.of("1"), (button) -> {
-            Notebook.pageLocation = "Notebook/Default1";
+            if (!Objects.equals(location.get(), Notebook.verified_page_location)) {
+                location.set(Notebook.verified_page_location);
+                Notebook.pageLocation = Notebook.verified_page_location;
+            }
+            Notebook.pageLocation = location+"1";
             assert this.client != null;
             this.client.setScreen(new menuScreen());
         }).dimensions(this.width / 2 - 70, 32, 20, 20).build());
         this.addDrawableChild(ButtonWidget.builder(Text.of("2"), (button) -> {
-            Notebook.pageLocation = "Notebook/Default2";
+            if (!Objects.equals(location.get(), Notebook.verified_page_location)) {
+                location.set(Notebook.verified_page_location);
+                Notebook.pageLocation = Notebook.verified_page_location;
+            }
+            Notebook.pageLocation = location+"2";
             assert this.client != null;
             this.client.setScreen(new menuScreen());
         }).dimensions(this.width / 2 - 10 , 32, 20, 20).build());
         this.addDrawableChild(ButtonWidget.builder(Text.of("3"), (button) -> {
-            Notebook.pageLocation = "Notebook/Default3";
+            if (!Objects.equals(location.get(), Notebook.verified_page_location)) {
+                location.set(Notebook.verified_page_location);
+                Notebook.pageLocation = Notebook.verified_page_location;
+            }
+            Notebook.pageLocation = location+"3";
             assert this.client != null;
             this.client.setScreen(new menuScreen());
         }).dimensions(this.width / 2 + 50, 32, 20, 20).build());
 
         // Config button
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Mod Config"), (button) -> {
+        this.addDrawableChild(Gui.sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> {
+
+        })));
+        this.addDrawableChild(new TexturedButtonWidget(5, 5, 20, 20, 0, 0, 20, CONFIG_ICON, 32, 64, (button) -> {
             assert this.client != null;
             this.client.setScreen(new configScreen());
-        }).dimensions(this.width / 2 - 40 , 64, 80, 20).build());
+        }, Text.translatable("jwg.button.config")));
     }
-
-
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
