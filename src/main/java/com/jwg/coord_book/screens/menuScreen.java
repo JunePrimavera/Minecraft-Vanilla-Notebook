@@ -33,6 +33,7 @@ public class menuScreen extends Screen {
 
     boolean nextCharacterSpecial = false;
     public static int page = 0;
+    public static int bookmarkedpage = 0;
     public static int pageLimit = -1;
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     private List<OrderedText> cachedPage;
@@ -92,10 +93,17 @@ public class menuScreen extends Screen {
 
         //Delete page button
         if (deletePageButtonShown) {
-            this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
+            this.addDrawableChild(new TexturedButtonWidget(this.width -21, this.height-21, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
                 removePage(page);
-            }, Text.translatable("jwg.button.bookmenu")));
+            }, Text.translatable("jwg.button.close")));
+            this.addDrawableChild(new TexturedButtonWidget(this.width-42, this.height-21, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {
+                page = bookmarkedpage;
+                assert this.client != null;
+                this.client.setScreen(this);
+            }, Text.translatable("jwg.button.bookmark")));
+            
         }
+
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
