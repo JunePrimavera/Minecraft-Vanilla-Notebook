@@ -1,5 +1,6 @@
 package xyz.sillyjune.notebook.mixin;
 
+import net.minecraft.client.gui.screen.ButtonTextures;
 import xyz.sillyjune.notebook.NotebookScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -24,7 +25,8 @@ public abstract class TitleScreenButton extends Screen {
     }
     @Inject(at = @At("RETURN"), method="initWidgetsNormal")
     private void addCustomButton(int y, int spacingY, CallbackInfo ci) {
-        this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104), y + spacingY + CONFIG.button_offset(), 20, 20, MAIN_BUTTON_ICON, (button) -> this.client.setScreen(new NotebookScreen())));
+        ButtonTextures icon = getBookIcon();
+        this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104), y + spacingY + CONFIG.button_offset(), 20, 20, icon, (button) -> this.client.setScreen(new NotebookScreen())));
     }
 }
 
