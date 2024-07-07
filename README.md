@@ -45,4 +45,3 @@ If you like the mod, or other projects, please consider [buying me a coffee](htt
 You can also [join my discord](https://discord.gg/EqTwbVYEWx) if you have any questions, need help, or want to talk to me directly.
 
 You can also help support this mod by translating it into other languages, making textures, or reporting bugs/requesting features at the top menu. If you want to add textures/translations, contact me on discord above.
-
