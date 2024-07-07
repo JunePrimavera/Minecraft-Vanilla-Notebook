@@ -1,5 +1,6 @@
 package xyz.sillyjune.notebook;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -205,56 +206,54 @@ public class NotebookScreen extends Screen {
     }
 
     // Special keys (delete, backspace, etc)
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.bookNameField.isSelected()) {
-            if (super.keyPressed(keyCode, scanCode, modifiers)) { return true;
-            } else {
-                if (CONFIG.debug()) {
-                    System.out.println(keyCode);
+            if (CONFIG.debug()) {
+                System.out.println(keyCode);
+            }
+            switch (keyCode) {
+                case 266 -> { this.previousPageButton.onPress(); return true; }
+                case 267 -> { this.nextPageButton.onPress(); return true; }
+                case 259 -> {
+                    String pageContent = this.readPage(pageIndex);
+                    if (cursorIndex > 0) {
+                        pageContent = pageContent.substring(0, cursorIndex - 1) + pageContent.substring(cursorIndex);
+                        String[] content = DATA.content();
+                        content[pageIndex] = pageContent;
+                        DATA = new NotebookData(content, DATA.location());
+                        NotebookData.write(DATA);
+                        this.cursorIndex -= 1;
+                    }
+                    return true;
                 }
-                switch (keyCode) {
-                    case 266 -> { this.previousPageButton.onPress(); return true; }
-                    case 267 -> { this.nextPageButton.onPress(); return true; }
-                    case 259 -> {
-                        String pageContent = this.readPage(pageIndex);
-                        if (cursorIndex > 0) {
-                            pageContent = pageContent.substring(0, cursorIndex - 1) + pageContent.substring(cursorIndex);
-                            String[] content = DATA.content();
-                            content[pageIndex] = pageContent;
-                            DATA = new NotebookData(content, DATA.location());
-                            NotebookData.write(DATA);
-                            this.cursorIndex -= 1;
-                        }
-                        return true;
+                case 261 -> {
+                    String pageContent = this.readPage(pageIndex);
+                    if (cursorIndex < pageContent.length()) {
+                        pageContent = pageContent.substring(0, cursorIndex) + pageContent.substring(cursorIndex + 1);
+                        String[] content = DATA.content();
+                        content[pageIndex] = pageContent;
+                        DATA = new NotebookData(content, DATA.location());
+                        NotebookData.write(DATA);
                     }
-                    case 261 -> {
-                        String pageContent = this.readPage(pageIndex);
-                        if (cursorIndex < pageContent.length()) {
-                            pageContent = pageContent.substring(0, cursorIndex) + pageContent.substring(cursorIndex + 1);
-                            String[] content = DATA.content();
-                            content[pageIndex] = pageContent;
-                            DATA = new NotebookData(content, DATA.location());
-                            NotebookData.write(DATA);
-                        }
-                        return true;
+                    return true;
+                }case 262 -> {
+                    String pageContent = this.readPage( pageIndex);
+                    this.deselButtons();
+                    if (cursorIndex < pageContent.length()) {
+                        cursorIndex += 1;
                     }
-                    case 262 -> {
-                        String pageContent = this.readPage( pageIndex);
-                        this.deselButtons();
-                        if (cursorIndex < pageContent.length()) {
-                            cursorIndex += 1;
-                        }
-                        return true;
-                    }
-                    case 263 -> {
-                        this.deselButtons();
-                        if (cursorIndex > 0) {
-                            cursorIndex -= 1;
-                        }
-                        return true;
-                    }
-                    default -> { return false; }
+                    return true;
                 }
+                case 263 -> {
+                    this.deselButtons();
+                    if (cursorIndex > 0) {
+                        cursorIndex -= 1;
+                    }
+                    return true;
+                }
+                default -> { return false; }
+
             }
         } else {
             if (keyCode == 257) {
@@ -266,6 +265,7 @@ public class NotebookScreen extends Screen {
         }
     }
     // Normal typing
+    @Override
     public boolean charTyped(char chr, int modifiers) {
         if (!this.bookNameField.isSelected()) {
             String pageContent = this.readPage(pageIndex);
