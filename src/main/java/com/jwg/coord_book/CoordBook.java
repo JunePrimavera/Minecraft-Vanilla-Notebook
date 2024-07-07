@@ -27,8 +27,6 @@ public class CoordBook implements ModInitializer {
 
 
 	public static final Identifier BOOKMARK_ICON = new Identifier("coordbook:textures/gui/bookmark-goto.png");
-	public static final Identifier EXPORT_ICON = new Identifier("coordbook:textures/gui/export-button.png");
-	public static final Identifier IMPORT_ICON = new Identifier("coordbook:textures/gui/import-button.png");
 	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/del-page.png");
 
 
