@@ -16,6 +16,7 @@ import static com.june.notebook.Keybind.openBookKeybindRegister;
 
 public class Notebook implements ModInitializer {
 	public static boolean presetsEnabled = true;
+	public static String verified_page_location = "Notebook/Default";
 	public static final boolean developerMode = false;
 	public static final String version = "2.1.0";
 	public static final String project = "Vanilla-Notebook";
@@ -26,14 +27,26 @@ public class Notebook implements ModInitializer {
 	public static final Identifier BOOKMARK_ICON = new Identifier("notebook:textures/gui/bookmark-goto.png");
 	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("notebook:textures/gui/bookmark.png");
 	public static final Identifier DELETE_ICON = new Identifier("notebook:textures/gui/del-page.png");
-
+	public static final Identifier CONFIG_ICON = new Identifier("notebook:textures/gui/config.png");
 
 	public static boolean NEEDS_SETUP = false;
 
-	@Override
-	public void onInitialize() {
+	public static void re_init(boolean is_p_init) {
+
+		readConfig.read();
+		verified_page_location = pageLocation;
+		// I should probably improve this code
+		// It's very cursed but in a weird way i love it
 		LOGGER.info("{} has started initializing!", project);
 		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"1/"));
+		if (!new File(pageLocation+"1/0.jdat").exists()) {
+			try {
+				boolean b = new File(pageLocation+"1").mkdirs();
+				b = new File(pageLocation+"1/0.jdat").createNewFile();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		File firstPage = new File(pageLocation+"1/0.jdat");
 		LOGGER.info("Page folder is \"{}\"", pageLocation);
 		boolean tmp = false;
@@ -42,6 +55,14 @@ public class Notebook implements ModInitializer {
 			if (firstPage.createNewFile()){ LOGGER.info("Created first page of the book.."); NEEDS_SETUP = true; }
 		} catch (IOException e) { System.out.println(e); }
 		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"2/"));
+		if (!new File(pageLocation+"2/0.jdat").exists()) {
+			try {
+				boolean b = new File(pageLocation+"2").mkdirs();
+				b = new File(pageLocation+"2/0.jdat").createNewFile();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		firstPage = new File(pageLocation+"2/0.jdat");
 		LOGGER.info("Page folder is \"{}\"", pageLocation);
 		tmp = false;
@@ -50,6 +71,14 @@ public class Notebook implements ModInitializer {
 			if (firstPage.createNewFile()){ LOGGER.info("Created first page of the book.."); NEEDS_SETUP = true; }
 		} catch (IOException e) { System.out.println(e); }
 		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"3/"));
+		if (!new File(pageLocation+"3/0.jdat").exists()) {
+			try {
+				boolean b = new File(pageLocation+"3").mkdirs();
+				b = new File(pageLocation+"3/0.jdat").createNewFile();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		firstPage = new File(pageLocation+"3/0.jdat");
 		LOGGER.info("Page folder is \"{}\"", pageLocation);
 		tmp = false;
@@ -77,8 +106,15 @@ public class Notebook implements ModInitializer {
 		if (!pageLocation.equals("notebook") && !new File(pageLocation+"3").exists()) { tmp = new File(pageLocation+"3").mkdirs(); }
 		if (tmp) { LOGGER.info("Possible first time use! Thank you for using my mod!"); }
 
-		LOGGER.info("Registering keybinds...");
-		openBookKeybindRegister();
-		LOGGER.info("{} has finished initializing!", project);
+		if (is_p_init) {
+			LOGGER.info("Registering keybinds...");
+			openBookKeybindRegister();
+			LOGGER.info("{} has finished initializing!", project);
+		}
+
 	}
+
+	@Override
+	public void onInitialize() { re_init(true); }
+
 }
