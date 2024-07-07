@@ -57,6 +57,25 @@ public class menuScreen extends Screen {
     protected void init() {
         this.addButtons();
     }
+    protected void removePage(int rmpage) {
+
+        if (rmpage == 0) {
+            LOGGER.info("Can't delete first page");
+        } else if (rmpage == Objects.requireNonNull(new File(pageLocation+"/").list()).length-1) {
+            goToPreviousPage();
+            boolean tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
+            LOGGER.info("Removed page " +rmpage);
+        }  else {
+            boolean tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
+            try {
+                System.out.println(pageLocation+"/"+rmpage+".jdat");
+                tmp = new File(pageLocation+"/"+rmpage+".jdat").createNewFile();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     protected void addButtons() {
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> {
@@ -65,18 +84,7 @@ public class menuScreen extends Screen {
         }));
         //Delete page button
         this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
-            if (page != 0) {
-                int oldpage = page;
-                goToPreviousPage();
-                if (new File(pageLocation+"/"+oldpage+".jdat").delete()) {
-                    LOGGER.info("Removed page " + oldpage);
-                }
-                else {
-                    LOGGER.info("Failed to remove page " + oldpage);
-                }
-            } else {
-                LOGGER.info("Can't remove first page!");
-            }
+            removePage(page);
         }, Text.translatable("jwg.button.bookmenu")));
 
         //Page buttons (arrows)
