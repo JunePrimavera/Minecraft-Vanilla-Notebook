@@ -1,6 +1,6 @@
-package com.jwg.notebook.keybinds;
+package com.june.notebook.keybinds;
 
-import com.jwg.notebook.screens.menuScreen;
+import com.june.notebook.screens.menuScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

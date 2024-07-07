@@ -1,12 +1,12 @@
-package com.jwg.notebook.util;
+package com.june.notebook.util;
 
-import com.jwg.notebook.Notebook;
+import com.june.notebook.Notebook;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static com.jwg.notebook.screens.menuScreen.*;
+import static com.june.notebook.screens.menuScreen.*;
 
 public class readConfig {
     public static String readCfg(String entry, int cfgLine) throws IOException {

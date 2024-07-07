@@ -1,13 +1,14 @@
-package com.jwg.notebook.screens;
+package com.june.notebook.screens;
 
-import com.jwg.notebook.Notebook;
-import com.jwg.notebook.gui.sidebar;
-import com.jwg.notebook.util.addCharacter;
-import com.jwg.notebook.util.readPage;
+import com.june.notebook.Notebook;
+import com.june.notebook.gui.button.gotobookmark;
+import com.june.notebook.gui.sidebar;
+import com.june.notebook.util.addCharacter;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.GameModeSelectionScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
@@ -30,11 +31,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.jwg.notebook.Notebook.*;
+import static com.june.notebook.Notebook.*;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
-
     public static int page = 0;
     public static int bookmarkedpage = 0;
     public static int pageLimit = -1;
@@ -50,7 +50,6 @@ public class menuScreen extends Screen {
     public static TexturedButtonWidget delete;
     public static TexturedButtonWidget bookmark;
     public static TexturedButtonWidget bookmarkPgB;
-
     public menuScreen() {
         this(true);
     }
@@ -71,25 +70,28 @@ public class menuScreen extends Screen {
 
     protected void init() {
         assert this.client != null;
-        this.client.keyboard.setRepeatEvents(true);
         this.addButtons();
     }
 
+
+
     protected void addButtons() {
         //Done button
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> { assert this.client != null; this.client.setScreen(null); }));
+        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+            assert this.client != null;
+            this.client.setScreen(null);
+        }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         //Sidebar buttons
-        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> com.jwg.notebook.gui.button.delete.onPress(page))));
-        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> com.jwg.notebook.gui.button.gotobookmark.onPress())));
-        this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> com.jwg.notebook.gui.button.bookmark.onPress())));
-
+        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> com.june.notebook.gui.button.delete.onPress(page))));
+        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> com.june.notebook.gui.button.gotobookmark.onPress())));
+        this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> com.june.notebook.gui.button.bookmark.onPress())));
         assert this.client != null;
 
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
-            if (page != pageLimit || pageLimit < 0) { if (page >= pageLimit && pageLimit > 0) { page = pageLimit; } this.goToNextPage(); assert this.client != null; this.client.setScreen(this); }
+            if (page != pageLimit || pageLimit < 0) { if (page >= pageLimit && pageLimit > 0) { page = pageLimit; }this.goToNextPage(); assert this.client != null; this.client.setScreen(this); }
         }, this.pageTurnSound));
         this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (button) -> {
             goToPreviousPage();
@@ -120,7 +122,7 @@ public class menuScreen extends Screen {
         }
     }
     public void renderBookText(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
         int i = (this.width - 192) / 2;
@@ -146,14 +148,11 @@ public class menuScreen extends Screen {
 
         this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
 
-
         int k = this.textRenderer.getWidth(this.pageIndexText);
         this.textRenderer.draw(matrices, this.pageIndexText, (float)(i - k + 192 - 44), 18.0F, 1);
 
         Objects.requireNonNull(this.textRenderer);
         int l = Math.min(128 / 9, this.cachedPage.size());
-
-
 
         for(int m = 0; m < l; ++m) {
             OrderedText orderedText = this.cachedPage.get(m);
@@ -161,12 +160,11 @@ public class menuScreen extends Screen {
             float var10003 = (float)(i + 36);
             Objects.requireNonNull(this.textRenderer);
             var10000.draw(matrices, orderedText, var10003, (float)(32 + m * 9), 0);
-
         }
         super.render(matrices, mouseX, mouseY, delta);
     }
     public void renderSideBar(MatrixStack matrices, int mouseX, int mouseY, float delta){
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
         int i = (this.width - -150) / 2;
@@ -175,7 +173,7 @@ public class menuScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
     public void renderTooltips(MatrixStack matrices){
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
 
@@ -188,7 +186,6 @@ public class menuScreen extends Screen {
         else if (bookmarkPgB.isHovered()) {
             drawStringWithShadow(matrices, this.textRenderer, "Go To Bookmark", this.width/2 +115, 7+(12*3), 16777215);
         }
-
 
     }
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -245,8 +242,17 @@ public class menuScreen extends Screen {
 
             this.ltchr = chr;
             String keystring = String.valueOf(this.ltchr);
-            StringBuilder fulldata = readPage.read(pageLocation, page);
-
+            StringBuilder fulldata = new StringBuilder();
+            try {
+                Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
+                while (readPageContent.hasNextLine()) {
+                    String data = readPageContent.nextLine();
+                    fulldata.append(data);
+                }
+                readPageContent.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             fulldata = new StringBuilder(addCharacter.add(String.valueOf(fulldata), cursorLoc, keystring));
 
             try {
@@ -263,6 +269,8 @@ public class menuScreen extends Screen {
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+
+
         //Backspace/Delete
         if (keyCode == 259) {
             StringBuilder fulldata = new StringBuilder();
@@ -272,6 +280,7 @@ public class menuScreen extends Screen {
             while (readFile.hasNextLine()) {
                 String data = readFile.nextLine();
                 fulldata.append(data);
+                System.out.println(data);
             }
             readFile.close();
             try {
@@ -281,7 +290,15 @@ public class menuScreen extends Screen {
             } catch (IOException e) { e.printStackTrace(); }
         }
         if (keyCode == 261) {
-            StringBuilder fulldata = readPage.read(pageLocation, page);
+            StringBuilder fulldata = new StringBuilder();
+            Scanner readFile = null;
+            try { readFile = new Scanner(new File(pageLocation+"/"+page+".jdat"));
+            } catch (FileNotFoundException e) { throw new RuntimeException(e); }
+            while (readFile.hasNextLine()) {
+                String data = readFile.nextLine();
+                fulldata.append(data);
+            }
+            readFile.close();
             try {
                 FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
                 if (fulldata.length()-cursorLoc != fulldata.length()) {
@@ -304,19 +321,7 @@ public class menuScreen extends Screen {
             this.client.setScreen(null);
         }
 
-        if (keyCode == 257 && scanCode == 28) {
 
-            String filedat = readPage.read(pageLocation, page) + "\nW";
-            try {
-                FileWriter f = new FileWriter(pageLocation+"/"+page+".jdat");
-                f.write(filedat);
-                f.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
         return true;
     }
     @Nullable
