@@ -102,7 +102,7 @@ public class menuScreen extends Screen {
         //Sidebar buttons
         this.addDrawableChild(sidebar.addSidebarButton(0, DELETE_ICON, this, "delete"));
         this.addDrawableChild(sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark"));
-        
+
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
