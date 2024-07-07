@@ -82,12 +82,7 @@ public class menuScreen extends Screen {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> { assert this.client != null; this.client.setScreen(null); }));
 
         //Delete page button
-        if (deletePageButtonShown) {
-            this.addDrawableChild(new TexturedButtonWidget(this.width -21, this.height-21, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> removePage(page), Text.translatable("jwg.button.close")));
-        }
-
-        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2+91, 12, 6, 6, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
-        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2+91, 12, 6, 6, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); assert this.client != null; this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +91, 20, 6, 6, 0, 0, 0, DELETE_ICON, 6, 12, (button) -> removePage(page), Text.translatable("jwg.button.close")));
 
         //Marker button to take you to the bookmarked page
         this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
