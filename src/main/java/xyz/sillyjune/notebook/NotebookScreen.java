@@ -2,6 +2,7 @@ package xyz.sillyjune.notebook;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
@@ -144,11 +145,12 @@ public class NotebookScreen extends Screen {
         this.previousPageButton = this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (button) -> {
             this.goToPreviousPage();
         }, this.pageTurnSound));
-        this.newPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 119, 155, 20, 20, 0, 0, 20, NEW_PAGE_ICON, 32, 64, (button) -> {
+
+        this.newPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 119, 155, 20, 20, NEW_PAGE_ICON, (button) -> {
             newPage(BOOK_FOLDER + "/" + BookName, totalPages);
             this.goToNextPage();
         }, Text.translatable("notebook.button.new")));
-        this.delPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 99, 155, 20, 20, 0, 0, 20, DEL_PAGE_ICON, 32, 64, (button) -> {
+        this.delPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 99, 155, 20, 20, DEL_PAGE_ICON, (button) -> {
             if (totalPages > 1) {
                 delPage(BOOK_FOLDER + "/" + BookName);
                 this.goToPreviousPage();
@@ -160,7 +162,7 @@ public class NotebookScreen extends Screen {
         this.bookNameField.setEditable(true);
         this.bookNameField.setText(BookName);
 
-       this.buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, 0, 0, 20, NEXT_BOOK_ICON, 32, 64, (button) -> {
+       this.buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (button) -> {
             int bookIndex = getBookIndex();
             if (bookIndex < Objects.requireNonNull(new File(BOOK_FOLDER + "/").list()).length - 1) {
                 BookName = Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex + 1];
@@ -168,7 +170,7 @@ public class NotebookScreen extends Screen {
                 this.updatePageButtons();
             }
         }, Text.translatable("notebook.button.next")));
-        this.buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, 0, 0, 20, LAST_BOOK_ICON, 32, 64, (button) -> {
+        this.buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (button) -> {
             int bookIndex = getBookIndex();
             if (bookIndex > 0) {
                 BookName = Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex - 1];
@@ -292,7 +294,7 @@ public class NotebookScreen extends Screen {
     // The code I am going to avoid like the plague
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         int i = (this.width - 192) / 2;
         context.drawTexture(BOOK_TEXTURE, i, 2, 0, 0, 192, 192);
         if (this.totalPages > this.pageIndex) {
