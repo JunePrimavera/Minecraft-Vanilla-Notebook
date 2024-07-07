@@ -19,6 +19,7 @@ public class CoordBook implements ModInitializer {
 
 
 	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
+	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/cross.png");
 	@Override
 	public void onInitialize(ModContainer mod) {
 		LOGGER.info("{} has started initializing!", mod.metadata().name());
