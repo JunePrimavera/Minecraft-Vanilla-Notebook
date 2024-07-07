@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "coord_book",
+  "version": "${version}",
+
+  "name": "Coordinate Book"",
+  "description": "Adds a simple coordinate book in the menus.",
+  "authors": [
+    "JWGardiner"
+  ],
+  "contact": {
+    "homepage": "https://github.com/JWGardiner/Minecraft-Coordinate-Book",
+    "sources": "https://github.com/JWGardiner/Minecraft-Coordinate-Book"
+  },
+
+  "license": "MIT",
+  "icon": "assets/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jwg.coord_book.CoordBook"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
