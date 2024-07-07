@@ -38,16 +38,16 @@ public class menuScreen extends Screen {
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
-    public static boolean deletePageButtonShown = true;
     private final boolean pageTurnSound;
+    public static boolean deletePageButtonShown = true;
     private String versionText;
     private String contents;
 
-    public menuScreen(BookScreen.Contents contents) {
-        this(contents, true);
+    public menuScreen() {
+        this(true);
     }
 
-    private menuScreen(BookScreen.Contents contents, boolean bl) {
+    private menuScreen(boolean bl) {
         super(NarratorManager.EMPTY);
         this.contents = "";
         this.versionText = "";
@@ -62,15 +62,15 @@ public class menuScreen extends Screen {
         this.addButtons();
     }
     protected void removePage(int rmpage) {
-
+        boolean tmp = false;
         if (rmpage == 0) {
             LOGGER.info("Can't delete first page");
         } else if (rmpage == Objects.requireNonNull(new File(pageLocation+"/").list()).length-1) {
             goToPreviousPage();
-            boolean tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
+            tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
             LOGGER.info("Removed page " +rmpage);
         }  else {
-            boolean tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
+            tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
             try {
                 System.out.println(pageLocation+"/"+rmpage+".jdat");
                 tmp = new File(pageLocation+"/"+rmpage+".jdat").createNewFile();
@@ -79,13 +79,18 @@ public class menuScreen extends Screen {
                 throw new RuntimeException(e);
             }
         }
+        if (developerMode) {
+            LOGGER.info(String.valueOf(tmp));
+        }
     }
+
     protected void addButtons() {
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> {
             assert this.client != null;
             this.client.setScreen(null);
         }));
+
         //Delete page button
         if (deletePageButtonShown) {
             this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
@@ -122,7 +127,6 @@ public class menuScreen extends Screen {
             page = 0;
         }
     }
-
     protected void goToNextPage() {
         ++page;
         if (!new File(pageLocation+"/"+page+".jdat").exists()) {
@@ -146,9 +150,7 @@ public class menuScreen extends Screen {
         this.drawTexture(matrices, i, 2, 0, 0, 192, 192);
         this.pageIndexText = new TranslatableText("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File(pageLocation+"/").list()).length), 1));
 
-
         drawStringWithShadow(matrices, this.textRenderer, String.valueOf(versionText), 2, this.height - 10, 16777215);
-
 
         StringBuilder fulldata = new StringBuilder();
         try {
@@ -168,10 +170,8 @@ public class menuScreen extends Screen {
         StringVisitable stringVisitable = StringVisitable.plain(this.contents);
         this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
 
-
         int k = this.textRenderer.getWidth(this.pageIndexText);
         this.textRenderer.draw(matrices, this.pageIndexText, (float)(i - k + 192 - 44), 18.0F, 1);
-
 
         Objects.requireNonNull(this.textRenderer);
         int l = Math.min(128 / 9, this.cachedPage.size());
@@ -196,29 +196,28 @@ public class menuScreen extends Screen {
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
-    protected void closeBookScreen() {
-        assert this.client != null;
-        this.client.setScreen((Screen)null);
-    }
+
     int o = 0;
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         int code = getExtendedKeyCodeForChar(keyCode);
         char key = (char) code;
         String keystring = String.valueOf(key).toLowerCase();
-        if (developerMode) {
-            System.out.println(code + "\n" + key);
-        }
-        keystring = switch (code) {
-            case 192, 16777473, 16777559, 16777563, 16777481, 16777479, 16777547 -> "";
-            case 16777549 -> "-";
-            default -> keystring = keystring;
-        };
         if (!deletePageButtonShown) {
             if (code == 16777473) {
                 keystring = "";
                 removePage(page);
             }
         }
+
+        if (developerMode) {
+            System.out.println(code + "\n" + key);
+        }
+
+        keystring = switch (code) {
+            case 192, 16777473, 16777559, 16777563, 16777481, 16777479, 16777547 -> "";
+            case 16777549 -> "-";
+            default -> keystring = keystring;
+        };
         ++o;
         if (code == 0) {
             keystring = "";
@@ -229,7 +228,7 @@ public class menuScreen extends Screen {
             if (!Objects.equals(this.contents, "")) {
                 this.contents = this.contents.substring(0, this.contents.length() - 1);
                 try {
-                    FileWriter updatePage = new FileWriter(new File(pageLocation+"/" + page + ".jdat"));
+                    FileWriter updatePage = new FileWriter(pageLocation+"/" + page + ".jdat");
                     updatePage.write(this.contents);
                     updatePage.close();
                 } catch (IOException e) {
@@ -285,13 +284,13 @@ public class menuScreen extends Screen {
         fulldata = new StringBuilder(fulldata + keystring);
         this.contents = String.valueOf(fulldata);
         try {
-            FileWriter updatePage = new FileWriter(new File(pageLocation+"/"+page+".jdat"));
+            FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
             updatePage.write(String.valueOf(fulldata));
             updatePage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.client.setScreen(this);
+        Objects.requireNonNull(this.client).setScreen(this);
         return false;
     }
 
@@ -306,12 +305,12 @@ public class menuScreen extends Screen {
                 Objects.requireNonNull(this.textRenderer);
                 int k = Math.min(128 / 9, this.cachedPage.size());
                 if (i <= 114) {
-                    Objects.requireNonNull(this.client.textRenderer);
+                    Objects.requireNonNull(Objects.requireNonNull(this.client).textRenderer);
                     if (j < 9 * k + k) {
                         Objects.requireNonNull(this.client.textRenderer);
                         int l = j / 9;
                         if (l >= 0 && l < this.cachedPage.size()) {
-                            OrderedText orderedText = (OrderedText)this.cachedPage.get(l);
+                            OrderedText orderedText = this.cachedPage.get(l);
                             return this.client.textRenderer.getTextHandler().getStyleAt(orderedText, i);
                         }
 

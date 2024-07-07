@@ -12,7 +12,7 @@ public class generateConfig {
 
         ++i;
 
-        madeConfigFolder = new File("config/coordinate-book/").mkdir();
+        madeConfigFolder = new File("config/coordinate-book/").mkdirs();
         try {
             madeConfigFile = new File("config/coordinate-book/config.cfg").createNewFile();
         } catch (IOException e) {
