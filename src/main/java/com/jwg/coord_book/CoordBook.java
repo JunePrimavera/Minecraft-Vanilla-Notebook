@@ -15,8 +15,8 @@ import java.io.IOException;
 import static com.jwg.coord_book.keybinds.OpenBook.openBookKeybindRegister;
 
 public class CoordBook implements ModInitializer {
-	public static final boolean developerMode = true;
-	public static final String version = "1.3.0";
+	public static final boolean developerMode = false;
+	public static final String version = "1.4.0";
 	public static final String project = "Coordinate-Book";
 	public static String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
