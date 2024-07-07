@@ -4,10 +4,8 @@ import com.jwg.coord_book.CoordBook;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -25,13 +23,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.IntStream;
 
 import static com.jwg.coord_book.CoordBook.*;
-import static java.awt.event.KeyEvent.KEY_PRESSED;
-import static java.awt.event.KeyEvent.getExtendedKeyCodeForChar;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
@@ -266,6 +260,7 @@ public class menuScreen extends Screen {
     }
     char ltchr;
 
+    int lastkey = 0;
     public boolean charTyped(char chr, int modifiers) {
         ltchr = chr;
         this.selectionManager.insert(chr);
@@ -294,22 +289,43 @@ public class menuScreen extends Screen {
             e.printStackTrace();
         }
         Objects.requireNonNull(this.client).setScreen(this);
-
-
         return true;
     }
-    int o = 0;
+
+
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        System.out.println(keyCode);
+        lastkey = keyCode;
+        if (keyCode == 259) {
+            StringBuilder fulldata = new StringBuilder();
+            try {
+                Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
+                while (readPageContent.hasNextLine()) {
+                    String data = readPageContent.nextLine();
+                    if (!fulldata.toString().equals("")) {
+                        data = "\n" + data;
+                    }
+                    fulldata.append(data);
+                }
+                readPageContent.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (!fulldata.toString().equals("")) {
+                fulldata = new StringBuilder(fulldata.substring(0, this.contents.length() - 1));
+                this.contents = String.valueOf(fulldata);
+                try {
+                    FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
+                    updatePage.write(String.valueOf(fulldata));
+                    updatePage.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        if (keyCode == 265) {
-            this.selectionManager.putCursorAtEnd();
-            return true;
-        }
-        else {
-            this.selectionManager.putCursorAtEnd();
-            return true;
         }
 
+        return true;
     }
     @Nullable
     public Style getTextStyleAt(double x, double y) {
@@ -341,4 +357,5 @@ public class menuScreen extends Screen {
             }
         }
     }
+
 }
