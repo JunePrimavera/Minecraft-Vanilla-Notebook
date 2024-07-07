@@ -293,9 +293,8 @@ public class NotebookScreen extends Screen {
 
     // The code I am going to avoid like the plague
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-
-        this.renderBackground(context, mouseX, mouseY, delta);
         int i = (this.width - 192) / 2;
+        super.renderBackground(context, mouseX, mouseY, delta);
         context.drawTexture(BOOK_TEXTURE, i, 2, 0, 0, 192, 192);
         if (this.totalPages > this.pageIndex) {
             String pageContent = readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
