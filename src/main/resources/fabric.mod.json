@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "coord_book",
-  "version": "1.2.1",
+  "version": "1.3.0",
 
   "name": "Coordinate Book",
   "description": "Adds a simple coordinate book in the menus.",
@@ -40,7 +40,7 @@
       "parent": {
         "id": "coordbook",
         "name": "Coordinate Book",
-        "description": "Modular example library",
+        "description": "Adds a notebook to your GUI.",
         "icon": "assets/coordbook/icon.png"
       }
     }
