@@ -3,7 +3,7 @@
   "id": "coord_book",
   "version": "${version}",
 
-  "name": "Coordinate Book"",
+  "name": "Coordinate Book",
   "description": "Adds a simple coordinate book in the menus.",
   "authors": [
     "JWGardiner"
@@ -23,13 +23,13 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "coord_book.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.14.6",
     "fabric": "*",
-    "minecraft": "~1.19",
+    "minecraft": "~1.18",
     "java": ">=17"
   },
   "suggests": {

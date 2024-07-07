@@ -30,6 +30,6 @@ public abstract class GameScreenMixin extends Screen {
 			//Code is run when the button is clicked
 			assert this.client != null;
 			this.client.setScreen(new menuScreen(null));
-		}, Text.translatable("jwg.button.bookmenu")));
+		}));
 	}
 }
