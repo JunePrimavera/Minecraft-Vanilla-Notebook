@@ -1,18 +1,42 @@
 package com.jwg.coord_book;
 
+import com.jwg.coord_book.util.ensureFileStructureExists;
+import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CoordBook implements ModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("Coordinate Book");
+import java.io.File;
+import java.io.IOException;
 
+public class CoordBook implements ModInitializer {
+	public static final boolean developerMode = true;
+	public static final String version = "0.3.0";
+	public static final String project = "Coordinate-Book";
+	public static final String pageLocation = "CoordinateBook";
+	public static final Logger LOGGER = LoggerFactory.getLogger(project);
+
+
+	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
+	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/cross.png");
 	@Override
 	public void onInitialize(ModContainer mod) {
 		LOGGER.info("{} has started initializing!", mod.metadata().name());
-
-
+		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"/"));
+		File firstPage = new File(pageLocation+"/0.jdat");
+		LOGGER.info("Page folder is \"{}\"", pageLocation);
+		try {
+			if (firstPage.createNewFile()){
+				LOGGER.info("Created first page of the coordinate book");
+			}
+			else{
+				LOGGER.info("Unable to create the first page of the coordinate book; it might already exist");
+				//TODO: Read & display page
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		LOGGER.info("{} has finished initializing!", mod.metadata().name());
 	}
 }
