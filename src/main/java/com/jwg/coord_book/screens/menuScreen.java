@@ -38,6 +38,7 @@ public class menuScreen extends Screen {
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
     private final boolean pageTurnSound;
+    public static boolean deletePageButtonShown = true;
     private String versionText;
     private String contents;
 
@@ -60,7 +61,6 @@ public class menuScreen extends Screen {
         this.addButtons();
     }
     protected void removePage(int rmpage) {
-
         if (rmpage == 0) {
             LOGGER.info("Can't delete first page");
         } else if (rmpage == Objects.requireNonNull(new File(pageLocation+"/").list()).length-1) {
@@ -85,10 +85,11 @@ public class menuScreen extends Screen {
             this.client.setScreen(null);
         }));
         //Delete page button
-        this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
-            removePage(page);
-        }, Text.translatable("jwg.button.bookmenu")));
-
+        if (deletePageButtonShown) {
+            this.addDrawableChild(new TexturedButtonWidget(this.width -20, this.height-20, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> {
+                removePage(page);
+            }, Text.translatable("jwg.button.bookmenu")));
+        }
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
@@ -199,6 +200,11 @@ public class menuScreen extends Screen {
         int code = getExtendedKeyCodeForChar(keyCode);
         char key = (char) code;
         String keystring = String.valueOf(key).toLowerCase();
+        if (code == 16777473) {
+            keystring = "";
+            removePage(page);
+        }
+
         if (developerMode) {
             System.out.println(code + "\n" + key);
         }
