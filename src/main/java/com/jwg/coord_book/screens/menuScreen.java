@@ -86,8 +86,8 @@ public class menuScreen extends Screen {
             this.addDrawableChild(new TexturedButtonWidget(this.width -21, this.height-21, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> removePage(page), Text.translatable("jwg.button.close")));
         }
 
-        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2-50, 12, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
-        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2-50, 12, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); assert this.client != null; this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
+        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2+91, 12, 6, 6, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
+        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2+91, 12, 6, 6, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); assert this.client != null; this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
 
         //Marker button to take you to the bookmarked page
         this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
@@ -181,21 +181,19 @@ public class menuScreen extends Screen {
         }
         super.render(matrices, mouseX, mouseY, delta);
     }
-    public void renderSideBar(MatrixStack matrices2, int mouseX, int mouseY, float delta){
+    public void renderSideBar(MatrixStack matrices, int mouseX, int mouseY, float delta){
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.enableTexture();
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
-        int i = (this.width - -100) / 2;
+        int i = (this.width - -150) / 2;
 
-        this.drawTexture(matrices2, i, 2, 0, 0, 34, 180);
-        super.render(matrices2, mouseX, mouseY, delta);
+        this.drawTexture(matrices, i, 2, 0, 0, 36, 180);
+        super.render(matrices, mouseX, mouseY, delta);
     }
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        MatrixStack matrices2 = matrices;
         this.renderBackground(matrices);
         renderBookText(matrices, mouseX, mouseY, delta);
-        renderSideBar(matrices2, mouseX, mouseY, delta);
+        renderSideBar(matrices, mouseX, mouseY, delta);
     }
 
     public boolean handleTextClick(Style style) {
