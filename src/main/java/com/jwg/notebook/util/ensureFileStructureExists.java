@@ -1,4 +1,4 @@
-package com.jwg.coord_book.util;
+package com.jwg.notebook.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,5 +9,5 @@ public class ensureFileStructureExists {
     public static boolean exists(String folders) {
         return Files.exists(Path.of(folders));
     }
-    public static void createFiles(boolean exists) { if (!exists) { try { Files.createDirectories(Paths.get("CoordinateBook/")); } catch (IOException e) { throw new RuntimeException(e); } } }
+    public static void createFiles(boolean exists) { if (!exists) { try { Files.createDirectories(Paths.get("Notebook/")); } catch (IOException e) { throw new RuntimeException(e); } } }
 }
