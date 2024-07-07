@@ -18,6 +18,8 @@ import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -37,8 +39,10 @@ public class menuScreen extends Screen {
     public static boolean deletePageButtonShown = true;
     private String versionText;
     private String contents;
+    private String preContents;
     private SelectionManager selectionManager;
     private int loc;
+    private int cursorLoc;
 
     public menuScreen() {
         this(true);
@@ -55,6 +59,7 @@ public class menuScreen extends Screen {
         this.pageTurnSound = bl;
         this.loc = 0;
         this.ltchr = 0;
+        this.cursorLoc = 0;
         pageLimit = pageLimit - 1;
     }
 
@@ -172,8 +177,9 @@ public class menuScreen extends Screen {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        this.contents = String.valueOf(fulldata);
+        this.contents = addChar(String.valueOf(fulldata), cursorLoc, "|");
         StringVisitable stringVisitable = StringVisitable.plain(this.contents);
+
         this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
 
         int k = this.textRenderer.getWidth(this.pageIndexText);
@@ -239,6 +245,19 @@ public class menuScreen extends Screen {
         assert this.client != null;
         this.client.setScreen(null); }
 
+    public String addChar(String str, int position, String keyStr) {
+        int len = str.length();
+        char[] updatedArr = new char[len + 1];
+        try {
+            char ch = keyStr.charAt(0);
+            str.getChars(0, len, updatedArr, 0);
+            updatedArr[len - position] = ch;
+            str.getChars(len - position, len, updatedArr, len - position + 1);
+        } catch (IndexOutOfBoundsException e) {
+            addChar(str, 0, keyStr);
+        }
+        return new String(updatedArr)+"";
+    }
     public static int countPg() throws IOException {
         File file = new File(pageLocation+"/"+page+".jdat");
         FileInputStream fileInputStream;
@@ -286,8 +305,9 @@ public class menuScreen extends Screen {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        fulldata = new StringBuilder(fulldata + keystring);
-        this.contents = String.valueOf(fulldata);
+        fulldata = new StringBuilder(addChar(String.valueOf(fulldata), cursorLoc, keystring));
+
+        this.preContents = String.valueOf(fulldata);
         try {
             FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
             updatePage.write(String.valueOf(fulldata));
@@ -303,31 +323,22 @@ public class menuScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == 259) {
             StringBuilder fulldata = new StringBuilder();
+            Scanner readFile = null;
+            try { readFile = new Scanner(new File(pageLocation+"/"+page+".jdat"));
+            } catch (FileNotFoundException e) { throw new RuntimeException(e); }
+            while (readFile.hasNextLine()) {
+                String data = readFile.nextLine();
+                fulldata.append(data);
+                System.out.println(data);
+            }
+            readFile.close();
             try {
-                Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
-                while (readPageContent.hasNextLine()) {
-                    String data = readPageContent.nextLine();
-                    if (!fulldata.toString().equals("")) {
-                        data = "\n" + data;
-                    }
-                    fulldata.append(data);
-                }
-                readPageContent.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            if (!fulldata.toString().equals("")) {
-                fulldata = new StringBuilder(fulldata.substring(0, this.contents.length() - 1));
-                this.contents = String.valueOf(fulldata);
-                try {
-                    FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
-                    updatePage.write(String.valueOf(fulldata));
-                    updatePage.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+                FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
+                if (fulldata.length()-1-cursorLoc >= 0) updatePage.write(String.valueOf(fulldata.deleteCharAt(fulldata.length()-1-cursorLoc)));
+                updatePage.close();
+            } catch (IOException e) { e.printStackTrace(); }
         }
+
         if (keyCode == 257) {
             StringBuilder fulldata = new StringBuilder();
             try {
@@ -345,7 +356,7 @@ public class menuScreen extends Screen {
             }
             if (!fulldata.toString().equals("")) {
                 fulldata = new StringBuilder(fulldata + "\n ");
-                this.contents = String.valueOf(fulldata);
+                this.preContents = String.valueOf(fulldata);
                 try {
                     FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
                     updatePage.write(String.valueOf(fulldata));
@@ -355,6 +366,15 @@ public class menuScreen extends Screen {
                 }
             }
         }
+
+        int location = cursorLoc;
+        if (keyCode == 262 && location++ > 0) cursorLoc--;
+
+        //Left arrow
+        if (keyCode == 263 && location-- < this.contents.length()-1) cursorLoc++;
+
+
+
         return true;
     }
     @Nullable
