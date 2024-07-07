@@ -24,6 +24,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import static com.jwg.coord_book.CoordBook.developerMode;
+import static com.jwg.coord_book.CoordBook.version;
+import static java.awt.event.KeyEvent.getExtendedKeyCodeForChar;
 import static java.awt.event.KeyEvent.getKeyText;
 
 @Environment(EnvType.CLIENT)
@@ -35,6 +38,7 @@ public class menuScreen extends Screen {
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
     private final boolean pageTurnSound;
+    private String versionText;
     private String contents;
 
     public menuScreen(BookScreen.Contents contents) {
@@ -44,9 +48,11 @@ public class menuScreen extends Screen {
     private menuScreen(BookScreen.Contents contents, boolean bl) {
         super(NarratorManager.EMPTY);
         this.contents = "";
+        this.versionText = "";
         this.cachedPage = Collections.emptyList();
         this.pageIndexText = ScreenTexts.EMPTY;
         this.pageTurnSound = bl;
+
     }
 
     protected void init() {
@@ -71,6 +77,11 @@ public class menuScreen extends Screen {
             this.client.setScreen(this);
         }, this.pageTurnSound));
 
+        if (developerMode) {
+            this.versionText = "Coordinate Book "+version+" Developer build";
+        } else {
+            this.versionText = "Coordinate Book " + version;
+        }
     }
     protected void goToPreviousPage() {
         --page;
@@ -102,6 +113,10 @@ public class menuScreen extends Screen {
         this.drawTexture(matrices, i, 2, 0, 0, 192, 192);
         this.pageIndexText = Text.translatable("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File("CoordinateBook/").list()).length), 1));
 
+
+        drawStringWithShadow(matrices, this.textRenderer, String.valueOf(versionText), 2, this.height - 10, 16777215);
+
+
         StringBuilder fulldata = new StringBuilder();
         try {
             Scanner readPageContent = new Scanner(new File("CoordinateBook/"+page+".json"));
@@ -122,7 +137,9 @@ public class menuScreen extends Screen {
 
 
         int k = this.textRenderer.getWidth(this.pageIndexText);
-        this.textRenderer.draw(matrices, this.pageIndexText, (float)(i - k + 192 - 44), 18.0F, 0);
+        this.textRenderer.draw(matrices, this.pageIndexText, (float)(i - k + 192 - 44), 18.0F, 1);
+
+
         Objects.requireNonNull(this.textRenderer);
         int l = Math.min(128 / 9, this.cachedPage.size());
 
@@ -149,18 +166,16 @@ public class menuScreen extends Screen {
 
     int o = 0;
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        String key = getKeyText(keyCode).toLowerCase(Locale.ROOT);
+        int code = getExtendedKeyCodeForChar(keyCode);
+        char key = (char) code;
+        String keystring = String.valueOf(key).toLowerCase();
         ++o;
-        if (key.equals("period")) {
-            key = ".";
-        } else if (key.equals("space")) {
-            key = " ";
-        } else if (key.equals("unknown keycode: 0x154")) {
-            key = "";
+        if (code == 0) {
+            keystring = "";
             nextCharacterSpecial = true;
             o = 1;
-        } else if (key.equals("japanese katakana")) {
-            key = "";
+        } else if (code == 16777475){
+            keystring = "";
             if (!Objects.equals(this.contents, "")) {
                 this.contents = this.contents.substring(0, this.contents.length() - 1);
                 try {
@@ -172,11 +187,23 @@ public class menuScreen extends Screen {
                 }
             }
         }
-
         if (nextCharacterSpecial && o == 2) {
-            key = key.toUpperCase(Locale.ROOT);
-
+            keystring = keystring.toUpperCase(Locale.ROOT);
             nextCharacterSpecial = false;
+            keystring = switch (keystring) {
+                case "1" -> "!";
+                case "2" -> "\"";
+                case "3" -> "£";
+                case "4" -> "$";
+                case "5" -> "%";
+                case "6" -> "^";
+                case "7" -> "&";
+                case "8" -> "*";
+                case "9" -> "(";
+                case "0" -> ")";
+                case "'" -> "@";
+                default -> keystring;
+            };
         }
         StringBuilder fulldata = new StringBuilder();
         try {
@@ -192,7 +219,7 @@ public class menuScreen extends Screen {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        fulldata = new StringBuilder(fulldata + key);
+        fulldata = new StringBuilder(fulldata + keystring);
         this.contents = String.valueOf(fulldata);
         try {
             FileWriter updatePage = new FileWriter(new File("CoordinateBook/"+page+".json"));
