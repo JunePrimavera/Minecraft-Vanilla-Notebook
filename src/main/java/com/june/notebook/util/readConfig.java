@@ -5,6 +5,7 @@ import com.june.notebook.Notebook;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 import static com.june.notebook.screens.menuScreen.*;
 
@@ -30,6 +31,13 @@ public class readConfig {
 
         try {
             page = Integer.parseInt(readCfg("startpag", 6));
+        } catch (IOException e) { throw new RuntimeException(e); }
+
+        try {
+            String preset = readCfg("preset", 8);
+            Notebook.presetsEnabled = preset.toLowerCase(Locale.ROOT).equals("true");
+
+
         } catch (IOException e) { throw new RuntimeException(e); }
 
         try {

@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.june.notebook.Notebook.BOOK_ICON;
+import static com.june.notebook.Notebook.presetsEnabled;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameScreenMixin extends Screen {
@@ -23,8 +24,14 @@ public abstract class GameScreenMixin extends Screen {
 	private void addCustomButton(CallbackInfo ci) {
 		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, this.height / 4 + 96 + -16, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
 			//Code is run when the button is clicked
-			assert this.client != null;
-			this.client.setScreen(new bookSelectScreen());
+			if (presetsEnabled) {
+				assert this.client != null;
+				this.client.setScreen(new bookSelectScreen());
+			} else {
+				assert this.client != null;
+				this.client.setScreen(new menuScreen());
+			}
+
 		}, Text.translatable("jwg.button.bookmenu")));
 	}
 }
