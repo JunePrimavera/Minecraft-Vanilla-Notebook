@@ -36,7 +36,7 @@ Go to the releases tab on the right to see it here;
 
 - Modrinth: https://modrinth.com/mod/notebook
 
-- CurseForge: (Waiting on approval)
+- CurseForge: https://www.curseforge.com/minecraft/mc-mods/simple-notebook
 
 ## Support 
 
