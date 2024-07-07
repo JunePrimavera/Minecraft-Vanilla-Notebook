@@ -26,7 +26,6 @@ public abstract class TitleScreenButton extends Screen {
     private void addCustomButton(int y, int spacingY, CallbackInfo ci) {
         this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104), y + spacingY + CONFIG.button_offset(), 20, 20, MAIN_BUTTON_ICON, (button) -> {
             assert this.client != null;
-            NotebookScreen.BookName = "Default";
             this.client.setScreen(new NotebookScreen());
         }));
     }
