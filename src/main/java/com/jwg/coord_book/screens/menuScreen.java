@@ -15,18 +15,21 @@ import net.minecraft.client.util.math.MatrixStack;
 
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
+
+import static java.awt.event.KeyEvent.getKeyText;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
 
+    boolean nextCharacterSpecial = false;
     public static int page = 0;
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     private List<OrderedText> cachedPage;
@@ -91,7 +94,7 @@ public class menuScreen extends Screen {
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);    
+        this.renderBackground(matrices);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
@@ -133,4 +136,103 @@ public class menuScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
 
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            Style style = this.getTextStyleAt(mouseX, mouseY);
+            if (style != null && this.handleTextClick(style)) {
+                return true;
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    int o = 0;
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        String key = getKeyText(keyCode).toLowerCase(Locale.ROOT);
+        ++o;
+        if (key.equals("period")) {
+            key = ".";
+        } else if (key.equals("space")) {
+            key = " ";
+        } else if (key.equals("unknown keycode: 0x154")) {
+            key = "";
+            nextCharacterSpecial = true;
+            o = 1;
+        } else if (key.equals("japanese katakana")) {
+            key = "";
+            if (!Objects.equals(this.contents, "")) {
+                this.contents = this.contents.substring(0, this.contents.length() - 1);
+                try {
+                    FileWriter updatePage = new FileWriter(new File("CoordinateBook/" + page + ".json"));
+                    updatePage.write(this.contents);
+                    updatePage.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (nextCharacterSpecial && o == 2) {
+            key = key.toUpperCase(Locale.ROOT);
+
+            nextCharacterSpecial = false;
+        }
+        StringBuilder fulldata = new StringBuilder();
+        try {
+            Scanner readPageContent = new Scanner(new File("CoordinateBook/"+page+".json"));
+            while (readPageContent.hasNextLine()) {
+                String data = readPageContent.nextLine();
+                if (!fulldata.toString().equals("")) {
+                    data = "\n" + data;
+                }
+                fulldata.append(data);
+            }
+            readPageContent.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        fulldata = new StringBuilder(fulldata + key);
+        this.contents = String.valueOf(fulldata);
+        try {
+            FileWriter updatePage = new FileWriter(new File("CoordinateBook/"+page+".json"));
+            updatePage.write(String.valueOf(fulldata));
+            updatePage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.client.setScreen(this);
+        return false;
+    }
+
+    @Nullable
+    public Style getTextStyleAt(double x, double y) {
+        if (this.cachedPage.isEmpty()) {
+            return null;
+        } else {
+            int i = MathHelper.floor(x - (double)((this.width - 192) / 2) - 36.0);
+            int j = MathHelper.floor(y - 2.0 - 30.0);
+            if (i >= 0 && j >= 0) {
+                Objects.requireNonNull(this.textRenderer);
+                int k = Math.min(128 / 9, this.cachedPage.size());
+                if (i <= 114) {
+                    Objects.requireNonNull(this.client.textRenderer);
+                    if (j < 9 * k + k) {
+                        Objects.requireNonNull(this.client.textRenderer);
+                        int l = j / 9;
+                        if (l >= 0 && l < this.cachedPage.size()) {
+                            OrderedText orderedText = (OrderedText)this.cachedPage.get(l);
+                            return this.client.textRenderer.getTextHandler().getStyleAt(orderedText, i);
+                        }
+
+                        return null;
+                    }
+                }
+
+                return null;
+            } else {
+                return null;
+            }
+        }
+    }
 }
