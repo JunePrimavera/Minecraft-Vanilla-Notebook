@@ -34,18 +34,15 @@ public class readConfig {
         } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
-            System.out.println(readCfg("startpag", 6));
             page = Integer.parseInt(readCfg("startpag", 6));
         } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
-            System.out.println(readCfg("deletebutto", 8));
             deletePageButtonShown = Boolean.parseBoolean(readCfg("deletebutto", 8));
         } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
             getBookmarkPage();
-            System.out.println(bookmarkedpage);
         } catch (IOException e) { throw new RuntimeException(e); }
     }
 }
