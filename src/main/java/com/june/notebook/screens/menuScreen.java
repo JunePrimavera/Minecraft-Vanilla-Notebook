@@ -69,6 +69,7 @@ public class menuScreen extends Screen {
     }
 
     protected void init() {
+
         assert this.client != null;
         this.addButtons();
     }
@@ -83,7 +84,10 @@ public class menuScreen extends Screen {
             else this.client.setScreen(null);
 
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
-
+        this.addDrawableChild(new TexturedButtonWidget(5, 5, 20, 20, 0, 0, 20, CONFIG_ICON, 32, 64, (button) -> {
+            assert this.client != null;
+            this.client.setScreen(new configScreen());
+        }, Text.translatable("jwg.button.config")));
         //Sidebar buttons
         this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> Gui.button.delete.onPress(page))));
         this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> Gui.button.gotobookmark.onPress())));
