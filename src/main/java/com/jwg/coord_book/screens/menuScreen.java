@@ -101,7 +101,11 @@ public class menuScreen extends Screen {
                 assert this.client != null;
                 this.client.setScreen(this);
             }, Text.translatable("jwg.button.bookmark")));
-            
+        }
+        if (page == bookmarkedpage && bookmarkedpage >= 0) {
+            this.addDrawableChild(new TexturedButtonWidget(this.width-275, this.height-231, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
+                bookmarkedpage = page;
+            }, Text.translatable("jwg.button.bookmark-marker")));
         }
 
         //Page buttons (arrows)
