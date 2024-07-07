@@ -84,10 +84,7 @@ public class menuScreen extends Screen {
         this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> com.jwg.notebook.gui.button.delete.onPress(page))));
         this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> com.jwg.notebook.gui.button.gotobookmark.onPress())));
         this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> com.jwg.notebook.gui.button.bookmark.onPress())));
-
-
         assert this.client != null;
-        //bookmarkPgB
 
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
@@ -272,6 +269,7 @@ public class menuScreen extends Screen {
         return true;
     }
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        System.out.println(keyCode);
         if (keyCode == 259) {
             StringBuilder fulldata = new StringBuilder();
             Scanner readFile = null;
@@ -289,32 +287,25 @@ public class menuScreen extends Screen {
                 updatePage.close();
             } catch (IOException e) { e.printStackTrace(); }
         }
-
-        if (keyCode == 257) {
+        if (keyCode == 261) {
             StringBuilder fulldata = new StringBuilder();
+            Scanner readFile = null;
+            try { readFile = new Scanner(new File(pageLocation+"/"+page+".jdat"));
+            } catch (FileNotFoundException e) { throw new RuntimeException(e); }
+            while (readFile.hasNextLine()) {
+                String data = readFile.nextLine();
+                fulldata.append(data);
+            }
+            readFile.close();
             try {
-                Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
-                while (readPageContent.hasNextLine()) {
-                    String data = readPageContent.nextLine();
-                    if (!fulldata.toString().equals("")) {
-                        data = "\n" + data;
-                    }
-                    fulldata.append(data);
-                }
-                readPageContent.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            if (!fulldata.toString().equals("")) {
-                fulldata = new StringBuilder(fulldata + "\n ");
-                try {
-                    FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
-                    updatePage.write(String.valueOf(fulldata));
-                    updatePage.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+                FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
+                if (fulldata.length()-cursorLoc != fulldata.length()) {
+                    if (fulldata.length()-1-cursorLoc >= 0) updatePage.write(String.valueOf(fulldata.deleteCharAt(fulldata.length()-cursorLoc)));
+                    cursorLoc--;
+                } else updatePage.write(String.valueOf(fulldata));
+                updatePage.close();
+            } catch (IOException e) { e.printStackTrace(); }
+
         }
 
         int location = cursorLoc;
@@ -323,6 +314,10 @@ public class menuScreen extends Screen {
         //Left arrow
         if (keyCode == 263 && location-- < this.contents.length()-1) cursorLoc++;
 
+        if (keyCode == 256) {
+            assert this.client != null;
+            this.client.setScreen(null);
+        }
 
 
         return true;
