@@ -15,11 +15,13 @@
     "Niorgamer (Portuguese translations)"
   ],
   "contact": {
-    "repo": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook "
+    "issues": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook/issues",
+    "sources": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook",
+    "homepage": "https://modrinth.com/notebook"
   },
   "license": "MIT",
   "icon": "assets/notebook/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "xyz.sillyjune.notebook.Notebook"
