@@ -1,8 +1,8 @@
-package com.jwg.notebook.util;
+package com.june.notebook.util;
 
 import java.io.*;
 
-import static com.jwg.notebook.Notebook.pageLocation;
+import static com.june.notebook.Notebook.pageLocation;
 
 public class countPageChars {
     public static int countPg(int pg) throws IOException {

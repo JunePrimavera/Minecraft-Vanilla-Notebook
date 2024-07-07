@@ -1,11 +1,11 @@
-package com.jwg.notebook.gui.button;
+package com.june.notebook.gui.button;
 
-import com.jwg.notebook.screens.menuScreen;
+import com.june.notebook.screens.menuScreen;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static com.jwg.notebook.screens.menuScreen.bookmarkedpage;
+import static com.june.notebook.screens.menuScreen.bookmarkedpage;
 
 public class gotobookmark {
     public static void onPress() {

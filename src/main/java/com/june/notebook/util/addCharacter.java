@@ -1,4 +1,4 @@
-package com.jwg.notebook.util;
+package com.june.notebook.util;
 
 public class addCharacter {
     public static String add(String str, int position, String keyStr) {

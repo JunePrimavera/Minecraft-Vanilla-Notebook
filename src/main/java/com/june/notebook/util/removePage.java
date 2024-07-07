@@ -1,4 +1,4 @@
-package com.jwg.notebook.util;
+package com.june.notebook.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.jwg.notebook.Notebook.LOGGER;
-import static com.jwg.notebook.Notebook.pageLocation;
-import static com.jwg.notebook.screens.menuScreen.goToPreviousPage;
+import static com.june.notebook.Notebook.LOGGER;
+import static com.june.notebook.Notebook.pageLocation;
+import static com.june.notebook.screens.menuScreen.goToPreviousPage;
 
 public class removePage {
     public static void remove(int rmpage) {
