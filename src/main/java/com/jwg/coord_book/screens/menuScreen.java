@@ -26,11 +26,11 @@ import static com.jwg.coord_book.CoordBook.*;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
-
     public static int page = 0;
     public static int bookmarkedpage = 0;
     public static int pageLimit = -1;
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
+    public static final Identifier BOOK_SIDEBAR_TEXTURE = new Identifier("coordbook:textures/gui/sidebar.png");
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
     private final boolean pageTurnSound;
@@ -68,9 +68,6 @@ public class menuScreen extends Screen {
                 tmp = new File(pageLocation + "/" + l + ".jdat").renameTo(new File(pageLocation + "/" + m + ".jdat"));
             }
         }
-
-
-
         if (developerMode) { LOGGER.info(String.valueOf(tmp)); }
     }
     private void writeBookmark() {
@@ -89,12 +86,8 @@ public class menuScreen extends Screen {
             this.addDrawableChild(new TexturedButtonWidget(this.width -21, this.height-21, 20, 20, 0, 0, 20, DELETE_ICON, 32, 64, (button) -> removePage(page), Text.translatable("jwg.button.close")));
         }
 
-        //Bookmark button
-        //The placement is temporary
-        //In the future I will redo all of the GUI bits, so it's a bit nicer
-        //I feel like the GUI currently is not great
-        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2-45, 12, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
-        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2-45, 12, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); assert this.client != null; this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
+        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2+91, 12, 6, 6, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
+        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2+91, 12, 6, 6, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); assert this.client != null; this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
 
         //Marker button to take you to the bookmarked page
         this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
@@ -145,7 +138,6 @@ public class menuScreen extends Screen {
         }
     }
     public void renderBookText(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
@@ -189,9 +181,21 @@ public class menuScreen extends Screen {
         }
         super.render(matrices, mouseX, mouseY, delta);
     }
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-       renderBookText(matrices, mouseX, mouseY, delta);
+    public void renderSideBar(MatrixStack matrices, int mouseX, int mouseY, float delta){
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
+        int i = (this.width - -150) / 2;
+
+        this.drawTexture(matrices, i, 2, 0, 0, 36, 180);
+        super.render(matrices, mouseX, mouseY, delta);
     }
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
+        renderBookText(matrices, mouseX, mouseY, delta);
+        renderSideBar(matrices, mouseX, mouseY, delta);
+    }
+
     public boolean handleTextClick(Style style) {
         assert style != null;
         ClickEvent clickEvent = style.getClickEvent();
