@@ -196,7 +196,10 @@ public class menuScreen extends Screen {
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
-
+    protected void closeBookScreen() {
+        assert this.client != null;
+        this.client.setScreen((Screen)null);
+    }
     int o = 0;
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         int code = getExtendedKeyCodeForChar(keyCode);
@@ -205,12 +208,23 @@ public class menuScreen extends Screen {
         if (developerMode) {
             System.out.println(code + "\n" + key);
         }
+        keystring = switch (code) {
+            case 192, 16777473, 16777559, 16777563, 16777481, 16777479, 16777547 -> "";
+            case 16777549 -> "-";
+            default -> throw new IllegalStateException("Unexpected value: " + code);
+        };
+        if (!deletePageButtonShown) {
+            if (code == 16777473) {
+                keystring = "";
+                removePage(page);
+            }
+        }
         ++o;
         if (code == 0) {
             keystring = "";
             nextCharacterSpecial = true;
             o = 1;
-        } else if (code == 16777475){
+        } else if (code == 16777475 || code == 16777547){
             keystring = "";
             if (!Objects.equals(this.contents, "")) {
                 this.contents = this.contents.substring(0, this.contents.length() - 1);

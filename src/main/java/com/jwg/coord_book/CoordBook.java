@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class CoordBook implements ModInitializer {
 	public static final boolean developerMode = false;
-	public static final String version = "0.3.2";
+	public static final String version = "0.3.3";
 	public static final String project = "Coordinate-Book";
 	public static String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
@@ -51,7 +51,7 @@ public class CoordBook implements ModInitializer {
 		}
 		readConfig.read();
 
-		if (pageLocation != "CoordinateBook" && !new File(pageLocation).exists()) {
+		if (!pageLocation.equals("CoordinateBook") && !new File(pageLocation).exists()) {
 			boolean tmp = new File(pageLocation).mkdirs();
 		}
 		LOGGER.info("{} has finished initializing!", project);
