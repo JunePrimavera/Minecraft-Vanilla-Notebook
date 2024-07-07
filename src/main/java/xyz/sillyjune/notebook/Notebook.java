@@ -48,20 +48,18 @@ public class Notebook implements ModInitializer {
             }
         }
         CONFIG = cfg; // Set the config
+
         openBookKeybindRegister(); // Register keybind for opening the notebook, ";" by default
 
-
-        // TODO: Rewrite this
-        if (!new File(BOOK_FOLDER).exists() || !new File(BOOK_FOLDER + "/Default").exists()) {
+        if (!new File(BOOK_FOLDER).exists() || !new File(STR."\{BOOK_FOLDER}/default.json").exists()) {
             try {
-                Path path = Paths.get(BOOK_FOLDER + "/Default");
-                Files.createDirectories(path);
+                Files.createDirectories(Paths.get(BOOK_FOLDER));
+                NotebookData data = new NotebookData(new String[0], "default.json");
+                NotebookData.write(data);
             } catch (IOException e) {
-                System.err.println("Failed to create directory! Make a bug report if you see this\n " + e.getMessage());
+                LOGGER.error(STR."failed to create \{BOOK_FOLDER}");
             }
         }
-        //
-
 
         if (CONFIG.debug()) { LOGGER.error("June is very silly. Continue with extreme caution."); }
 
