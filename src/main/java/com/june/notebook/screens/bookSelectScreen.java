@@ -15,9 +15,6 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class bookSelectScreen extends Screen {
-
-    public static final Identifier BOOK_SIDEBAR_TEXTURE = new Identifier("notebook:textures/gui/sidebar.png");
-
     public bookSelectScreen() {
         super(Text.of(""));
     }
@@ -53,6 +50,11 @@ public class bookSelectScreen extends Screen {
             this.client.setScreen(new menuScreen());
         }).dimensions(this.width / 2 + 50, 32, 20, 20).build());
 
+        // Config button
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Mod Config"), (button) -> {
+            assert this.client != null;
+            this.client.setScreen(new configScreen());
+        }).dimensions(this.width / 2 - 40 , 64, 80, 20).build());
     }
 
 
@@ -62,7 +64,6 @@ public class bookSelectScreen extends Screen {
 
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
         drawStringWithShadow(matrices, this.textRenderer, Text.translatable("category.notebook.presets").getString(), this.width / 2 - 20 , 12, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
 
