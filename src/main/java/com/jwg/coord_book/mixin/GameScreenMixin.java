@@ -24,10 +24,10 @@ public abstract class GameScreenMixin extends Screen {
 	}
 	@Inject(at = @At("RETURN"), method="initWidgets")
 	private void addCustomButton(CallbackInfo ci) {
-		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, l + 72 + 12, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
+		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, this.height / 4 + 96 + -16, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
 			//Code is run when the button is clicked
 			assert this.client != null;
-			this.client.setScreen(new menuScreen((BookScreen.Contents) this));
+			this.client.setScreen(new menuScreen(null));
 		}, Text.translatable("jwg.button.bookmenu")));
 	}
 }
