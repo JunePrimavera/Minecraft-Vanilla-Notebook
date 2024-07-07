@@ -48,9 +48,7 @@ public class Notebook implements ModInitializer {
             }
         }
         CONFIG = cfg; // Set the config
-
         openBookKeybindRegister(); // Register keybind for opening the notebook, ";" by default
-
         if (!new File(BOOK_FOLDER).exists() || !new File(STR."\{BOOK_FOLDER}/default.json").exists()) {
             try {
                 Files.createDirectories(Paths.get(BOOK_FOLDER));
@@ -60,14 +58,10 @@ public class Notebook implements ModInitializer {
                 LOGGER.error(STR."failed to create \{BOOK_FOLDER}");
             }
         }
-
         if (CONFIG.debug()) { LOGGER.error("June is very silly. Continue with extreme caution."); }
-        Date date = new Date();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int month = cal.get(Calendar.MONTH);
-        if (month != 5) { GAY = false; }
-
+        cal.setTime(new Date());
+        if (cal.get(Calendar.MONTH) != Calendar.JUNE) { GAY = false; } // Gay unless proven straight.
     }
 
     public static void openBookKeybindRegister() { // Register keybind
