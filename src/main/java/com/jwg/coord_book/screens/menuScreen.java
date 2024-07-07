@@ -169,6 +169,9 @@ public class menuScreen extends Screen {
         int code = getExtendedKeyCodeForChar(keyCode);
         char key = (char) code;
         String keystring = String.valueOf(key).toLowerCase();
+        if (developerMode) {
+            System.out.println(code + "\n" + key);
+        }
         ++o;
         if (code == 0) {
             keystring = "";
@@ -190,6 +193,9 @@ public class menuScreen extends Screen {
         if (nextCharacterSpecial && o == 2) {
             keystring = keystring.toUpperCase(Locale.ROOT);
             nextCharacterSpecial = false;
+            //Avert your eyes from this awful code
+            //If it works, don't touch it. And it does work, kinda...
+            //Needs improvement but it works-ish.
             keystring = switch (keystring) {
                 case "1" -> "!";
                 case "2" -> "\"";
@@ -201,6 +207,16 @@ public class menuScreen extends Screen {
                 case "8" -> "*";
                 case "9" -> "(";
                 case "0" -> ")";
+                case "-" -> "_";
+                case "=" -> "+";
+                case "[" -> "{";
+                case "]" -> "}";
+                case ";" -> ":";
+                case "#" -> "~";
+                case "\\" -> "|";
+                case "," -> "<";
+                case "." -> ">";
+                case "/" -> "?";
                 case "'" -> "@";
                 default -> keystring;
             };
