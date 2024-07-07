@@ -1,4 +1,4 @@
-# Minecraft Coordinate Book
+# Minecraft Vanilla Notebook
 
 This is a small, vanilla styled mod that lets you write notes, or coordinates. This mod is made for quilt originally, but should work on fabric as well. (The mod is now developed on fabric to keep compat)
 
@@ -31,7 +31,7 @@ Yes, you can use it in your modpack. Preferably, with credit (Of course, if you 
 
 > Where do I download it?
 
-It's downloadable here, modrinth and curseforge - Curseforge is still pending.
+It's downloadable here, modrinth and curseforge.
 
 Go to the releases tab on the right to see it here, or go to a different site;
 
