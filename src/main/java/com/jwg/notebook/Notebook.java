@@ -1,9 +1,9 @@
-package com.jwg.coord_book;
+package com.jwg.notebook;
 
-import com.jwg.coord_book.util.ensureFileStructureExists;
-import com.jwg.coord_book.util.generateConfig;
-import com.jwg.coord_book.util.readConfig;
-import com.jwg.coord_book.util.resetConfig;
+import com.jwg.notebook.util.ensureFileStructureExists;
+import com.jwg.notebook.util.generateConfig;
+import com.jwg.notebook.util.readConfig;
+import com.jwg.notebook.util.resetConfig;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -12,20 +12,20 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
-import static com.jwg.coord_book.keybinds.OpenBook.openBookKeybindRegister;
+import static com.jwg.notebook.keybinds.OpenBook.openBookKeybindRegister;
 
-public class CoordBook implements ModInitializer {
+public class Notebook implements ModInitializer {
 	public static final boolean developerMode = false;
 	public static final String version = "1.4.0";
-	public static final String project = "Coordinate-Book";
-	public static String pageLocation = "CoordinateBook";
+	public static final String project = "Vanilla-Notebook";
+	public static String pageLocation = "Notebook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
 
-	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
-	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("coordbook:textures/gui/bookmark-tab.png");
-	public static final Identifier BOOKMARK_ICON = new Identifier("coordbook:textures/gui/bookmark-goto.png");
-	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/del-page.png");
+	public static final Identifier BOOK_ICON = new Identifier("notebook:textures/gui/book.png");
+	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("notebook:textures/gui/bookmark-tab.png");
+	public static final Identifier BOOKMARK_ICON = new Identifier("notebook:textures/gui/bookmark-goto.png");
+	public static final Identifier DELETE_ICON = new Identifier("notebook:textures/gui/del-page.png");
 
 
 	public static boolean NEEDS_SETUP = false;
@@ -39,12 +39,12 @@ public class CoordBook implements ModInitializer {
 		boolean tmp = false;
 		try {
 			if (firstPage.createNewFile()){ LOGGER.info("Created first page of the book.."); NEEDS_SETUP = true; }
-			else { if (!new File("config/coordinate-book/config.cfg").exists()) { NEEDS_SETUP = true; } tmp = new File("config/coordinate-book/config.cfg").createNewFile(); }
+			else { if (!new File("config/vanilla-notebook/config.cfg").exists()) { NEEDS_SETUP = true; } tmp = new File("config/vanilla-notebook/config.cfg").createNewFile(); }
 		} catch (IOException e) { System.out.println(e); }
 		if (NEEDS_SETUP) { generateConfig.generate(0); resetConfig.reset(); }
 		readConfig.read();
 
-		if (!pageLocation.equals("CoordinateBook") && !new File(pageLocation).exists()) { tmp = new File(pageLocation).mkdirs(); }
+		if (!pageLocation.equals("notebook") && !new File(pageLocation).exists()) { tmp = new File(pageLocation).mkdirs(); }
 		if (tmp) { LOGGER.info("Possible first time use! Thank you for using my mod!"); }
 
 		LOGGER.info("Registering keybinds...");

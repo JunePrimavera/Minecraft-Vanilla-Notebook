@@ -1,6 +1,6 @@
-package com.jwg.coord_book.keybinds;
+package com.jwg.notebook.keybinds;
 
-import com.jwg.coord_book.screens.menuScreen;
+import com.jwg.notebook.screens.menuScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -15,10 +15,10 @@ public class OpenBook {
     private static KeyBinding openBookKeybind;
     public static void openBookKeybindRegister() {
         openBookKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.coord_book.open",
+                "key.notebook.open",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_SEMICOLON,
-                "category.coord_book.keys"
+                "category.notebook.keys"
         ));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openBookKeybind.wasPressed()) { assert client.player != null; client.setScreen(new menuScreen()); }
