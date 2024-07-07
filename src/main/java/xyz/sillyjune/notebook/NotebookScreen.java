@@ -165,7 +165,7 @@ public class NotebookScreen extends Screen {
                 case 262 -> { if (cursorIndex < DATA.content[pageIndex].length()) { cursorIndex += 1; }  }
                 case 263 -> { if (cursorIndex > 0) { cursorIndex -= 1; } }
                 case 257 ->   {
-                    DATA.content[pageIndex] += "\n";
+                    DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex) + "\n" + DATA.content[pageIndex].substring(cursorIndex);
                     this.cursorIndex += 1;
                 }
                 default -> { return false; }
