@@ -66,7 +66,6 @@ public class menuScreen extends Screen {
         int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
         int pagesToRename = files - rmpage;
         boolean tmp;
-        System.out.println(rmpage);
         if (rmpage == 0) { LOGGER.warn("Can't delete first page"); }
         else if (rmpage == files-1) { goToPreviousPage(); tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete(); }
         else {
