@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "coord_book",
-  "version": "${version}",
+  "version": "1.2.1",
 
   "name": "Coordinate Book",
   "description": "Adds a simple coordinate book in the menus.",
