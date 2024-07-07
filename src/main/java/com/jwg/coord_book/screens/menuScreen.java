@@ -34,6 +34,7 @@ public class menuScreen extends Screen {
 
     boolean nextCharacterSpecial = false;
     public static int page = 0;
+    public static int pageLimit = -1;
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
@@ -50,8 +51,9 @@ public class menuScreen extends Screen {
         this.contents = "";
         this.versionText = "";
         this.cachedPage = Collections.emptyList();
-        this.pageIndexText = ScreenTexts.NO;
+        this.pageIndexText = ScreenTexts.DONE;
         this.pageTurnSound = bl;
+        pageLimit = pageLimit -1;
 
     }
 
@@ -91,9 +93,14 @@ public class menuScreen extends Screen {
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
-            this.goToNextPage();
-            assert this.client != null;
-            this.client.setScreen(this);
+            if (page != pageLimit || pageLimit < 0 || !(page >= pageLimit) && pageLimit > 0) {
+                if (page >= pageLimit && pageLimit > 0) {
+                    page = pageLimit;
+                }
+                this.goToNextPage();
+                assert this.client != null;
+                this.client.setScreen(this);
+            }
         }, this.pageTurnSound));
         this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (button) -> {
             this.goToPreviousPage();
