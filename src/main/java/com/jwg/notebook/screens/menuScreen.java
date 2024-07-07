@@ -328,16 +328,6 @@ public class menuScreen extends Screen {
             this.client.setScreen(null);
         }
 
-        //Enter
-        if (keyCode == 257) {
-            this.contents = "\n ";
-
-            try {
-                FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
-                updatePage.write(this.contents);
-                updatePage.close();
-            } catch (IOException e) { e.printStackTrace(); }
-        }
 
         return true;
     }
