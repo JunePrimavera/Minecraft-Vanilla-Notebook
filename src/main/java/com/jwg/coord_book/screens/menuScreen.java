@@ -213,12 +213,11 @@ public class menuScreen extends Screen {
         }
 
         keystring = switch (code) {
-            case 192, 16777473, 16777559, 16777563, 16777481, 16777479 -> "";
+            case 192, 16777473, 16777559, 16777563, 16777481, 16777479, 16777547 -> "";
             case 16777549 -> "-";
-            case 16777547 -> "/";
             default -> throw new IllegalStateException("Unexpected value: " + code);
         };
-        
+
         ++o;
         if (code == 0) {
             keystring = "";
