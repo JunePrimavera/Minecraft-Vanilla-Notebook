@@ -1,5 +1,6 @@
 package com.june.notebook.mixin;
 
+import com.june.notebook.Notebook;
 import com.june.notebook.screens.bookSelectScreen;
 import com.june.notebook.screens.menuScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -22,7 +23,7 @@ public abstract class GameScreenMixin extends Screen {
 	}
 	@Inject(at = @At("RETURN"), method="initWidgets")
 	private void addCustomButton(CallbackInfo ci) {
-		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, this.height / 4 + 96 + -16, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
+		this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104) + Notebook.button_positions[0], (this.height / 4 + 96 + -16) + Notebook.button_positions[1], 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
 			//Code is run when the button is clicked
 			if (presetsEnabled) {
 				assert this.client != null;
