@@ -21,6 +21,9 @@ public class Notebook implements ModInitializer {
     public void onInitialize() {
 
         // Create config file if it doesn't exist
+        if (!new File("config").exists()) {
+            boolean b = new File("config").mkdir();
+        }
         if (!new File("config/notebook.conf").exists()) {
             try {
                 if (!new File("config/notebook.conf").createNewFile()) {
