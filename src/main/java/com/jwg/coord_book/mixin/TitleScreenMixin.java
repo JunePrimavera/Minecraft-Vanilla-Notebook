@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.event.KeyEvent;
 import java.util.Objects;
 
 import static com.jwg.coord_book.CoordBook.BOOK_ICON;
@@ -41,7 +42,6 @@ public abstract class TitleScreenMixin extends Screen implements BookScreen.Cont
 	}
 	@Inject(at = @At("RETURN"), method="initWidgetsNormal")
 	private void addCustomButton(int y, int spacingY, CallbackInfo ci) {
-		System.out.println(y + spacingY);
 		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, y + spacingY, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
 			//Code is run when the button is clicked
 			assert this.client != null;
