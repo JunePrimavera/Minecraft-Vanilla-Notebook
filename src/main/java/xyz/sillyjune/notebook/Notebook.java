@@ -73,7 +73,15 @@ public class Notebook implements ModInitializer {
         });
 
     }
+    public static ButtonTextures getBookIcon() {
+        if (!GAY){
+            return MAIN_BUTTON_ICON;
+        } else {
+            return MAIN_BUTTON_ICON_GAY;
+        }
+    }
     public static final Logger LOGGER = LoggerFactory.getLogger("notebook");
+    public static final ButtonTextures MAIN_BUTTON_ICON_GAY = b_id("book_gay");
     public static final ButtonTextures MAIN_BUTTON_ICON = b_id("book");
     public static final ButtonTextures NEW_PAGE_ICON = b_id("new_page");
     public static final ButtonTextures DEL_PAGE_ICON = b_id("delete_page");

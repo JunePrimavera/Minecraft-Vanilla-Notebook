@@ -5,14 +5,24 @@
   "name": "Notebook",
   "description": "Keep track of everything!",
   "authors": [
-    "Juniper"
+    "Juniper Primavera (aka June)"
+  ],
+  "contributors": [
+    "Sekalol15 (German translations, pride month button icons)",
+    "JustAPotota (Emotional support)",
+    "Amirhan-Taipovjan-Greatest-I (Tatar translations)",
+    "Alex Gazmanovich (Belarusian translations)",
+    "NightMite (Polish translations)",
+    "Niorgamer (Portuguese translations)"
   ],
   "contact": {
-    "repo": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook "
+    "issues": "https://github.com/JunePrimavera/Minecraft-Vanilla-Notebook/issues",
+    "sources": "https://github.com/JunePrimavera/Minecraft-Vanilla-Notebook",
+    "homepage": "https://modrinth.com/notebook"
   },
   "license": "MIT",
   "icon": "assets/notebook/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "xyz.sillyjune.notebook.Notebook"
