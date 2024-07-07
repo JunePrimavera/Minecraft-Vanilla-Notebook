@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
+import static com.jwg.coord_book.keybinds.OpenBook.openBookKeybindRegister;
+
 public class CoordBook implements ModInitializer {
 	public static final boolean developerMode = true;
 	public static final String version = "1.3.0";
@@ -44,6 +46,9 @@ public class CoordBook implements ModInitializer {
 
 		if (!pageLocation.equals("CoordinateBook") && !new File(pageLocation).exists()) { tmp = new File(pageLocation).mkdirs(); }
 		if (tmp) { LOGGER.info("Possible first time use! Thank you for using my mod!"); }
+
+		LOGGER.info("Registering keybinds...");
+		openBookKeybindRegister();
 		LOGGER.info("{} has finished initializing!", project);
 	}
 }
