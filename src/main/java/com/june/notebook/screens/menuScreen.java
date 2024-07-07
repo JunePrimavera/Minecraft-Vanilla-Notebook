@@ -50,6 +50,9 @@ public class menuScreen extends Screen {
     public static TexturedButtonWidget bookmark;
     public static TexturedButtonWidget bookmarkPgB;
 
+    public static TexturedButtonWidget importB;
+    public static TexturedButtonWidget exportB;
+
     public menuScreen() {
         this(true);
     }
@@ -92,6 +95,12 @@ public class menuScreen extends Screen {
         this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> Gui.button.delete.onPress(page))));
         this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> Gui.button.gotobookmark.onPress())));
         this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> Gui.button.bookmark.onPress())));
+
+        this.addDrawableChild(importB = sidebar.addSidebarButton(3, IMPORT_ICON, this, "import", 8, 8, (button -> Gui.button.importButton.onPress())));
+        this.addDrawableChild(exportB = sidebar.addSidebarButton(4, EXPORT_ICON, this, "export", 8, 8, (button -> Gui.button.exportButton.onPress())));
+
+
+
         assert this.client != null;
 
         //Page buttons (arrows)

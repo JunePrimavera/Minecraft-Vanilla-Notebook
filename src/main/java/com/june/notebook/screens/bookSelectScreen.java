@@ -71,9 +71,6 @@ public class bookSelectScreen extends Screen {
         }).dimensions(this.width / 2 + 50, 32, 20, 20).build());
 
         // Config button
-        this.addDrawableChild(Gui.sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> {
-
-        })));
         this.addDrawableChild(new TexturedButtonWidget(5, 5, 20, 20, 0, 0, 20, CONFIG_ICON, 32, 64, (button) -> {
             assert this.client != null;
             this.client.setScreen(new configScreen());
