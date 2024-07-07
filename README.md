@@ -1,10 +1,12 @@
 # Minecraft Coordinate Book
 
-This is a small, vanilla styled mod that lets you write notes, or coordinates. This mod is made for quilt, but should work on fabric as well (UNTESTED!)
+This is a small, vanilla styled mod that lets you write notes, or coordinates. This mod is made for quilt, but should work on fabric as well.
 
 It uses the same GUI as a traditional book, but it's completely client-side, for each coordinate you can keep notes, to keep track of why you were there.
 
-If you die, you keep it in your menu, and it's individual per each world; however you can still access it if you aren't in the same world. 
+If you die, you keep it in your menu, and it's not individual per each world; however you can still access it if you aren't in the same world. 
+
+While this is supposed to be used for coordinates, you can write whatever you want in this.
 
 **WARNING:** Some servers may count this as cheating, while I don't see this as being any different to writing them down or putting them on a document, some server owners may disagree
 
@@ -14,7 +16,7 @@ If you die, you keep it in your menu, and it's individual per each world; howeve
 
 > When will it be released?
 
-I don't know, hopefully by the end of next month (August 2022)
+I don't know, it will take as long as it takes.
 
 > What versions?
 
@@ -32,9 +34,9 @@ Yes, you can use it in your modpack. You don't need to credit me (Of course, if 
 
 > Where do I download it?
 
-Currently (As of July 2022) there is no download.
+Currently, it's only downloadable here, on GitHub.
 
-When it's done, it'll be downloadable on Curseforge, Modrinth and here on GitHub.
+When it's done, it'll be downloadable on Curseforge and Modrinth.
 
 ## Support 
 
