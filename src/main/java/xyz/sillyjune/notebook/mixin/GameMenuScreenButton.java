@@ -19,6 +19,6 @@ public abstract class GameMenuScreenButton extends Screen {
     }
     @Inject(at = @At("RETURN"), method="initWidgets")
     private void addCustomButton(CallbackInfo ci) {
-        this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, this.height / 4 + 96 + -16, 20, 20, MAIN_BUTTON_ICON, (_) -> this.client.setScreen(new NotebookScreen())));
+        this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, this.height / 4 + 96 + -16, 20, 20, MAIN_BUTTON_ICON, (button) -> this.client.setScreen(new NotebookScreen())));
     }
 }

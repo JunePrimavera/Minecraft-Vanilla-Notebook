@@ -56,8 +56,7 @@ public class NotebookScreen extends Screen {
     // Removes the last page
     protected void delPage() {
         String[] new_pages = new String[DATA.content.length-1];
-        int i = 0;
-        for (String _ : new_pages) {
+        for (int i = 0; i < new_pages.length; i++) {
             new_pages[i] = DATA.content[i]; i++;
         }
         DATA.content = new_pages; DATA.write();
@@ -71,8 +70,8 @@ public class NotebookScreen extends Screen {
     }
     // Get index of book in folder
     protected int getBookIndex() {
-        for (int i = 0; i < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length; i++) {
-            if (Objects.equals(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[i], DATA.location)) {
+        for (int i = 0; i < Objects.requireNonNull(new File(BOOK_FOLDER + "/").list()).length; i++) {
+            if (Objects.equals(Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[i], DATA.location)) {
                 return i;
             }
         }
@@ -80,8 +79,8 @@ public class NotebookScreen extends Screen {
     }
     void next_book() {
         int bookIndex = getBookIndex();
-        if (bookIndex < Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list()).length - 1) {
-            DATA = NotebookData.read(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[bookIndex + 1]);
+        if (bookIndex < Objects.requireNonNull(new File(BOOK_FOLDER).list()).length - 1) {
+            DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER).list())[bookIndex + 1]);
             this.bookNameField.setText(DATA.location.replace(".json", ""));
             this.pageIndex = 0;
             this.updatePageButtons();
@@ -90,7 +89,7 @@ public class NotebookScreen extends Screen {
     void last_book() {
         int bookIndex = getBookIndex();
         if (bookIndex > 0) {
-            DATA = NotebookData.read(Objects.requireNonNull(new File(STR."\{BOOK_FOLDER}/").list())[bookIndex - 1]);
+            DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex - 1]);
             if (DATA != null) {
                 this.bookNameField.setText(DATA.location.replace(".json", ""));
                 this.pageIndex = 0;
@@ -116,21 +115,21 @@ public class NotebookScreen extends Screen {
         pageIndex = 0;
 
         // Add done/close button
-        closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (_) -> this.close()).dimensions(this.width / 2 - 100, 196, 200, 20).build());
+        closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> this.close()).dimensions(this.width / 2 - 100, 196, 200, 20).build());
         // Page buttons
         int i = (this.width - 192) / 2;
-        this.nextPageButton = this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (_) -> this.goToNextPage(), this.pageTurnSound));
-        this.previousPageButton = this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (_) -> this.goToPreviousPage(), this.pageTurnSound));
-        this.newPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 119, 155, 20, 20, NEW_PAGE_ICON, (_) -> newPage()));
-        this.delPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 99, 155, 20, 20, DEL_PAGE_ICON, (_) -> delPage()));
+        this.nextPageButton = this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> this.goToNextPage(), this.pageTurnSound));
+        this.previousPageButton = this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (button) -> this.goToPreviousPage(), this.pageTurnSound));
+        this.newPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 119, 155, 20, 20, NEW_PAGE_ICON, (button) -> newPage()));
+        this.delPageButton = this.addDrawableChild(new TexturedButtonWidget(i + 99, 155, 20, 20, DEL_PAGE_ICON, (button) -> delPage()));
         // Top bar buttons
         this.bookNameField = this.addDrawableChild(new TextFieldWidget(this.textRenderer, 5, 5, 108, 20, Text.translatable("notebook.text.field")));
         this.bookNameField.setEditable(true);
         this.bookNameField.setText("default");
-        buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (_) -> next_book()));
-        buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (_) -> last_book()));
-        buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (_) -> {
-            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(DATA.content, STR."\{this.bookNameField.getText()}.json"); }}
+        buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (button) -> next_book()));
+        buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (button) -> last_book()));
+        buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (button) -> {
+            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(DATA.content, this.bookNameField.getText() + ".json"); }}
         ));
 
         this.updatePageButtons();
@@ -177,7 +176,7 @@ public class NotebookScreen extends Screen {
             if (keyCode == 259 && !this.bookNameField.getText().isEmpty()) {
                 this.bookNameField.setText(this.bookNameField.getText().substring(0, this.bookNameField.getText().length() - 1));
             } else if (keyCode == 257 && !this.bookNameField.getText().isEmpty()) {
-                DATA = new NotebookData(DATA.content, STR."\{this.bookNameField.getText()}.json");
+                DATA = new NotebookData(DATA.content,this.bookNameField.getText() + ".json");
             }
 
         }
@@ -203,7 +202,7 @@ public class NotebookScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
         if (GAY) { context.drawText(this.textRenderer, Text.of("Happy pride month! :3"), 5, this.height - 22, Colors.RED / 2, true); }
         if (CONFIG.debug()) {
-            context.drawText(this.textRenderer, Text.of(STR."Notebook v4.0.0 - \{Text.translatable("devwarning.info").getString()}"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v4.0.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
             context.drawText(this.textRenderer, Text.of("Notebook v4.0.0"), 5, this.height - 10, Colors.WHITE, true);
         }
@@ -213,9 +212,9 @@ public class NotebookScreen extends Screen {
         if (DATA.content.length > this.pageIndex) {
             String pageContent = readPage(pageIndex);
             // Cursor timing
-            if (cursorIndex < pageContent.length()) { pageContent = STR."\{pageContent.substring(0, cursorIndex)}|\{pageContent.substring(cursorIndex)}"; }
+            if (cursorIndex < pageContent.length()) { pageContent = pageContent.substring(0, cursorIndex)+"|" +pageContent.substring(cursorIndex); }
             else { cursorIndex = pageContent.length(); }
-            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = STR."\{pageContent}_";}
+            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = pageContent + "_";}
             // Render cursor and book content
             this.cachedPage = this.textRenderer.wrapLines(StringVisitable.plain(pageContent), 114);
         }
