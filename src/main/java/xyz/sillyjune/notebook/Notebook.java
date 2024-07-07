@@ -54,7 +54,7 @@ public class Notebook implements ModInitializer {
             try {
                 Files.createDirectories(Paths.get(BOOK_FOLDER));
                 NotebookData data = new NotebookData(new String[0], "default.json");
-                NotebookData.write(data);
+                data.write();
             } catch (IOException e) {
                 LOGGER.error(STR."failed to create \{BOOK_FOLDER}");
             }
@@ -86,5 +86,6 @@ public class Notebook implements ModInitializer {
     public static final ButtonTextures RENAME_BOOK_ICON = b_id("rename_book");
     public static final ButtonTextures NEXT_BOOK_ICON = b_id("next_book");
     public static NotebookConfig CONFIG;
+    public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     public static String BOOK_FOLDER = "Notebook";
 }
