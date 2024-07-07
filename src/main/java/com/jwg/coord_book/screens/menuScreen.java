@@ -93,7 +93,7 @@ public class menuScreen extends Screen {
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
             if (page != pageLimit || pageLimit < 0 || !(page >= pageLimit)) {
-                if (page >= pageLimit) {
+                if (page >= pageLimit && pageLimit > 0) {
                     page = pageLimit;
                 }
                 this.goToNextPage();
