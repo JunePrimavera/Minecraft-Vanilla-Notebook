@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.june.notebook.NotebookKeybind.openBookKeybindRegister;
+
 
 public class Notebook implements ModInitializer {
 
@@ -22,8 +24,11 @@ public class Notebook implements ModInitializer {
                 System.err.println("Failed to create directory! Make a bug report if you see this\n " + e.getMessage());
             }
         }
+        openBookKeybindRegister();
+        if (DEV_ONLY) {
+            System.out.println("June is a silly goober");
+        }
 
-        System.out.println("June is a silly goober");
     }
 
     public static final Identifier MAIN_BUTTON_ICON = new Identifier("notebook:textures/gui/book.png");
