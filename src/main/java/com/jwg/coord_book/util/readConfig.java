@@ -18,36 +18,34 @@ public class readConfig {
         String dat = Files.readAllLines(Paths.get("config/coordinate-book/config.cfg")).get(cfgLine);
         return dat.substring(entry.length()+2);
     }
+    public static void getBookmarkPage() throws IOException {
+        String dat = Files.readAllLines(Paths.get("config/coordinate-book/bookmark.cfg")).get(1);
+        bookmarkedpage = Integer.parseInt(dat);
+    }
     public static void read() {
         LOGGER.info("Reading config...");
 
         try {
             pageLocation = readCfg("pagedirector", 2);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
             pageLimit = Integer.parseInt(readCfg("pagelimi", 4));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
             System.out.println(readCfg("startpag", 6));
             page = Integer.parseInt(readCfg("startpag", 6));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
             System.out.println(readCfg("deletebutto", 8));
             deletePageButtonShown = Boolean.parseBoolean(readCfg("deletebutto", 8));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (developerMode) {
-            System.out.println(pageLocation + ", " + pageLimit + ", " + page);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
+
+        try {
+            getBookmarkPage();
+            System.out.println(bookmarkedpage);
+        } catch (IOException e) { throw new RuntimeException(e); }
     }
 }
