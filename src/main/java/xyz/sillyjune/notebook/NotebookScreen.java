@@ -129,7 +129,10 @@ public class NotebookScreen extends Screen {
         this.bookNameField.setText("default");
         buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (_) -> next_book()));
         buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (_) -> last_book()));
-        buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (_) -> DATA = new NotebookData(DATA.content, STR."\{this.bookNameField.getText()}.json")));
+        buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (_) -> {
+            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(DATA.content, STR."\{this.bookNameField.getText()}.json"); }}
+        ));
+
         this.updatePageButtons();
         this.cursorIndex = readPage(pageIndex).length();
     }
@@ -164,7 +167,7 @@ public class NotebookScreen extends Screen {
                 }
                 case 262 -> { if (cursorIndex < DATA.content[pageIndex].length()) { cursorIndex += 1; }  }
                 case 263 -> { if (cursorIndex > 0) { cursorIndex -= 1; } }
-                case 257 ->   {
+                case 257 ->  {
                     DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex) + "\n" + DATA.content[pageIndex].substring(cursorIndex);
                     this.cursorIndex += 1;
                 }
@@ -173,7 +176,10 @@ public class NotebookScreen extends Screen {
         } else {
             if (keyCode == 259 && !this.bookNameField.getText().isEmpty()) {
                 this.bookNameField.setText(this.bookNameField.getText().substring(0, this.bookNameField.getText().length() - 1));
+            } else if (keyCode == 257 && !this.bookNameField.getText().isEmpty()) {
+                DATA = new NotebookData(DATA.content, STR."\{this.bookNameField.getText()}.json");
             }
+
         }
         return true;
     }
