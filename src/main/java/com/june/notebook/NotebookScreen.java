@@ -53,7 +53,10 @@ public class NotebookScreen extends Screen {
         this.cachedPage = Collections.emptyList();
         this.pageIndexText = ScreenTexts.EMPTY;
         this.pageTurnSound = playPageTurnSound;
+
     }
+
+
 
     // Returns the amount of pages stored
     protected int getPageCount(String path) {
@@ -129,7 +132,7 @@ public class NotebookScreen extends Screen {
         }
         this.cursorIndex = readPage(BOOK_FOLDER + "/" + BookName, pageIndex).length();
         // Add done/close button
-        ButtonWidget closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+        this.closeButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
             this.close();
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
@@ -173,6 +176,9 @@ public class NotebookScreen extends Screen {
                 this.updatePageButtons();
             }
         }, Text.translatable("notebook.button.last")));
+
+
+
         this.updatePageButtons();
     }
 
@@ -210,6 +216,7 @@ public class NotebookScreen extends Screen {
         this.nextPageButton.setFocused(false);
         this.previousPageButton.setFocused(false);
         this.newPageButton.setFocused(false);
+
     }
 
     // Special keys (delete, backspace, etc)
@@ -284,6 +291,7 @@ public class NotebookScreen extends Screen {
 
     // The code I am going to avoid like the plague
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+
         this.renderBackground(context);
         int i = (this.width - 192) / 2;
         context.drawTexture(BOOK_TEXTURE, i, 2, 0, 0, 192, 192);
@@ -300,12 +308,14 @@ public class NotebookScreen extends Screen {
             this.pageIndexText = Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(this.totalPages, 1));
         }
         int k = this.textRenderer.getWidth(this.pageIndexText);
-        context.drawText(this.textRenderer, Text.of("Alpha Build - Expect bugs or missing features!"), 5, this.height - 22, Colors.RED, true);
+        context.drawText(this.textRenderer, Text.of("Beta Build - Expect minor bugs or missing features!"), 5, this.height - 22, Colors.RED / 2, true);
         if (Notebook.DEV_ONLY) {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.0.1 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v3.0.1"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v3.1.0"), 5, this.height - 10, Colors.WHITE, true);
         }
+
+
         if (!Objects.equals(this.bookNameField.getText(), BookName) && !Objects.equals(this.bookNameField.getText(), "")) {
            boolean bookExists = false;
             for (int it = 0; it == Objects.requireNonNull(new File(BOOK_FOLDER).list()).length; it++) {
