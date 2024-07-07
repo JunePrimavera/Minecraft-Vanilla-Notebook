@@ -18,7 +18,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class Notebook implements ModInitializer {
@@ -61,16 +62,16 @@ public class Notebook implements ModInitializer {
         }
 
         if (CONFIG.debug()) { LOGGER.error("June is very silly. Continue with extreme caution."); }
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int month = cal.get(Calendar.MONTH);
+        if (month != 5) { GAY = false; }
 
     }
 
     public static void openBookKeybindRegister() { // Register keybind
-        openBookKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.notebook.open",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_SEMICOLON,
-                "category.notebook.keys"
-        ));
+        openBookKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.notebook.open", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_SEMICOLON, "category.notebook.keys"));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (openBookKeybind.wasPressed()) { // Open notebook on key press
                 client.setScreen(new NotebookScreen());
@@ -88,4 +89,5 @@ public class Notebook implements ModInitializer {
     public static NotebookConfig CONFIG;
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     public static String BOOK_FOLDER = "Notebook";
+    public static boolean GAY = true;
 }
