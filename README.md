@@ -1,44 +1,44 @@
 # Minecraft Vanilla Notebook
 
-This is a small, vanilla styled mod that lets you write notes, or coordinates. This mod is made for quilt originally, but should work on fabric as well. (The mod is now developed on fabric to keep compat)
+This is a small, vanilla-styled mod that lets you write notes in-game.
 
-It uses the same GUI as a traditional book, but it's completely client-side, for each coordinate you can keep notes, to keep track of why you were there.
-
-If you die, you keep it in your menu, and it's not individual per each world; you can still access it if you aren't in the same world. 
-
-While this is supposed to be used for coordinates, you can write whatever you want in this.
-
-> [!WARNING]
-> Some servers may count this as cheating, while I don't see this as being any different to writing them down or putting them on a document, some server owners may disagree
-
+It uses a similar GUI as a traditional book, but it's completely client-side and global - It will persist across worlds and servers.
 ## FAQ
 
 > What versions?
 
-Whichever stay relevant, I'm hoping to keep it up to date on the latest version, but I most likely won't update to 1.17 or earlier.
-
-Currently, it's on 1.20.x
+I try and keep it on the latest version, but if people stick to specific versions I will support those for longer, until something else becomes more relevant. Versions older than 1.20.5 may not be supported, as some changes in java 21 are very useful.
 
 > Forge/Fabric?
 
 The mod should work on fabric and quilt already. However forge is probably not going to get an official port.
 
-If you want to port it to forge yourself, you're more than welcome to.
+If you want to port it to forge yourself, you're more than welcome to - I will accept PRs and add branches to support forge if someone wants to maintain them.
 
 > Can I use this in my modpack?
 
-Yes, you can use it in your modpack. Preferably, with credit (Of course, if you can, please do) but you cannot claim it's your own mod.
+Yes, you can use it in your modpack. Preferably, with credit.
 
 > Where do I download it?
 
-It's downloadable here, modrinth and curseforge.
+It's downloadable on GitHub, my Forgejo instance Modrinth and Curseforge. 
 
-Go to the releases tab on the right to see it here, or go to a different site;
+Curseforge is the least priority, so I would recommend checking here or Modrinth first.
+
+Go to the releases tab to see it here, or go to a different site;
 
 - Modrinth: https://modrinth.com/mod/notebook
+- Curseforge: https://www.curseforge.com/minecraft/mc-mods/notebook
+- Forgejo: https://git.sillyjune.xyz/juniper/Minecraft-Vanilla-Notebook
+- Github: https://github.com/JunePrimavera/Minecraft-Vanilla-Notebook
 
-## Support 
+> I found a bug! / I want to suggest features!
 
-You can also [join my discord](https://discord.gg/EqTwbVYEWx) if you have any questions, need help, or want to talk to me directly.
+If you find bugs or issues with the mod, you can make an issue [on GitHub](https://github.com/JunePrimavera/Minecraft-Vanilla-Notebook) or [my forgejo instance](https://git.sillyjune.xyz/juniper/Minecraft-Vanilla-Notebook/issues).
 
-You can also help support this mod by translating it into other languages, making textures, or reporting bugs/requesting features at the top menu. If you want to add textures/translations, contact me on discord above.
+Alternatively, you can [join my discord](https://discord.gg/EqTwbVYEWx) if you have any questions, need help, or want to talk to me directly.
+
+If you want to help support this mod, you can do so by translating it into other languages, improving textures. If you want to add textures/translations (and don't want/know how to use GitHub's PRs), contact me on discord.
+
+Please do not DM me for feature requests - If you are asking about contributing or bugs, feel free to.
+
