@@ -109,8 +109,8 @@ public class menuScreen extends Screen {
         //The placement is temporary
         //In 1.2.0 I will redo all of the GUI bits, so it's a bit nicer
         //I feel like the GUI currently is not great
-        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width-250, this.height-228, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
-        else {this.addDrawableChild(new TexturedButtonWidget(this.width-250, this.height-228, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
+        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width-250, 28, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
+        else {this.addDrawableChild(new TexturedButtonWidget(this.width-250, 28, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
 
         //Marker button to take you to the bookmarked page
         this.addDrawableChild(new TexturedButtonWidget(this.width-275, this.height-231, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
