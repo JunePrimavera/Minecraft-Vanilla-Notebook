@@ -2,6 +2,7 @@ package com.jwg.notebook.screens;
 
 import com.jwg.notebook.Notebook;
 
+import com.jwg.notebook.gui.sidebar;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -72,7 +73,7 @@ public class menuScreen extends Screen {
     }
 
     //To fix, currently just clears the page
-    protected void removePage(int rmpage) {
+    public static void removePage(int rmpage) {
         int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
         int pagesToRename = files - rmpage;
         boolean tmp = false;
@@ -93,28 +94,15 @@ public class menuScreen extends Screen {
             fileOverwriter.close();
         } catch (IOException e) { e.printStackTrace(); }
     }
+
     protected void addButtons() {
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> { assert this.client != null; this.client.setScreen(null); }));
 
-        //12
-
-        //Delete page button
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 20, 17, 17, 0, 0, 17, DELETE_ICON, 17, 34, (button) -> removePage(page), Text.translatable("jwg.button.close")));
-        //Bookmark button
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 38, 17, 17, 0, 0, 17, BOOKMARK_ICON, 17, 34, (button) -> page = bookmarkedpage, Text.translatable("jwg.button.bookmark")));
-
-        //Bookmark button
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> { bookmarkedpage = page; writeBookmark(); }, Text.translatable("jwg.button.bookmark-marker")));
-        //Go to bookmark page button
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2 +86, 38, 17, 17, 0, 0, 17, BOOKMARK_ICON, 17, 34, (button) -> {
-            if (page != bookmarkedpage && bookmarkedpage >= 0) {
-                if (new File(pageLocation+"/"+bookmarkedpage+".jdat").exists()) { page = bookmarkedpage; assert this.client != null; this.client.setScreen(this);
-                } else { bookmarkedpage = -1; }
-            }
-        }, Text.translatable("jwg.button.bookmark-marker")));
-
-
+        //Sidebar buttons
+        this.addDrawableChild(sidebar.addSidebarButton(0, DELETE_ICON, this, "delete"));
+        this.addDrawableChild(sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark"));
+        
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
@@ -134,7 +122,7 @@ public class menuScreen extends Screen {
         assert this.client != null;
         this.selectionManager = new SelectionManager(() -> this.contents, (text) -> this.contents = text, SelectionManager.makeClipboardGetter(this.client), SelectionManager.makeClipboardSetter(this.client), (text) -> this.client.textRenderer.getWidth(text) <= this.loc);
     }
-    protected void goToPreviousPage() {
+    protected static void goToPreviousPage() {
         --page;
         if (page <= -1) {
             page = 0;
