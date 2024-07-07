@@ -1,4 +1,4 @@
-package com.june.notebook;
+package xyz.sillyjune.notebook;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.june.notebook.Notebook.*;
+import static xyz.sillyjune.notebook.Notebook.*;
 
 public class NotebookScreen extends Screen {
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
