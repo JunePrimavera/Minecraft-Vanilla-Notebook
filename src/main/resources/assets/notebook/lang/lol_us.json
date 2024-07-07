@@ -6,6 +6,8 @@
   "tooltip.notebook.delete": "Delete Paeg",
   "tooltip.notebook.bookmark.goto": "Go 2 bookmarkd paeg",
   "tooltip.notebook.bookmark.create": "Bookmark paeg",
+  "tooltip.notebook.import": "Import",
+  "tooltip.notebook.export": "Export",
   "bookconfig.dir": "Book Storage Directory (Default: Notebook/Default)",
   "bookconfig.startpage": "Startin Paeg (Default: 0)",
   "bookconfig.limit": "Paeg Limit (Default: -1)",
