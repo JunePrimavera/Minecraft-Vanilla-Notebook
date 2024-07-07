@@ -1,8 +1,8 @@
 package com.jwg.notebook.screens;
 
 import com.jwg.notebook.Notebook;
-
 import com.jwg.notebook.gui.sidebar;
+import com.jwg.notebook.util.addCharacter;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,7 +13,6 @@ import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.NarratorManager;
-import net.minecraft.client.util.SelectionManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.*;
@@ -21,12 +20,16 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 import static com.jwg.notebook.Notebook.*;
-import static com.jwg.notebook.Notebook.pageLocation;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
@@ -38,12 +41,9 @@ public class menuScreen extends Screen {
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
     private final boolean pageTurnSound;
-    public static boolean deletePageButtonShown = true;
     private String versionText;
     private String contents;
-    private String preContents;
-    private SelectionManager selectionManager;
-    private int loc;
+
     private int cursorLoc;
 
     public menuScreen() {
@@ -59,7 +59,6 @@ public class menuScreen extends Screen {
         this.cachedPage = Collections.emptyList();
         this.pageIndexText = ScreenTexts.EMPTY;
         this.pageTurnSound = bl;
-        this.loc = 0;
         this.ltchr = 0;
         this.cursorLoc = 0;
         pageLimit = pageLimit - 1;
@@ -69,44 +68,10 @@ public class menuScreen extends Screen {
         assert this.client != null;
         this.client.keyboard.setRepeatEvents(true);
         this.addButtons();
-        selectionMgr();
     }
 
     //To fix, currently just clears the page
-    protected void removePage(int rmpage) {
-        int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
-        int pagesToRename = files - rmpage;
-        boolean tmp = false;
-        if (rmpage == 0) { LOGGER.warn("Can't delete first page"); }
-        else if (rmpage == files-1) { goToPreviousPage(); tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete(); }
-        else {
-            int i = 0;
-            tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete();
-            tmp = new File(pageLocation +"/"+ (files-1) + ".jdat").delete();
 
-            while (i < files-rmpage) {
-                StringBuilder fulldata = new StringBuilder();
-                try {
-                    if (new File(pageLocation +"/"+ (rmpage+i) + ".jdat").exists()) {
-                        Scanner readPageContent = new Scanner(new File(pageLocation +"/"+ (rmpage+i) + ".jdat"));
-                        while (readPageContent.hasNextLine()) {
-                            String data = readPageContent.nextLine();
-                            if (!fulldata.toString().equals("")) data = "\n" + data;
-                            fulldata.append(data);
-                        }
-                        readPageContent.close();
-                    }
-                } catch (FileNotFoundException e) { e.printStackTrace(); }
-                try {
-                    FileWriter f = new FileWriter(pageLocation +"/"+ (rmpage+i-1) + ".jdat", false);
-                    f.write(String.valueOf(fulldata));
-                    f.close();
-                } catch (IOException e) { e.printStackTrace(); }
-
-                i++;
-            }
-        }
-    }
     private void writeBookmark() {
         try {
             FileWriter fileOverwriter = new FileWriter("config/vanilla-notebook/bookmark.cfg");
@@ -122,8 +87,8 @@ public class menuScreen extends Screen {
         TexturedButtonWidget delete;
         TexturedButtonWidget bookmark;
         //Sidebar buttons
-        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, (button -> removePage(page))));
-        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark", 8, (button -> page = bookmarkedpage)));
+        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, (button -> com.jwg.notebook.gui.button.delete.onPress(page))));
+        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark", 8, (button -> com.jwg.notebook.gui.button.bookmark.onPress())));
 
         assert this.client != null;
 
@@ -142,12 +107,7 @@ public class menuScreen extends Screen {
         if (developerMode) { this.versionText = "Vanilla Notebook "+version+" Developer build";
         } else { this.versionText = "Vanilla Notebook " + version; }
     }
-
-    protected void selectionMgr() {
-        assert this.client != null;
-        this.selectionManager = new SelectionManager(() -> this.contents, (text) -> this.contents = text, SelectionManager.makeClipboardGetter(this.client), SelectionManager.makeClipboardSetter(this.client), (text) -> this.client.textRenderer.getWidth(text) <= this.loc);
-    }
-    protected static void goToPreviousPage() {
+    public static void goToPreviousPage() {
         --page;
         if (page <= -1) {
             page = 0;
@@ -191,7 +151,7 @@ public class menuScreen extends Screen {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        this.contents = addChar(String.valueOf(fulldata), cursorLoc, "|");
+        this.contents = addCharacter.add(String.valueOf(fulldata), cursorLoc, "|");
         StringVisitable stringVisitable = StringVisitable.plain(this.contents);
 
         this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
@@ -257,35 +217,7 @@ public class menuScreen extends Screen {
     }
     public void closeScreen() {
         assert this.client != null;
-        this.client.setScreen(null); }
-
-    public String addChar(String str, int position, String keyStr) {
-        int len = str.length();
-        char[] updatedArr = new char[len + 1];
-        try {
-            char ch = keyStr.charAt(0);
-            str.getChars(0, len, updatedArr, 0);
-            updatedArr[len - position] = ch;
-            str.getChars(len - position, len, updatedArr, len - position + 1);
-        } catch (IndexOutOfBoundsException e) {
-            addChar(str, 0, keyStr);
-        }
-        return new String(updatedArr)+"";
-    }
-    public static int countPg() throws IOException {
-        File file = new File(pageLocation+"/"+page+".jdat");
-        FileInputStream fileInputStream;
-
-        { try { fileInputStream = new FileInputStream(file); } catch (FileNotFoundException e) { throw new RuntimeException(e); } }
-        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        int characterCount = 1;
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            characterCount += line.length();
-
-        }
-        return characterCount;
+        this.client.setScreen(null);
     }
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
@@ -298,14 +230,9 @@ public class menuScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
     public boolean charTyped(char chr, int modifiers) {
-
-        try { this.loc = countPg(); } catch (IOException e) { throw new RuntimeException(e); }
         this.ltchr = chr;
-        this.selectionManager.insert(chr);
         String keystring = String.valueOf(this.ltchr);
         StringBuilder fulldata = new StringBuilder();
-        this.selectionManager.putCursorAtEnd();
-        this.selectionManager.insert(chr);
         try {
             Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
             while (readPageContent.hasNextLine()) {
@@ -319,9 +246,8 @@ public class menuScreen extends Screen {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        fulldata = new StringBuilder(addChar(String.valueOf(fulldata), cursorLoc, keystring));
+        fulldata = new StringBuilder(addCharacter.add(String.valueOf(fulldata), cursorLoc, keystring));
 
-        this.preContents = String.valueOf(fulldata);
         try {
             FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
             updatePage.write(String.valueOf(fulldata));
@@ -332,8 +258,6 @@ public class menuScreen extends Screen {
         Objects.requireNonNull(this.client).setScreen(this);
         return true;
     }
-
-
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == 259) {
             StringBuilder fulldata = new StringBuilder();
@@ -370,7 +294,6 @@ public class menuScreen extends Screen {
             }
             if (!fulldata.toString().equals("")) {
                 fulldata = new StringBuilder(fulldata + "\n ");
-                this.preContents = String.valueOf(fulldata);
                 try {
                     FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
                     updatePage.write(String.valueOf(fulldata));
