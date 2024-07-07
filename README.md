@@ -8,7 +8,8 @@ If you die, you keep it in your menu, and it's not individual per each world; yo
 
 While this is supposed to be used for coordinates, you can write whatever you want in this.
 
-**WARNING:** Some servers may count this as cheating, while I don't see this as being any different to writing them down or putting them on a document, some server owners may disagree
+> [!WARNING]
+> Some servers may count this as cheating, while I don't see this as being any different to writing them down or putting them on a document, some server owners may disagree
 
 ## FAQ
 
