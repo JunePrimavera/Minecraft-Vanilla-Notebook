@@ -113,7 +113,7 @@ public class menuScreen extends Screen {
         else {this.addDrawableChild(new TexturedButtonWidget(250, 28, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, Text.translatable("jwg.button.bookmark")));}
 
         //Marker button to take you to the bookmarked page
-        this.addDrawableChild(new TexturedButtonWidget(this.width/2-75, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
             if (page != bookmarkedpage && bookmarkedpage >= 0) {
                 page = bookmarkedpage;
                 assert this.client != null;
