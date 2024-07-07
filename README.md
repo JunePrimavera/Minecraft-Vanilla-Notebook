@@ -40,7 +40,7 @@ Go to the releases tab on the right to see it here;
 
 ## Support 
 
-If you like the mod, or other projects, please consider [buying me a coffee](https://ko-fi.com/JWGardiner)
+If you like the mod, or other projects, please consider [buying me a coffee](https://ko-fi.com/juneDeveloper)
 
 You can also [join my discord](https://discord.gg/EqTwbVYEWx) if you have any questions, need help, or want to talk to me directly.
 
