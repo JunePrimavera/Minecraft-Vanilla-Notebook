@@ -80,7 +80,9 @@ public class menuScreen extends Screen {
         //Done button
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
             assert this.client != null;
-            this.client.setScreen(new bookSelectScreen());
+            if (presetsEnabled) this.client.setScreen(new bookSelectScreen());
+            else this.client.setScreen(null);
+
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         //Sidebar buttons
