@@ -1,4 +1,4 @@
-package com.jwg.notebook.util;
+package com.june.notebook.util;
 
 import java.io.FileWriter;
 import java.io.IOException;
