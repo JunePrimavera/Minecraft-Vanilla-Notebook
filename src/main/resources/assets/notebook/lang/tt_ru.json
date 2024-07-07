@@ -1,0 +1,17 @@
+{
+  "category.notebook.keys": "Vanilla Notebook",
+  "category.notebook.presets": "Китаплар",
+  "category.notebook.config": "Көйләүләр",
+  "key.notebook.open": "Китап ачу",
+  "tooltip.notebook.delete": "Бит бетерү",
+  "tooltip.notebook.bookmark.goto": "Кыстырылган биткә күчү",
+  "tooltip.notebook.bookmark.create": "Бит кыстыру",
+  "tooltip.notebook.import": "Импортлау",
+  "tooltip.notebook.export": "Экспортлау",
+  "bookconfig.dir": "Китапны саклау урыны (Беренчел: Notebook/Default)",
+  "bookconfig.startpage": "Башлангыч бит (Беренчел: 0)",
+  "bookconfig.limit": "Бит чиге (Беренчел: -1)",
+  "bookconfig.warning": "Игътибар: Бу көйләүләр белән Сезнең утыртуны вата ала. Сак булыгыз!",
+  "bookconfig.warning_reset": "Әгәр дә үзгәртүдән соң яңадан кушмасагыз, хаталарны сыный аласыз!"
+  "devwarning.info": "(Ясаучы шарты)"
+}
