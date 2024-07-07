@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 import static com.jwg.coord_book.CoordBook.*;
@@ -63,26 +64,21 @@ public class menuScreen extends Screen {
         this.addButtons();
     }
     protected void removePage(int rmpage) {
-        boolean tmp = false;
-        if (rmpage == 0) {
-            LOGGER.info("Can't delete first page");
-        } else if (rmpage == Objects.requireNonNull(new File(pageLocation+"/").list()).length-1) {
-            goToPreviousPage();
-            tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
-            LOGGER.info("Removed page " +rmpage);
-        }  else {
-            tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
-            try {
-                System.out.println(pageLocation+"/"+rmpage+".jdat");
-                tmp = new File(pageLocation+"/"+rmpage+".jdat").createNewFile();
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
+        int pagesToRename = files - rmpage;
+        boolean tmp;
+        if (rmpage == 0) { LOGGER.warn("Can't delete first page"); }
+        else if (rmpage == files-1) { goToPreviousPage(); tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete(); }
+        else {
+            for (int i = 1; i < pagesToRename; i++) {
+                int l = rmpage+i; int m = l-1;
+                tmp = new File(pageLocation + "/" + l + ".jdat").renameTo(new File(pageLocation + "/" + m + ".jdat"));
             }
         }
-        if (developerMode) {
-            LOGGER.info(String.valueOf(tmp));
-        }
+
+
+
+        if (developerMode) { LOGGER.info(String.valueOf(tmp)); }
     }
     private void writeBookmark() {
         try {
@@ -91,7 +87,6 @@ public class menuScreen extends Screen {
             fileOverwriter.close();
         } catch (IOException e) { e.printStackTrace(); }
     }
-
     protected void addButtons() {
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> {
@@ -110,8 +105,8 @@ public class menuScreen extends Screen {
         //The placement is temporary
         //In 1.2.0 I will redo all of the GUI bits, so it's a bit nicer
         //I feel like the GUI currently is not great
-        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2-30, 12, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
-        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2-30, 12, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
+        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2-45, 12, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
+        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2-45, 12, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
 
         //Marker button to take you to the bookmarked page
         this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
@@ -126,6 +121,7 @@ public class menuScreen extends Screen {
 
             }
         }, new TranslatableText("jwg.button.bookmark-marker")));
+
 
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
@@ -170,7 +166,6 @@ public class menuScreen extends Screen {
             }
         }
     }
-
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -215,7 +210,6 @@ public class menuScreen extends Screen {
         }
         super.render(matrices, mouseX, mouseY, delta);
     }
-
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             Style style = this.getTextStyleAt(mouseX, mouseY);
@@ -226,7 +220,6 @@ public class menuScreen extends Screen {
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
-
     int o = 0;
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         int code = getExtendedKeyCodeForChar(keyCode);
@@ -323,7 +316,6 @@ public class menuScreen extends Screen {
         Objects.requireNonNull(this.client).setScreen(this);
         return false;
     }
-
     @Nullable
     public Style getTextStyleAt(double x, double y) {
         if (this.cachedPage.isEmpty()) {
