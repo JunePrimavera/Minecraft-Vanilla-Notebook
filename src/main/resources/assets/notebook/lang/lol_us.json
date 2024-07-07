@@ -12,5 +12,6 @@
   "bookconfig.startpage": "Startin Paeg (Default: 0)",
   "bookconfig.limit": "Paeg Limit (Default: -1)",
   "bookconfig.warning": "Warnin: Mesin wif thees can break ur installashun. Her be dragons!",
-  "bookconfig.warning_reset": "U cud experience bugs if u doan restart ur game aftr changin thees!"
+  "bookconfig.warning_reset": "U cud experience bugs if u doan restart ur game aftr changin thees!",
+  "devwarning.info": "(Devloper mode)"
 }
