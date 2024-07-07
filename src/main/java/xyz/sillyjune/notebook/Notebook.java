@@ -69,24 +69,24 @@ public class Notebook implements ModInitializer {
     }
 
     public static final ButtonTextures MAIN_BUTTON_ICON = new ButtonTextures(
-            new Identifier("notebook:textures/gui/book/unfocused.png"),
-            new Identifier("notebook:textures/gui/book/focused.png")
+            new Identifier("notebook:book/unfocused"),
+            new Identifier("notebook:book/focused")
     );
     public static final ButtonTextures NEW_PAGE_ICON = new ButtonTextures(
-            new Identifier("notebook:textures/gui/new_page/unfocused.png"),
-            new Identifier("notebook:textures/gui/new_page/focused.png")
+            new Identifier("notebook:new_page/unfocused"),
+            new Identifier("notebook:new_page/focused")
     );
     public static final ButtonTextures DEL_PAGE_ICON = new ButtonTextures(
-            new Identifier("notebook:textures/gui/delete_page/unfocused.png"),
-            new Identifier("notebook:textures/gui/delete_page/focused.png")
+            new Identifier("notebook:delete_page/unfocused"),
+            new Identifier("notebook:delete_page/focused")
     );
     public static final ButtonTextures LAST_BOOK_ICON = new ButtonTextures(
-            new Identifier("notebook:textures/gui/last_book/unfocused.png"),
-            new Identifier("notebook:textures/gui/last_book/focused.png")
+            new Identifier("notebook:last_book/unfocused"),
+            new Identifier("notebook:last_book/focused")
     );
     public static final ButtonTextures NEXT_BOOK_ICON =  new ButtonTextures(
-            new Identifier("notebook:textures/gui/next_book/unfocused.png"),
-            new Identifier("notebook:textures/gui/next_book/focused.png")
+            new Identifier("notebook:next_book/unfocused"),
+            new Identifier("notebook:next_book/focused")
     );
     public static String BOOK_FOLDER = "Notebook";
     public static boolean DEV_ONLY = false;
