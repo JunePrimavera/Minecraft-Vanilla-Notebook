@@ -17,19 +17,22 @@ import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
 
     public static int page = 0;
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
-    private final List<OrderedText> cachedPage;
+    private List<OrderedText> cachedPage;
     private Text pageIndexText;
     private final boolean pageTurnSound;
+    private String contents;
 
     public menuScreen(BookScreen.Contents contents) {
         this(contents, true);
@@ -37,6 +40,7 @@ public class menuScreen extends Screen {
 
     private menuScreen(BookScreen.Contents contents, boolean bl) {
         super(NarratorManager.EMPTY);
+        this.contents = "";
         this.cachedPage = Collections.emptyList();
         this.pageIndexText = ScreenTexts.EMPTY;
         this.pageTurnSound = bl;
@@ -87,13 +91,32 @@ public class menuScreen extends Screen {
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
+        this.renderBackground(matrices);    
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
         int i = (this.width - 192) / 2;
         this.drawTexture(matrices, i, 2, 0, 0, 192, 192);
         this.pageIndexText = Text.translatable("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File("CoordinateBook/").list()).length), 1));
+
+        StringBuilder fulldata = new StringBuilder();
+        try {
+            Scanner readPageContent = new Scanner(new File("CoordinateBook/"+page+".json"));
+            while (readPageContent.hasNextLine()) {
+                String data = readPageContent.nextLine();
+                if (!fulldata.toString().equals("")) {
+                    data = "\n" + data;
+                }
+                fulldata.append(data);
+            }
+            readPageContent.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.contents = String.valueOf(fulldata);
+        StringVisitable stringVisitable = StringVisitable.plain(this.contents);
+        this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
+
 
         int k = this.textRenderer.getWidth(this.pageIndexText);
         this.textRenderer.draw(matrices, this.pageIndexText, (float)(i - k + 192 - 44), 18.0F, 0);
