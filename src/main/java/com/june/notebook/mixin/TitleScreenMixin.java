@@ -29,7 +29,7 @@ public abstract class TitleScreenMixin extends Screen implements BookScreen.Cont
 	}
 	@Inject(at = @At("RETURN"), method="initWidgetsNormal")
 	private void addCustomButton(int y, int spacingY, CallbackInfo ci) {
-		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, y + spacingY, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
+		this.addDrawableChild(new TexturedButtonWidget((this.width / 2 + 104)+ Notebook.button_positions[2], y + spacingY + Notebook.button_positions[3], 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
 			//Code is run when the button is clicked
 			if (presetsEnabled) {
 				assert this.client != null;
