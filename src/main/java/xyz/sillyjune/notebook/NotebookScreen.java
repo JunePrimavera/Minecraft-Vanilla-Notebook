@@ -165,9 +165,7 @@ public class NotebookScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.bookNameField.isSelected()) {
-            if (CONFIG.debug()) {
-                System.out.println(keyCode);
-            }
+            if (CONFIG.debug()) { LOGGER.debug(String.valueOf(keyCode)); }
             switch (keyCode) {
                 case 266 -> { this.previousPageButton.onPress(); return true; }
                 case 267 -> { this.nextPageButton.onPress(); return true; }
@@ -213,7 +211,6 @@ public class NotebookScreen extends Screen {
     // Normal typing
     @Override
     public boolean charTyped(char chr, int modifiers) {
-        System.out.println(STR."\{chr} \{modifiers}");
         if (!this.bookNameField.isSelected()) {
             if (cursorIndex > DATA.content[pageIndex].length()) { cursorIndex = DATA.content[pageIndex].length(); }
             DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex) + chr + DATA.content[pageIndex].substring(cursorIndex);
@@ -230,9 +227,7 @@ public class NotebookScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
-        if (GAY) {
-            context.drawText(this.textRenderer, Text.of("Happy pride month! :3"), 5, this.height - 22, Colors.RED / 2, true);
-        }
+        if (GAY) { context.drawText(this.textRenderer, Text.of("Happy pride month! :3"), 5, this.height - 22, Colors.RED / 2, true); }
 
         if (CONFIG.debug()) {
             context.drawText(this.textRenderer, Text.of(STR."Notebook v4.0.0 - \{Text.translatable("devwarning.info").getString()}"), 5, this.height - 10, Colors.WHITE, true);
@@ -245,19 +240,15 @@ public class NotebookScreen extends Screen {
         if (DATA.content.length > this.pageIndex) {
             String pageContent = readPage(pageIndex);
             // Cursor timing
-            if (cursorIndex < pageContent.length()) {
-                pageContent = STR."\{pageContent.substring(0, cursorIndex)}|\{pageContent.substring(cursorIndex)}";
-            } else {
-                cursorIndex = pageContent.length();
-            }
-            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {
-                pageContent = STR."\{pageContent}_";
-            }
+            if (cursorIndex < pageContent.length()) { pageContent = STR."\{pageContent.substring(0, cursorIndex)}|\{pageContent.substring(cursorIndex)}"; }
+            else { cursorIndex = pageContent.length(); }
+            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = STR."\{pageContent}_";}
             // Render cursor and book content
             this.cachedPage = this.textRenderer.wrapLines(StringVisitable.plain(pageContent), 114);
             this.pageIndexText = Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1));
         }
-        context.drawTexture(BOOK_TEXTURE, (this.width - 192) / 2, 2, 0, 0, 192, 192); // Render book background
+        // Render book background
+        context.drawTexture(BOOK_TEXTURE, (this.width - 192) / 2, 2, 0, 0, 192, 192);
         for(int m = 0; m < Math.min(128 / 9, this.cachedPage.size()); ++m) {
             context.drawText(this.textRenderer, this.cachedPage.get(m), ((this.width - 192) / 2) + 36, 32 + m * 9, 0, false);
         }
