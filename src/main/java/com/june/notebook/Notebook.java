@@ -122,6 +122,7 @@ public class Notebook implements ModInitializer {
 			openBookKeybindRegister();
 			LOGGER.info("{} has finished initializing!", project);
 		}
+
 	}
 	@Override
 	public void onInitialize() { re_init(true); }

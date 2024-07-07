@@ -66,6 +66,77 @@ public class Util {
             }
         }
     }
+
+    public static class ports {
+        public static void exports(String pagelocation) {
+            // Format for export
+            int len = Objects.requireNonNull(new File(pagelocation).list()).length;
+            StringBuilder exported_file = new StringBuilder();
+            for (int i = 0 ; i != len ; i++) {
+                try {
+                    File f = new File(pagelocation + "/" + Objects.requireNonNull(new File(pagelocation).list())[i]);
+                    Scanner r = new Scanner(f);
+                    while (r.hasNextLine()) {
+                        String data = r.nextLine();
+                        exported_file.append(data);
+                    }
+                    r.close();
+                } catch (FileNotFoundException e) { e.printStackTrace(); }
+                exported_file.append("\n{_ENDOFPAGE_}\n");
+            }
+
+            // Create export file
+            try { boolean b = new File("Notebook/book.export").createNewFile();
+            } catch (IOException e) { throw new RuntimeException(e); }
+
+            // Write to file
+            try {
+                FileWriter f = new FileWriter("Notebook/book.export");
+                f.write(String.valueOf(exported_file));
+                f.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        public static void imports(String pagelocation, String fileToImport) {
+            if (new File(pagelocation).exists()) {
+                boolean b = new File(pagelocation).delete();
+                b = new File(pagelocation).mkdirs();
+            } else {
+                boolean b = new File(pagelocation).mkdirs();
+            }
+            StringBuilder import_file_data = new StringBuilder();
+
+            try {
+                File fi = new File(fileToImport);
+                Scanner r = new Scanner(fi);
+                int it = 0;
+                while (r.hasNextLine()) {
+                    String data = r.nextLine();
+                    System.out.println(data);
+                    if (Objects.equals(data, "{_ENDOFPAGE_}")) {
+                        boolean b = new File(pagelocation + "/" + it + ".jdat").createNewFile();
+                        System.out.println("WEWEEW");
+                        try {
+
+                            FileWriter f = new FileWriter(pagelocation + "/" + it + ".jdat");
+                            f.write(String.valueOf(import_file_data));
+                            f.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        it += 1;
+                        import_file_data = new StringBuilder();
+                    } else {
+                        import_file_data.append(data);
+                    }
+                }
+                r.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
-
-
