@@ -18,7 +18,7 @@ public class Notebook implements ModInitializer {
 	public static boolean presetsEnabled = true;
 	public static String verified_page_location = "Notebook/Default";
 	public static final boolean developerMode = false;
-	public static final String version = "2.1.2";
+	public static final String version = "2.1.3";
 	public static final String project = "Vanilla-Notebook";
 	public static String pageLocation = "Notebook/Default";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
