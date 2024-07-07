@@ -1,14 +1,12 @@
 package com.jwg.notebook.screens;
 
 import com.jwg.notebook.Notebook;
-import com.jwg.notebook.gui.button.gotobookmark;
 import com.jwg.notebook.gui.sidebar;
 import com.jwg.notebook.util.addCharacter;
 import com.jwg.notebook.util.readPage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -37,11 +35,9 @@ import static com.jwg.notebook.Notebook.*;
 @Environment(EnvType.CLIENT)
 public class menuScreen extends Screen {
 
-    public static boolean global = true;
     public static int page = 0;
     public static int bookmarkedpage = 0;
     public static int pageLimit = -1;
-    public static final Identifier GLOBAL_ICON = new Identifier("textures/gui/globe.png");
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     public static final Identifier BOOK_SIDEBAR_TEXTURE = new Identifier("notebook:textures/gui/sidebar.png");
     private List<OrderedText> cachedPage;
@@ -54,7 +50,7 @@ public class menuScreen extends Screen {
     public static TexturedButtonWidget delete;
     public static TexturedButtonWidget bookmark;
     public static TexturedButtonWidget bookmarkPgB;
-    public static TexturedButtonWidget globalb;
+
     public menuScreen() {
         this(true);
     }
@@ -88,18 +84,12 @@ public class menuScreen extends Screen {
         this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> com.jwg.notebook.gui.button.gotobookmark.onPress())));
         this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> com.jwg.notebook.gui.button.bookmark.onPress())));
 
-        this.addDrawableChild(globalb = sidebar.addSidebarButton(11, GLOBAL_ICON, this, "global", 8, 8, (button -> {
-            assert this.client != null;
-            if (this.client.world != null) {
-                com.jwg.notebook.gui.button.global.onPress(this.client.world);
-            }
-        })));
         assert this.client != null;
 
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
-            if (page != pageLimit || pageLimit < 0) { if (page >= pageLimit && pageLimit > 0) { page = pageLimit; }this.goToNextPage(); assert this.client != null; this.client.setScreen(this); }
+            if (page != pageLimit || pageLimit < 0) { if (page >= pageLimit && pageLimit > 0) { page = pageLimit; } this.goToNextPage(); assert this.client != null; this.client.setScreen(this); }
         }, this.pageTurnSound));
         this.addDrawableChild(new PageTurnWidget(i + 43, 159, false, (button) -> {
             goToPreviousPage();
@@ -198,13 +188,7 @@ public class menuScreen extends Screen {
         else if (bookmarkPgB.isHovered()) {
             drawStringWithShadow(matrices, this.textRenderer, "Go To Bookmark", this.width/2 +115, 7+(12*3), 16777215);
         }
-        else if (globalb.isHovered()) {
-            String enabled = "Disabled";
-            if (global) {
-                enabled = "Enabled";
-            }
-            drawStringWithShadow(matrices, this.textRenderer, "Global mode ("+enabled+")", this.width/2 +115, 7+(12*12), 16777215);
-        }
+
 
     }
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -279,7 +263,6 @@ public class menuScreen extends Screen {
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        System.out.println(keyCode + " + " + scanCode + " + " + modifiers);
         //Backspace/Delete
         if (keyCode == 259) {
             StringBuilder fulldata = new StringBuilder();
@@ -289,7 +272,6 @@ public class menuScreen extends Screen {
             while (readFile.hasNextLine()) {
                 String data = readFile.nextLine();
                 fulldata.append(data);
-                System.out.println(data);
             }
             readFile.close();
             try {
