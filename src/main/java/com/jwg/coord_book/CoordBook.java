@@ -11,12 +11,13 @@ import java.io.File;
 import java.io.IOException;
 
 public class CoordBook implements ModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("Coordinate Book");
-	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
-	public static final boolean developerMode = true;
+	public static final boolean developerMode = false;
 	public static final String version = "0.2.0";
 	public static final String project = "Coordinate-Book";
+	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
+
+	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
 	@Override
 	public void onInitialize(ModContainer mod) {
 		LOGGER.info("{} has started initializing!", mod.metadata().name());
