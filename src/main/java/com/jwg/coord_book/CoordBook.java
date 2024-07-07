@@ -4,9 +4,8 @@ import com.jwg.coord_book.util.ensureFileStructureExists;
 import com.jwg.coord_book.util.generateConfig;
 import com.jwg.coord_book.util.readConfig;
 import com.jwg.coord_book.util.resetConfig;
+import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +14,7 @@ import java.io.IOException;
 
 public class CoordBook implements ModInitializer {
 	public static final boolean developerMode = false;
-	public static final String version = "1.2.0";
+	public static final String version = "1.2.1";
 	public static final String project = "Coordinate-Book";
 	public static String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
@@ -30,8 +29,8 @@ public class CoordBook implements ModInitializer {
 	public static boolean NEEDS_SETUP = false;
 
 	@Override
-	public void onInitialize(ModContainer mod) {
-		LOGGER.info("{} has started initializing!", mod.metadata().name());
+	public void onInitialize() {
+		LOGGER.info("{} has started initializing!", project);
 		ensureFileStructureExists.createFiles(ensureFileStructureExists.exists(pageLocation+"/"));
 		File firstPage = new File(pageLocation+"/0.jdat");
 		LOGGER.info("Page folder is \"{}\"", pageLocation);
@@ -45,6 +44,6 @@ public class CoordBook implements ModInitializer {
 
 		if (!pageLocation.equals("CoordinateBook") && !new File(pageLocation).exists()) { tmp = new File(pageLocation).mkdirs(); }
 		if (tmp) { LOGGER.info("Possible first time use! Thank you for using my mod!"); }
-		LOGGER.info("{} has finished initializing!", mod.metadata().name());
+		LOGGER.info("{} has finished initializing!", project);
 	}
 }
