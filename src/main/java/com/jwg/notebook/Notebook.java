@@ -15,16 +15,17 @@ import java.io.IOException;
 import static com.jwg.notebook.keybinds.OpenBook.openBookKeybindRegister;
 
 public class Notebook implements ModInitializer {
-	public static final boolean developerMode = false;
-	public static final String version = "1.4.0";
+	public static final boolean developerMode = true;
+	public static final String version = "2.0.0-Alpha";
 	public static final String project = "Vanilla-Notebook";
-	public static String pageLocation = "Notebook";
+	public static String pageLocation = "Notebook/Default";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
 
 	public static final Identifier BOOK_ICON = new Identifier("notebook:textures/gui/book.png");
-	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("notebook:textures/gui/bookmark-tab.png");
+
 	public static final Identifier BOOKMARK_ICON = new Identifier("notebook:textures/gui/bookmark-goto.png");
+	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("notebook:textures/gui/bookmark.png");
 	public static final Identifier DELETE_ICON = new Identifier("notebook:textures/gui/del-page.png");
 
 
@@ -37,11 +38,22 @@ public class Notebook implements ModInitializer {
 		File firstPage = new File(pageLocation+"/0.jdat");
 		LOGGER.info("Page folder is \"{}\"", pageLocation);
 		boolean tmp = false;
+
+		if (NEEDS_SETUP) { generateConfig.generate(0); resetConfig.reset();  }
 		try {
 			if (firstPage.createNewFile()){ LOGGER.info("Created first page of the book.."); NEEDS_SETUP = true; }
-			else { if (!new File("config/vanilla-notebook/config.cfg").exists()) { NEEDS_SETUP = true; } tmp = new File("config/vanilla-notebook/config.cfg").createNewFile(); }
 		} catch (IOException e) { System.out.println(e); }
-		if (NEEDS_SETUP) { generateConfig.generate(0); resetConfig.reset(); }
+
+		if (!new File("config/vanilla-notebook/config.cfg").exists()) NEEDS_SETUP = true;
+		try {
+			tmp = new File("config/vanilla-notebook/").mkdirs();
+			tmp = new File("config/vanilla-notebook/config.cfg").createNewFile();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		if (NEEDS_SETUP) resetConfig.reset();
+
+
 		readConfig.read();
 
 		if (!pageLocation.equals("notebook") && !new File(pageLocation).exists()) { tmp = new File(pageLocation).mkdirs(); }
