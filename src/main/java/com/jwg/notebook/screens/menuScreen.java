@@ -73,19 +73,39 @@ public class menuScreen extends Screen {
     }
 
     //To fix, currently just clears the page
-    public static void removePage(int rmpage) {
+    protected void removePage(int rmpage) {
         int files = Objects.requireNonNull(new File(pageLocation + "/").list()).length;
         int pagesToRename = files - rmpage;
         boolean tmp = false;
         if (rmpage == 0) { LOGGER.warn("Can't delete first page"); }
         else if (rmpage == files-1) { goToPreviousPage(); tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete(); }
         else {
-            for (int i = 1; i < pagesToRename; i++) {
-                int l = rmpage+i; int m = l-1;
-                tmp = new File(pageLocation + "/" + l + ".jdat").renameTo(new File(pageLocation + "/" + m + ".jdat"));
+            int i = 0;
+            tmp = new File(pageLocation +"/"+ rmpage + ".jdat").delete();
+            tmp = new File(pageLocation +"/"+ (files-1) + ".jdat").delete();
+
+            while (i < files-rmpage) {
+                StringBuilder fulldata = new StringBuilder();
+                try {
+                    if (new File(pageLocation +"/"+ (rmpage+i) + ".jdat").exists()) {
+                        Scanner readPageContent = new Scanner(new File(pageLocation +"/"+ (rmpage+i) + ".jdat"));
+                        while (readPageContent.hasNextLine()) {
+                            String data = readPageContent.nextLine();
+                            if (!fulldata.toString().equals("")) data = "\n" + data;
+                            fulldata.append(data);
+                        }
+                        readPageContent.close();
+                    }
+                } catch (FileNotFoundException e) { e.printStackTrace(); }
+                try {
+                    FileWriter f = new FileWriter(pageLocation +"/"+ (rmpage+i-1) + ".jdat", false);
+                    f.write(String.valueOf(fulldata));
+                    f.close();
+                } catch (IOException e) { e.printStackTrace(); }
+
+                i++;
             }
         }
-        if (developerMode) { LOGGER.info(String.valueOf(tmp)); }
     }
     private void writeBookmark() {
         try {
@@ -99,9 +119,14 @@ public class menuScreen extends Screen {
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> { assert this.client != null; this.client.setScreen(null); }));
 
+        TexturedButtonWidget delete;
+        TexturedButtonWidget bookmark;
         //Sidebar buttons
-        this.addDrawableChild(sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8));
-        this.addDrawableChild(sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark", 8));
+        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, (button -> removePage(page))));
+        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_ICON, this, "bookmark", 8, (button -> page = bookmarkedpage)));
+
+        assert this.client != null;
+
 
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
