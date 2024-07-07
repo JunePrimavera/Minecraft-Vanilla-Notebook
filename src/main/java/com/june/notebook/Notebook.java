@@ -1,9 +1,9 @@
 package com.june.notebook;
 
-import com.june.notebook.util.ensureFileStructureExists;
-import com.june.notebook.util.generateConfig;
-import com.june.notebook.util.readConfig;
-import com.june.notebook.util.resetConfig;
+import com.june.notebook.Util.ensureFileStructureExists;
+import com.june.notebook.Util.generateConfig;
+import com.june.notebook.Util.readConfig;
+import com.june.notebook.Util.resetConfig;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
-import static com.june.notebook.keybinds.OpenBook.openBookKeybindRegister;
+import static com.june.notebook.Keybind.openBookKeybindRegister;
 
 public class Notebook implements ModInitializer {
-	public static boolean presetsEnabled = false;
+	public static boolean presetsEnabled = true;
 	public static final boolean developerMode = false;
-	public static final String version = "2.0.0";
+	public static final String version = "2.1.0";
 	public static final String project = "Vanilla-Notebook";
 	public static String pageLocation = "Notebook/Default";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);

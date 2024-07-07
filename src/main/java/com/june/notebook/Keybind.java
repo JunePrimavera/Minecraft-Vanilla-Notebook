@@ -1,4 +1,4 @@
-package com.june.notebook.keybinds;
+package com.june.notebook;
 
 import com.june.notebook.screens.menuScreen;
 import net.fabricmc.api.EnvType;
@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
 
-public class OpenBook {
+public class Keybind {
     private static KeyBinding openBookKeybind;
     public static void openBookKeybindRegister() {
         openBookKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
