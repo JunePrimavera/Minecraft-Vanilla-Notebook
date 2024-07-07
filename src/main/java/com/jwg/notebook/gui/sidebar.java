@@ -16,7 +16,8 @@ import static com.jwg.notebook.screens.menuScreen.bookmarkedpage;
 import static com.jwg.notebook.screens.menuScreen.page;
 
 public class sidebar {
-    public static TexturedButtonWidget addSidebarButton(int pos, Identifier BUTTON_TEXTURE, Screen BOOK_MENU, String buttonID, int size, ButtonWidget.PressAction pressAction) {
-        return new TexturedButtonWidget(BOOK_MENU.width/2 +90, 18+(12*pos), 8, 8, 0, 0, size, BUTTON_TEXTURE, size, size*2, pressAction, Text.translatable("jwg.button."+buttonID));
+    public static TexturedButtonWidget addSidebarButton(int pos, Identifier BUTTON_TEXTURE, Screen BOOK_MENU, String buttonID, int x, int y, ButtonWidget.PressAction pressAction) {
+        return new TexturedButtonWidget(BOOK_MENU.width/2 +90, 18+(12*pos), 8, 8, 0, 0, y, BUTTON_TEXTURE, x, y*2, pressAction, Text.translatable("jwg.button."+buttonID));
     }
+
 }
