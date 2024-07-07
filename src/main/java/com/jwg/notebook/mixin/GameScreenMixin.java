@@ -1,6 +1,6 @@
-package com.jwg.coord_book.mixin;
+package com.jwg.notebook.mixin;
 
-import com.jwg.coord_book.screens.menuScreen;
+import com.jwg.notebook.screens.menuScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -11,8 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.jwg.coord_book.CoordBook.BOOK_ICON;
-
+import static com.jwg.notebook.Notebook.BOOK_ICON;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameScreenMixin extends Screen {

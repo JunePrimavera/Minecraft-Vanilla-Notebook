@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "coord_book",
+  "id": "notebook",
   "version": "${version}",
 
-  "name": "Coordinate Book",
-  "description": "Adds a simple coordinate book in the menus.",
+  "name": "Vanilla Notebook",
+  "description": "Adds a simple notebook in the menus!",
   "authors": [
-    "JWGardiner"
+    "June"
   ],
   "contact": {
-    "homepage": "https://github.com/JWGardiner/Minecraft-Coordinate-Book",
-    "sources": "https://github.com/JWGardiner/Minecraft-Coordinate-Book"
+    "homepage": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook",
+    "sources": "https://github.com/JuneDeveloper/Minecraft-Vanilla-Notebook"
   },
 
   "license": "MIT",
@@ -19,11 +19,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.jwg.coord_book.CoordBook"
+      "com.jwg.notebook.Notebook"
     ]
   },
   "mixins": [
-    "coord_book.mixins.json"
+    "notebook.mixins.json"
   ],
 
   "depends": {

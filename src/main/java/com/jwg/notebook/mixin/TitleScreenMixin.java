@@ -1,6 +1,6 @@
-package com.jwg.coord_book.mixin;
+package com.jwg.notebook.mixin;
 
-import com.jwg.coord_book.screens.menuScreen;
+import com.jwg.notebook.screens.menuScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.jwg.coord_book.CoordBook.BOOK_ICON;
+import static com.jwg.notebook.Notebook.BOOK_ICON;
 
 @Environment(EnvType.CLIENT)
 @Mixin(TitleScreen.class)

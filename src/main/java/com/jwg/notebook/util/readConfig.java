@@ -1,32 +1,27 @@
-package com.jwg.coord_book.util;
+package com.jwg.notebook.util;
 
-import com.jwg.coord_book.CoordBook;
-import com.jwg.coord_book.screens.menuScreen;
+import com.jwg.notebook.Notebook;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static com.jwg.coord_book.CoordBook.*;
-import static com.jwg.coord_book.screens.menuScreen.*;
+import static com.jwg.notebook.screens.menuScreen.*;
 
 public class readConfig {
     public static String readCfg(String entry, int cfgLine) throws IOException {
-        String dat = Files.readAllLines(Paths.get("config/coordinate-book/config.cfg")).get(cfgLine);
+        String dat = Files.readAllLines(Paths.get("config/vanilla-notebook/config.cfg")).get(cfgLine);
         return dat.substring(entry.length()+2);
     }
     public static void getBookmarkPage() throws IOException {
-        String dat = Files.readAllLines(Paths.get("config/coordinate-book/bookmark.cfg")).get(1);
+        String dat = Files.readAllLines(Paths.get("config/vanilla-notebook/bookmark.cfg")).get(1);
         bookmarkedpage = Integer.parseInt(dat);
     }
     public static void read() {
-        LOGGER.info("Reading config...");
+        Notebook.LOGGER.info("Reading config...");
 
         try {
-            pageLocation = readCfg("pagedirector", 2);
+            Notebook.pageLocation = readCfg("pagedirector", 2);
         } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
@@ -35,10 +30,6 @@ public class readConfig {
 
         try {
             page = Integer.parseInt(readCfg("startpag", 6));
-        } catch (IOException e) { throw new RuntimeException(e); }
-
-        try {
-            deletePageButtonShown = Boolean.parseBoolean(readCfg("deletebutto", 8));
         } catch (IOException e) { throw new RuntimeException(e); }
 
         try {
