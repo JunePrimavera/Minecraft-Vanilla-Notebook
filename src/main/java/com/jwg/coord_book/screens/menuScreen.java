@@ -110,18 +110,22 @@ public class menuScreen extends Screen {
         //The placement is temporary
         //In 1.2.0 I will redo all of the GUI bits, so it's a bit nicer
         //I feel like the GUI currently is not great
-        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width-250, this.height-228, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
-        else {this.addDrawableChild(new TexturedButtonWidget(this.width-250, this.height-228, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
+        if (bookmarkedpage != page) {this.addDrawableChild(new TexturedButtonWidget(this.width/2-30, 12, 20, 20, 0, 0, 20, BOOKMARK_ICON, 32, 64, (button) -> {bookmarkedpage = page; this.writeBookmark(); assert this.client != null;this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
+        else {this.addDrawableChild(new TexturedButtonWidget(this.width/2-30, 12, 20, 20, 0, 0, 20, BOOKMARK_ENABLED_ICON, 32, 64, (button) -> {bookmarkedpage = -1; this.writeBookmark(); this.client.setScreen(this); }, new TranslatableText("jwg.button.bookmark")));}
 
         //Marker button to take you to the bookmarked page
-        this.addDrawableChild(new TexturedButtonWidget(this.width-275, this.height-231, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width/2-60, 9, 20, 20, 0, 0, 20, BOOKMARK_MARKER_ICON, 32, 64, (icon) -> {
             if (page != bookmarkedpage && bookmarkedpage >= 0) {
-                page = bookmarkedpage;
-                assert this.client != null;
-                this.client.setScreen(this);
+                if (new File(pageLocation+"/"+bookmarkedpage+".jdat").exists()) {
+                    page = bookmarkedpage;
+                    assert this.client != null;
+                    this.client.setScreen(this);
+                } else {
+                    bookmarkedpage = -1;
+                }
+
             }
         }, new TranslatableText("jwg.button.bookmark-marker")));
-
 
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
