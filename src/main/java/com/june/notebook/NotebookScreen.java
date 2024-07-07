@@ -3,8 +3,6 @@ package com.june.notebook;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.BookScreen;
-import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -14,8 +12,6 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.*;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,9 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-
-import static com.june.notebook.Notebook.DEL_PAGE_ICON;
-import static com.june.notebook.Notebook.NEW_PAGE_ICON;
+import static com.june.notebook.Notebook.*;
 
 public class NotebookScreen extends Screen {
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
@@ -41,6 +35,8 @@ public class NotebookScreen extends Screen {
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
     private TextFieldWidget bookNameField;
+    private ButtonWidget nextBookButton;
+    private ButtonWidget lastBookButton;
     private ButtonWidget newPageButton;
     private ButtonWidget delPageButton;
     private PageTurnWidget nextPageButton;
@@ -93,19 +89,13 @@ public class NotebookScreen extends Screen {
     protected String readPage(String path, int pagei) {
         StringBuilder text = new StringBuilder();
         try {
-            if (!new File(path + "/" + pagei + ".notebookpage").exists()) {
-                newPage(path, pagei);
-                return "";
-            } else {
-                File f = new File(path + "/" + pagei + ".notebookpage");
-                Scanner r = new Scanner(f);
-                while (r.hasNextLine()) {
-                    String d = r.nextLine();
-                    text.append(d);
-                }
-                r.close();
+            File f = new File(path + "/" + pagei + ".notebookpage");
+            Scanner r = new Scanner(f);
+            while (r.hasNextLine()) {
+                String d = r.nextLine();
+                text.append(d);
             }
-
+            r.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -122,6 +112,15 @@ public class NotebookScreen extends Screen {
         }
     }
 
+    // Get index of book in folder
+    protected int getBookIndex() {
+        for (int i = 0; i < Objects.requireNonNull(new File(BookFolder + "/").list()).length; i++) {
+            if (Objects.equals(Objects.requireNonNull(new File(BookFolder + "/").list())[i], BookName)) {
+                return i;
+            }
+        }
+        return 0;
+    }
     // Innit mate
     protected void init() {
         this.totalPages = getPageCount(BookFolder + "/" + BookName);
@@ -158,6 +157,22 @@ public class NotebookScreen extends Screen {
         this.bookNameField.setEditable(true);
         this.bookNameField.setText(BookName);
 
+        this.nextBookButton = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, 0, 0, 20, NEXT_BOOK_ICON, 32, 64, (button) -> {
+            int bookIndex = getBookIndex();
+            if (bookIndex < Objects.requireNonNull(new File(BookFolder + "/").list()).length - 1) {
+                BookName = Objects.requireNonNull(new File(BookFolder + "/").list())[bookIndex + 1];
+                this.bookNameField.setText(BookName);
+                this.updatePageButtons();
+            }
+        }, Text.translatable("notebook.button.next")));
+        this.lastBookButton = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, 0, 0, 20, LAST_BOOK_ICON, 32, 64, (button) -> {
+            int bookIndex = getBookIndex();
+            if (bookIndex > 0) {
+                BookName = Objects.requireNonNull(new File(BookFolder + "/").list())[bookIndex - 1];
+                this.bookNameField.setText(BookName);
+                this.updatePageButtons();
+            }
+        }, Text.translatable("notebook.button.last")));
         this.updatePageButtons();
     }
 
@@ -220,8 +235,7 @@ public class NotebookScreen extends Screen {
                 this.bookNameField.setText(this.bookNameField.getText().substring(0, this.bookNameField.getText().length() - 1));
             }
             return true;
-            }
-
+        }
     }
     // Normal typing
     public boolean charTyped(char chr, int modifiers) {
