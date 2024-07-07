@@ -6,6 +6,8 @@
   "tooltip.notebook.delete": "Delete Page",
   "tooltip.notebook.bookmark.goto": "Go to bookmarked page",
   "tooltip.notebook.bookmark.create": "Bookmark page",
+  "tooltip.notebook.import": "Import",
+  "tooltip.notebook.export": "Export",
   "bookconfig.dir": "Book Storage Directory (Default: Notebook/Default)",
   "bookconfig.startpage": "Starting Page (Default: 0)",
   "bookconfig.limit": "Page Limit (Default: -1)",

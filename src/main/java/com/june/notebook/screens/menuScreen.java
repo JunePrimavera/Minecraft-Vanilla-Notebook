@@ -201,6 +201,12 @@ public class menuScreen extends Screen {
         else if (bookmarkPgB.isHovered()) {
             drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.goto").getString(), this.width/2 +115, 7+(12*3), 16777215);
         }
+        else if (importB.isHovered()) {
+            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.import").getString(), this.width/2 +115, 7+(12*4), 16777215);
+        }
+        else if (exportB.isHovered()) {
+            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.export").getString(), this.width/2 +115, 7+(12*5), 16777215);
+        }
 
     }
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
