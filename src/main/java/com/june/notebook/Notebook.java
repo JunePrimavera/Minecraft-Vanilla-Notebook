@@ -21,12 +21,12 @@ public class Notebook implements ModInitializer {
     public void onInitialize() {
 
         // Create config file if it doesn't exist
-        if (!new File("config/notebook.json").exists()) {
+        if (!new File("config/notebook.conf").exists()) {
             try {
                 if (!new File("config/notebook.json").createNewFile()) {
                     System.err.println("Failed to create config file! Make a bug report if you see this");
                 } else {
-                    FileWriter w = new FileWriter("config/notebook.json");
+                    FileWriter w = new FileWriter("config/notebook.conf");
                     w.write("0\nNotebook");
                     w.close();
                 }
@@ -37,9 +37,8 @@ public class Notebook implements ModInitializer {
         openBookKeybindRegister();
 
         // Read config file
-        StringBuilder text = new StringBuilder();
         try {
-            File f = new File("config/notebook.json");
+            File f = new File("config/notebook.conf");
             Scanner r = new Scanner(f);
             int line = 0;
             while (r.hasNextLine()) {
