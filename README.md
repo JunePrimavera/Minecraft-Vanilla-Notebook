@@ -10,8 +10,6 @@ While this is supposed to be used for coordinates, you can write whatever you wa
 
 **WARNING:** Some servers may count this as cheating, while I don't see this as being any different to writing them down or putting them on a document, some server owners may disagree
 
-**WARNING:** This mod, and the Quilt modloader, are WIP, please make any bug reports, but there is currently **no jar file** and there won't be until it's ready.
-
 ## FAQ
 
 > What versions?
