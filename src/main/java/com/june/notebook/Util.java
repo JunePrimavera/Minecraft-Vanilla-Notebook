@@ -118,7 +118,6 @@ public class Util {
                         boolean b = new File(pagelocation + "/" + it + ".jdat").createNewFile();
                         System.out.println("WEWEEW");
                         try {
-
                             FileWriter f = new FileWriter(pagelocation + "/" + it + ".jdat");
                             f.write(String.valueOf(import_file_data));
                             f.close();
