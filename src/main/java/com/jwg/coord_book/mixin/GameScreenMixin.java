@@ -13,18 +13,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.jwg.coord_book.CoordBook.BOOK_ICON;
 
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameScreenMixin extends Screen {
 	int l = this.height / 4 + 48;
-	private static final Identifier ACCESSIBILITY_ICON_TEXTURE = new Identifier("textures/gui/accessibility.png");
 	protected GameScreenMixin(Text title) {
 		super(title);
 	}
 	@Inject(at = @At("RETURN"), method="initWidgets")
 	private void addCustomButton(CallbackInfo ci) {
-		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, l + 72 + 12, 20, 20, 0, 0, 20, ACCESSIBILITY_ICON_TEXTURE, 32, 64, (button) -> {
+		this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, l + 72 + 12, 20, 20, 0, 0, 20, BOOK_ICON, 32, 64, (button) -> {
 			//Code is run when the button is clicked
 			assert this.client != null;
 			this.client.setScreen(new menuScreen((BookScreen.Contents) this));
