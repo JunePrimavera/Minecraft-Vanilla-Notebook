@@ -1,6 +1,7 @@
 package xyz.sillyjune.notebook;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
@@ -67,11 +68,26 @@ public class Notebook implements ModInitializer {
         }
     }
 
-    public static final Identifier MAIN_BUTTON_ICON = new Identifier("notebook:textures/gui/book.png");
-    public static final Identifier NEW_PAGE_ICON = new Identifier("notebook:textures/gui/new_page.png");
-    public static final Identifier DEL_PAGE_ICON = new Identifier("notebook:textures/gui/delete_page.png");
-    public static final Identifier LAST_BOOK_ICON = new Identifier("notebook:textures/gui/last_book.png");
-    public static final Identifier NEXT_BOOK_ICON = new Identifier("notebook:textures/gui/next_book.png");
+    public static final ButtonTextures MAIN_BUTTON_ICON = new ButtonTextures(
+            new Identifier("notebook:book/unfocused"),
+            new Identifier("notebook:book/focused")
+    );
+    public static final ButtonTextures NEW_PAGE_ICON = new ButtonTextures(
+            new Identifier("notebook:new_page/unfocused"),
+            new Identifier("notebook:new_page/focused")
+    );
+    public static final ButtonTextures DEL_PAGE_ICON = new ButtonTextures(
+            new Identifier("notebook:delete_page/unfocused"),
+            new Identifier("notebook:delete_page/focused")
+    );
+    public static final ButtonTextures LAST_BOOK_ICON = new ButtonTextures(
+            new Identifier("notebook:last_book/unfocused"),
+            new Identifier("notebook:last_book/focused")
+    );
+    public static final ButtonTextures NEXT_BOOK_ICON =  new ButtonTextures(
+            new Identifier("notebook:next_book/unfocused"),
+            new Identifier("notebook:next_book/focused")
+    );
     public static String BOOK_FOLDER = "Notebook";
     public static boolean DEV_ONLY = false;
     public static int BUTTON_OFFSET = 0;
