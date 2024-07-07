@@ -50,6 +50,7 @@ public class menuScreen extends Screen {
     public static TexturedButtonWidget delete;
     public static TexturedButtonWidget bookmark;
     public static TexturedButtonWidget bookmarkPgB;
+
     public menuScreen() {
         this(true);
     }
@@ -79,7 +80,7 @@ public class menuScreen extends Screen {
         //Done button
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
             assert this.client != null;
-            this.client.setScreen(null);
+            this.client.setScreen(new bookSelectScreen());
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         //Sidebar buttons
@@ -178,13 +179,13 @@ public class menuScreen extends Screen {
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
 
         if (delete.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, "Delete Page", this.width/2 +115, 7+12, 16777215);
+            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.delete").getString(), this.width/2 +115, 7+12, 16777215);
         }
         else if (bookmark.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, "Bookmark Page", this.width/2 +115, 7+(12*2), 16777215);
+            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.create").getString(), this.width/2 +115, 7+(12*2), 16777215);
         }
         else if (bookmarkPgB.isHovered()) {
-            drawStringWithShadow(matrices, this.textRenderer, "Go To Bookmark", this.width/2 +115, 7+(12*3), 16777215);
+            drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.goto").getString(), this.width/2 +115, 7+(12*3), 16777215);
         }
 
     }
