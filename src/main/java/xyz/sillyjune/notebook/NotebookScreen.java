@@ -294,29 +294,14 @@ public class NotebookScreen extends Screen {
     // The code I am going to avoid like the plague
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int i = (this.width - 192) / 2;
-        super.renderBackground(context, mouseX, mouseY, delta);
-        context.drawTexture(BOOK_TEXTURE, i, 2, 0, 0, 192, 192);
-        if (this.totalPages > this.pageIndex) {
-            String pageContent = readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
-            // Cursor rendering
-            assert this.client != null;
-            if (cursorIndex < pageContent.length()) {pageContent = pageContent.substring(0, cursorIndex) + "|" + pageContent.substring(cursorIndex);
-            } else {cursorIndex = pageContent.length();}
-            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = pageContent + "_";}
 
-            StringVisitable stringVisitable = StringVisitable.plain(pageContent);
-            this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
-            this.pageIndexText = Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(this.totalPages, 1));
-        }
-        int k = this.textRenderer.getWidth(this.pageIndexText);
+
         context.drawText(this.textRenderer, Text.of("Beta Build - Expect minor bugs or missing features!"), 5, this.height - 22, Colors.RED / 2, true);
         if (Notebook.DEV_ONLY) {
             context.drawText(this.textRenderer, Text.of("Notebook v3.1.0 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
             context.drawText(this.textRenderer, Text.of("Notebook v3.1.0"), 5, this.height - 10, Colors.WHITE, true);
         }
-
-
         if (!Objects.equals(this.bookNameField.getText(), BookName) && !Objects.equals(this.bookNameField.getText(), "")) {
            boolean bookExists = false;
             for (int it = 0; it == Objects.requireNonNull(new File(BOOK_FOLDER).list()).length; it++) {
@@ -334,7 +319,28 @@ public class NotebookScreen extends Screen {
             }
         }
 
-        context.drawText(this.textRenderer, this.pageIndexText, i - k + 192 - 44, 18, 0, false);
+
+        renderBackground(context, mouseX, mouseY, delta);
+
+        super.render(context, mouseX, mouseY, delta);
+    }
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        int i = (this.width - 192) / 2;
+        super.renderBackground(context, mouseX, mouseY, delta);
+        if (this.totalPages > this.pageIndex) {
+            String pageContent = readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
+            // Cursor rendering
+            assert this.client != null;
+            if (cursorIndex < pageContent.length()) {pageContent = pageContent.substring(0, cursorIndex) + "|" + pageContent.substring(cursorIndex);
+            } else {cursorIndex = pageContent.length();}
+            if (cursorIndex == pageContent.length() && System.currentTimeMillis() % 2000 > 1000) {pageContent = pageContent + "_";}
+
+            StringVisitable stringVisitable = StringVisitable.plain(pageContent);
+            this.cachedPage = this.textRenderer.wrapLines(stringVisitable, 114);
+            this.pageIndexText = Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(this.totalPages, 1));
+        }
+        int k = this.textRenderer.getWidth(this.pageIndexText);
+        context.drawTexture(BOOK_TEXTURE, (this.width - 192) / 2, 2, 0, 0, 192, 192);
         Objects.requireNonNull(this.textRenderer);
         int l = Math.min(128 / 9, this.cachedPage.size());
         for(int m = 0; m < l; ++m) {
@@ -344,8 +350,7 @@ public class NotebookScreen extends Screen {
             Objects.requireNonNull(this.textRenderer);
             context.drawText(var10001, orderedText, var10003, 32 + m * 9, 0, false);
         }
-        super.render(context, mouseX, mouseY, delta);
+        context.drawText(this.textRenderer, this.pageIndexText, i - k + 192 - 44, 18, 0, false);
     }
-
 
 }
