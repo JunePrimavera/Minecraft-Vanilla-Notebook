@@ -33,7 +33,7 @@ public class menuScreen extends Screen {
 
     boolean nextCharacterSpecial = false;
     public static int page = 0;
-    public static int pageLimit = 3;
+    public static int pageLimit = -1;
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
     private List<OrderedText> cachedPage;
     private Text pageIndexText;
@@ -92,7 +92,7 @@ public class menuScreen extends Screen {
         //Page buttons (arrows)
         int i = (this.width - 192) / 2;
         this.addDrawableChild(new PageTurnWidget(i + 116, 159, true, (button) -> {
-            if (page != pageLimit || pageLimit > 0 || !(page >= pageLimit)) {
+            if (page != pageLimit || pageLimit < 0 || !(page >= pageLimit)) {
                 if (page >= pageLimit) {
                     page = pageLimit;
                 }
