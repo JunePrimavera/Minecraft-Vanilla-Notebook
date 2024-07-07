@@ -36,6 +36,7 @@ Go to the releases tab on the right to see it here, or go to a different site;
 
 - Modrinth: https://modrinth.com/mod/notebook
 
+Early builds are also on my [ko-fi page](https://ko-fi.com/juneDeveloper)
 
 ## Support 
 

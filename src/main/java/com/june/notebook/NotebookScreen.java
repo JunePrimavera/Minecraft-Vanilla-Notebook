@@ -27,7 +27,9 @@ import static com.june.notebook.Notebook.*;
 public class NotebookScreen extends Screen {
     public static final Identifier BOOK_TEXTURE = new Identifier("textures/gui/book.png");
 
-
+    public static ButtonWidget closeButton;
+    public static ButtonWidget buttonNext;
+    public static ButtonWidget buttonLast;
     public static String BookName = "Default";
     private int pageIndex;
     private int totalPages;
@@ -155,7 +157,7 @@ public class NotebookScreen extends Screen {
         this.bookNameField.setEditable(true);
         this.bookNameField.setText(BookName);
 
-        ButtonWidget nextBookButton = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, 0, 0, 20, NEXT_BOOK_ICON, 32, 64, (button) -> {
+       this.buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, 0, 0, 20, NEXT_BOOK_ICON, 32, 64, (button) -> {
             int bookIndex = getBookIndex();
             if (bookIndex < Objects.requireNonNull(new File(BOOK_FOLDER + "/").list()).length - 1) {
                 BookName = Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex + 1];
@@ -163,7 +165,7 @@ public class NotebookScreen extends Screen {
                 this.updatePageButtons();
             }
         }, Text.translatable("notebook.button.next")));
-        ButtonWidget lastBookButton = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, 0, 0, 20, LAST_BOOK_ICON, 32, 64, (button) -> {
+        this.buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, 0, 0, 20, LAST_BOOK_ICON, 32, 64, (button) -> {
             int bookIndex = getBookIndex();
             if (bookIndex > 0) {
                 BookName = Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex - 1];
@@ -192,6 +194,22 @@ public class NotebookScreen extends Screen {
         this.newPageButton.visible = onFinalPage;
         this.delPageButton.visible = onFinalPage;
         this.previousPageButton.visible = this.pageIndex > 0;
+    }
+    // Deselects all buttons
+    private void deselButtons() {
+        if (this.closeButton != null) {
+            this.closeButton.setFocused(false);
+        }
+       if (this.buttonNext != null) {
+           this.buttonNext.setFocused(false);
+       }
+       if (this.buttonLast != null) {
+           this.buttonLast.setFocused(false);
+       }
+        this.bookNameField.setFocused(false);
+        this.nextPageButton.setFocused(false);
+        this.previousPageButton.setFocused(false);
+        this.newPageButton.setFocused(false);
     }
 
     // Special keys (delete, backspace, etc)
@@ -222,8 +240,21 @@ public class NotebookScreen extends Screen {
                         }
                         return true;
                     }
-                    case 262 -> { String pageContent = this.readPage(BOOK_FOLDER + "/" + BookName, pageIndex); if (cursorIndex < pageContent.length()) { cursorIndex += 1; } return true; }
-                    case 263 -> { if (cursorIndex > 0) { cursorIndex -= 1; } return true; }
+                    case 262 -> {
+                        String pageContent = this.readPage(BOOK_FOLDER + "/" + BookName, pageIndex);
+                        this.deselButtons();
+                        if (cursorIndex < pageContent.length()) {
+                            cursorIndex += 1;
+                        }
+                        return true;
+                    }
+                    case 263 -> {
+                        this.deselButtons();
+                        if (cursorIndex > 0) {
+                            cursorIndex -= 1;
+                        }
+                        return true;
+                    }
                     default -> { return false; }
                 }
             }
