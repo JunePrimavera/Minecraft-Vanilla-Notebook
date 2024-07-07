@@ -104,13 +104,13 @@ public class configScreen extends Screen {
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("category.notebook.config").getString(), this.width / 2 - 20 , 12, 16777215);
+        drawTextWithShadow(matrices, this.textRenderer, Text.translatable("category.notebook.config").getString(), this.width / 2 - 20 , 12, 16777215);
 
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.dir").getString(), 177, 65, 16777215);
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.startpage").getString(), 177, 95, 16777215);
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.limit").getString(), 177, 125, 16777215);
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.warning_reset").getString(), 5, this.height-15, 16777215);
-        drawStringWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.warning").getString(), 5, this.height-30, 16777215);
+        drawTextWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.dir").getString(), 177, 65, 16777215);
+        drawTextWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.startpage").getString(), 177, 95, 16777215);
+        drawTextWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.limit").getString(), 177, 125, 16777215);
+        drawTextWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.warning_reset").getString(), 5, this.height-15, 16777215);
+        drawTextWithShadow(matrices, this.textRenderer, Text.translatable("bookconfig.warning").getString(), 5, this.height-30, 16777215);
         presetButton.setMessage(Text.of("Presets: " + Notebook.presetsEnabled));
         super.render(matrices, mouseX, mouseY, delta);
 
