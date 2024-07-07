@@ -6,6 +6,8 @@ It uses the same GUI as a traditional book, but it's completely client-side, for
 
 If you die, you keep it in your menu, and it's individual per each world; however you can still access it if you aren't in the same world. 
 
+While this is supposed to be used for coordinates, you can write whatever you want in this.
+
 **WARNING:** Some servers may count this as cheating, while I don't see this as being any different to writing them down or putting them on a document, some server owners may disagree
 
 **WARNING:** This mod, and the Quilt modloader, are WIP, please make any bug reports, but there is currently **no jar file** and there won't be until it's ready.
