@@ -23,8 +23,8 @@ public class CoordBook implements ModInitializer {
 
 
 	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
-	public static final Identifier BOOKMARK_ICON = new Identifier("coordbook:textures/gui/bookmark.png");
-	public static final Identifier BOOKMARK_ENABLED_ICON = new Identifier("coordbook:textures/gui/bookmark-enabled.png");
+	public static final Identifier BOOKMARK_ICON = new Identifier("coordbook:textures/gui/tmp/bookmark.png");
+	public static final Identifier BOOKMARK_ENABLED_ICON = new Identifier("coordbook:textures/gui/tmp/bookmark-enabled.png");
 	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("coordbook:textures/gui/bookmark-tab.png");
 	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/cross.png");
 
