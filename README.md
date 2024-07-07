@@ -16,7 +16,7 @@ While this is supposed to be used for coordinates, you can write whatever you wa
 
 > When will it be released?
 
-I don't know, hopefully by the end of next month (August 2022)
+I don't know, it will take as long as it takes.
 
 > What versions?
 
@@ -34,9 +34,9 @@ Yes, you can use it in your modpack. You don't need to credit me (Of course, if 
 
 > Where do I download it?
 
-Currently (As of July 2022) there is no download.
+Currently, it's only downloadable here, on GitHub.
 
-When it's done, it'll be downloadable on Curseforge, Modrinth and here on GitHub.
+When it's done, it'll be downloadable on Curseforge and Modrinth.
 
 ## Support 
 
