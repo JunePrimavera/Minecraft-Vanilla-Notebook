@@ -42,11 +42,11 @@ public class menuScreen extends Screen {
     private String versionText;
     private String contents;
 
-    public menuScreen(BookScreen.Contents contents) {
-        this(contents, true);
+    public menuScreen() {
+        this(true);
     }
 
-    private menuScreen(BookScreen.Contents contents, boolean bl) {
+    private menuScreen(boolean bl) {
         super(NarratorManager.EMPTY);
         this.contents = "";
         this.versionText = "";
@@ -61,14 +61,15 @@ public class menuScreen extends Screen {
         this.addButtons();
     }
     protected void removePage(int rmpage) {
+        boolean tmp = false;
         if (rmpage == 0) {
             LOGGER.info("Can't delete first page");
         } else if (rmpage == Objects.requireNonNull(new File(pageLocation+"/").list()).length-1) {
             goToPreviousPage();
-            boolean tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
+            tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
             LOGGER.info("Removed page " +rmpage);
         }  else {
-            boolean tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
+            tmp = new File(pageLocation+"/"+rmpage+".jdat").delete();
             try {
                 System.out.println(pageLocation+"/"+rmpage+".jdat");
                 tmp = new File(pageLocation+"/"+rmpage+".jdat").createNewFile();
@@ -77,12 +78,11 @@ public class menuScreen extends Screen {
                 throw new RuntimeException(e);
             }
         }
+        if (developerMode) {
+            LOGGER.info(String.valueOf(tmp));
+        }
     }
 
-    protected void closeBookScreen() {
-        assert this.client != null;
-        this.client.setScreen((Screen)null);
-    }
     protected void addButtons() {
         //Done button
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, 196, 200, 20, ScreenTexts.DONE, (button) -> {
@@ -217,7 +217,6 @@ public class menuScreen extends Screen {
             case 16777549 -> "-";
             default -> keystring = keystring;
         };
-
         ++o;
         if (code == 0) {
             keystring = "";
@@ -228,7 +227,7 @@ public class menuScreen extends Screen {
             if (!Objects.equals(this.contents, "")) {
                 this.contents = this.contents.substring(0, this.contents.length() - 1);
                 try {
-                    FileWriter updatePage = new FileWriter(new File(pageLocation+"/" + page + ".jdat"));
+                    FileWriter updatePage = new FileWriter(pageLocation+"/" + page + ".jdat");
                     updatePage.write(this.contents);
                     updatePage.close();
                 } catch (IOException e) {
@@ -284,13 +283,13 @@ public class menuScreen extends Screen {
         fulldata = new StringBuilder(fulldata + keystring);
         this.contents = String.valueOf(fulldata);
         try {
-            FileWriter updatePage = new FileWriter(new File(pageLocation+"/"+page+".jdat"));
+            FileWriter updatePage = new FileWriter(pageLocation+"/"+page+".jdat");
             updatePage.write(String.valueOf(fulldata));
             updatePage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.client.setScreen(this);
+        Objects.requireNonNull(this.client).setScreen(this);
         return false;
     }
 
@@ -305,12 +304,12 @@ public class menuScreen extends Screen {
                 Objects.requireNonNull(this.textRenderer);
                 int k = Math.min(128 / 9, this.cachedPage.size());
                 if (i <= 114) {
-                    Objects.requireNonNull(this.client.textRenderer);
+                    Objects.requireNonNull(Objects.requireNonNull(this.client).textRenderer);
                     if (j < 9 * k + k) {
                         Objects.requireNonNull(this.client.textRenderer);
                         int l = j / 9;
                         if (l >= 0 && l < this.cachedPage.size()) {
-                            OrderedText orderedText = (OrderedText)this.cachedPage.get(l);
+                            OrderedText orderedText = this.cachedPage.get(l);
                             return this.client.textRenderer.getTextHandler().getStyleAt(orderedText, i);
                         }
 
