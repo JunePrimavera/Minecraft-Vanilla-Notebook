@@ -14,9 +14,9 @@ public class Notebook implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        if (!new File("Notebook").exists()) {
+        if (!new File("Notebook").exists() || !new File("Notebook/Default").exists()) {
             try {
-                Path path = Paths.get("Notebook");
+                Path path = Paths.get("Notebook/Default");
                 Files.createDirectories(path);
             } catch (IOException e) {
                 System.err.println("Failed to create directory! Make a bug report if you see this\n " + e.getMessage());
