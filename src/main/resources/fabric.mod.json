@@ -3,7 +3,7 @@
   "id": "coord_book",
   "version": "${version}",
 
-  "name": "Coordinate Book"",
+  "name": "Coordinate Book",
   "description": "Adds a simple coordinate book in the menus.",
   "authors": [
     "JWGardiner"
@@ -34,5 +34,15 @@
   },
   "suggests": {
     "another-mod": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": {
+        "id": "coordbook",
+        "name": "Coordinate Book",
+        "description": "Modular example library",
+        "icon": "assets/coordbook/icon.png"
+      }
+    }
   }
 }
