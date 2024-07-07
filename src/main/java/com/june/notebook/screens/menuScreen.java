@@ -1,14 +1,13 @@
 package com.june.notebook.screens;
 
+import com.june.notebook.Gui;
 import com.june.notebook.Notebook;
-import com.june.notebook.gui.button.gotobookmark;
-import com.june.notebook.gui.sidebar;
-import com.june.notebook.util.addCharacter;
+import com.june.notebook.Gui.sidebar;
+import com.june.notebook.Util.addCharacter;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.GameModeSelectionScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
@@ -86,9 +85,9 @@ public class menuScreen extends Screen {
         }).dimensions(this.width / 2 - 100, 196, 200, 20).build());
 
         //Sidebar buttons
-        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> com.june.notebook.gui.button.delete.onPress(page))));
-        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> com.june.notebook.gui.button.gotobookmark.onPress())));
-        this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> com.june.notebook.gui.button.bookmark.onPress())));
+        this.addDrawableChild(delete = sidebar.addSidebarButton(0, DELETE_ICON, this, "delete", 8, 8, (button -> Gui.button.delete.onPress(page))));
+        this.addDrawableChild(bookmark = sidebar.addSidebarButton(1, BOOKMARK_MARKER_ICON, this, "bookmark", 8, 8, (button -> Gui.button.gotobookmark.onPress())));
+        this.addDrawableChild(bookmarkPgB = sidebar.addSidebarButton(2, BOOKMARK_ICON, this, "bookmarkb", 8, 8, (button -> Gui.button.bookmark.onPress())));
         assert this.client != null;
 
         //Page buttons (arrows)
