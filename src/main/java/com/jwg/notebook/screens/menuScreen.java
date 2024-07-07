@@ -135,10 +135,7 @@ public class menuScreen extends Screen {
             Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
             while (readPageContent.hasNextLine()) {
                 String data = readPageContent.nextLine();
-                if (!fulldata.toString().equals("")) {
-                    data = "\n" + data;
-                }
-                fulldata.append("\n").append(data);
+                fulldata.append(data);
             }
             readPageContent.close();
         } catch (FileNotFoundException e) {
@@ -240,7 +237,7 @@ public class menuScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
     public boolean charTyped(char chr, int modifiers) {
-            int i = 0;
+
             this.ltchr = chr;
             String keystring = String.valueOf(this.ltchr);
             StringBuilder fulldata = new StringBuilder();
@@ -248,13 +245,7 @@ public class menuScreen extends Screen {
                 Scanner readPageContent = new Scanner(new File(pageLocation+"/"+page+".jdat"));
                 while (readPageContent.hasNextLine()) {
                     String data = readPageContent.nextLine();
-                    i++;
-                    if (i == 0) {
-                        fulldata.append("\n").append(data);
-                    } else {
-                        fulldata.append(data);
-                    }
-
+                    fulldata.append(data);
                 }
                 readPageContent.close();
             } catch (FileNotFoundException e) {
