@@ -20,7 +20,7 @@ public class NotebookData {
     }
 
     public static NotebookData read(String location) { // Read the record from a file
-        File jsondata = new File(BOOK_FOLDER + STR."/\{location}");
+        File jsondata = new File(BOOK_FOLDER + "/" + location);
         StringBuilder d = new StringBuilder();
         try {
             Scanner reader = new Scanner(jsondata);
@@ -30,8 +30,8 @@ public class NotebookData {
             }
             reader.close();
         } catch (FileNotFoundException e) { // If it fails, create a new one
-            LOGGER.error(STR."Failed to read book!\n\{e}");
-            NotebookData data = new NotebookData(new String[0], STR."\{location}");
+            LOGGER.error("Failed to read book!\n" + e);
+            NotebookData data = new NotebookData(new String[0], location);
             data.write(); // Write to file
         }
         String json = d.toString();
@@ -41,11 +41,11 @@ public class NotebookData {
     public void write() {
         String json = new Gson().toJson(this);
         try { // Write the record to a file
-            FileWriter writer = new FileWriter(BOOK_FOLDER + STR."/\{this.location}");
+            FileWriter writer = new FileWriter(BOOK_FOLDER + "/" + this.location);
             writer.write(json);
             writer.close();
         } catch (IOException e) {
-            Notebook.LOGGER.error(STR."Failed to write book!\n\{e}");
+            Notebook.LOGGER.error("Failed to write book!\n" + e);
         }
     }
 }
