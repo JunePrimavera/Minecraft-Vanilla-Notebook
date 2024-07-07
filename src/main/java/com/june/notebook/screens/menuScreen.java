@@ -8,6 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
@@ -142,10 +143,10 @@ public class menuScreen extends Screen {
         RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
         int i = (this.width - 192) / 2;
 
-        this.drawTexture(matrices, i, 2, 0, 0, 192, 192);
+        drawTexture(matrices, i, 2, 0, 0, 192, 192);
         this.pageIndexText = Text.translatable("book.pageIndicator", page + 1, Math.max((Objects.requireNonNull(new File(pageLocation+"/").list()).length), 1));
 
-        drawStringWithShadow(matrices, this.textRenderer, String.valueOf(versionText), 2, this.height - 10, 16777215);
+        drawTextWithShadow(matrices, this.textRenderer, String.valueOf(versionText), 2, this.height - 10, 16777215);
 
         StringBuilder fulldata = new StringBuilder();
         try {
@@ -184,7 +185,7 @@ public class menuScreen extends Screen {
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
         int i = (this.width - -150) / 2;
 
-        this.drawTexture(matrices, i, 2, 0, 0, 36, 180);
+        drawTexture(matrices, i, 2, 0, 0, 36, 180);
         super.render(matrices, mouseX, mouseY, delta);
     }
     public void renderTooltips(MatrixStack matrices){
@@ -192,11 +193,11 @@ public class menuScreen extends Screen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BOOK_SIDEBAR_TEXTURE);
 
-        if (delete.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.delete").getString(), this.width/2 +115, 7+12, 16777215); }
-        else if (bookmark.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.create").getString(), this.width/2 +115, 7+(12*2), 16777215); }
-        else if (bookmarkPgB.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.goto").getString(), this.width/2 +115, 7+(12*3), 16777215); }
-        else if (importB.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.import").getString(), this.width/2 +115, 7+(12*4), 16777215); }
-        else if (exportB.isHovered()) { drawStringWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.export").getString(), this.width/2 +115, 7+(12*5), 16777215); }
+        if (delete.isHovered()) { drawTextWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.delete").getString(), this.width/2 +115, 7+12, 16777215); }
+        else if (bookmark.isHovered()) { drawTextWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.create").getString(), this.width/2 +115, 7+(12*2), 16777215); }
+        else if (bookmarkPgB.isHovered()) { drawTextWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.bookmark.goto").getString(), this.width/2 +115, 7+(12*3), 16777215); }
+        else if (importB.isHovered()) { drawTextWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.import").getString(), this.width/2 +115, 7+(12*4), 16777215); }
+        else if (exportB.isHovered()) { drawTextWithShadow(matrices, this.textRenderer, Text.translatable("tooltip.notebook.export").getString(), this.width/2 +115, 7+(12*5), 16777215); }
 
     }
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
