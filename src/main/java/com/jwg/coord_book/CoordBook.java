@@ -12,19 +12,21 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
+import static com.jwg.coord_book.keybinds.OpenBook.openBookKeybindRegister;
+
 public class CoordBook implements ModInitializer {
-	public static final boolean developerMode = false;
-	public static final String version = "1.2.1";
+	public static final boolean developerMode = true;
+	public static final String version = "1.3.0";
 	public static final String project = "Coordinate-Book";
 	public static String pageLocation = "CoordinateBook";
 	public static final Logger LOGGER = LoggerFactory.getLogger(project);
 
 
 	public static final Identifier BOOK_ICON = new Identifier("coordbook:textures/gui/book.png");
-	public static final Identifier BOOKMARK_ICON = new Identifier("coordbook:textures/gui/bookmark.png");
-	public static final Identifier BOOKMARK_ENABLED_ICON = new Identifier("coordbook:textures/gui/bookmark-enabled.png");
 	public static final Identifier BOOKMARK_MARKER_ICON = new Identifier("coordbook:textures/gui/bookmark-tab.png");
-	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/cross.png");
+	public static final Identifier BOOKMARK_ICON = new Identifier("coordbook:textures/gui/bookmark-goto.png");
+	public static final Identifier DELETE_ICON = new Identifier("coordbook:textures/gui/del-page.png");
+
 
 	public static boolean NEEDS_SETUP = false;
 
@@ -44,6 +46,9 @@ public class CoordBook implements ModInitializer {
 
 		if (!pageLocation.equals("CoordinateBook") && !new File(pageLocation).exists()) { tmp = new File(pageLocation).mkdirs(); }
 		if (tmp) { LOGGER.info("Possible first time use! Thank you for using my mod!"); }
+
+		LOGGER.info("Registering keybinds...");
+		openBookKeybindRegister();
 		LOGGER.info("{} has finished initializing!", project);
 	}
 }
