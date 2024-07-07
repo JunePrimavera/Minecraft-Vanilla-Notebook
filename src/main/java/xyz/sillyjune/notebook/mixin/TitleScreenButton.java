@@ -19,7 +19,7 @@ import static xyz.sillyjune.notebook.Notebook.MAIN_BUTTON_ICON;
 
 @Environment(EnvType.CLIENT)
 @Mixin(TitleScreen.class)
-public abstract class TitleScreenButton extends Screen implements BookScreen.Contents {
+public abstract class TitleScreenButton extends Screen {
     protected TitleScreenButton(Text title) {
         super(title);
     }
