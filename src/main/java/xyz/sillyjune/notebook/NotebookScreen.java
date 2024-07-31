@@ -109,6 +109,9 @@ public class NotebookScreen extends Screen {
         this.updatePageButtons();
     }
 
+    String getBookNameText() {
+        return this.bookNameField.getText().replace(" ", "-");
+    }
     // Innit mate
     protected void init() {
         DATA = NotebookData.read("default.json");
@@ -129,7 +132,7 @@ public class NotebookScreen extends Screen {
         buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (button) -> next_book()));
         buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (button) -> last_book()));
         buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (button) -> {
-            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(DATA.content, this.bookNameField.getText() + ".json"); }}
+            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(DATA.content, getBookNameText() + ".json"); }}
         ));
 
         this.updatePageButtons();
@@ -202,9 +205,9 @@ public class NotebookScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
         if (GAY) { context.drawText(this.textRenderer, Text.translatable("notebook.gay"), 5, this.height - 22, Colors.WHITE, true); }
         if (CONFIG.debug()) {
-            context.drawText(this.textRenderer, Text.of("Notebook v4.0.2 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v4.0.3 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v4.0.2"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v4.0.3"), 5, this.height - 10, Colors.WHITE, true);
         }
     }
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
