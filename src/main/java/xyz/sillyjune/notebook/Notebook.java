@@ -91,5 +91,5 @@ public class Notebook implements ModInitializer {
     public static NotebookConfig CONFIG;
     public static final Identifier BOOK_TEXTURE = Identifier.of("textures/gui/book.png");
     public static String BOOK_FOLDER = "Notebook";
-    public static boolean GAY = true;
+    public static boolean GAY = true; // I might be straight but gay people are pretty cool
 }

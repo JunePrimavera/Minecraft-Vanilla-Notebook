@@ -11,8 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static xyz.sillyjune.notebook.Notebook.MAIN_BUTTON_ICON;
-import static xyz.sillyjune.notebook.Notebook.getBookIcon;
+import static xyz.sillyjune.notebook.Notebook.*;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenButton extends Screen {
@@ -21,7 +20,15 @@ public abstract class GameMenuScreenButton extends Screen {
     }
     @Inject(at = @At("RETURN"), method="initWidgets")
     private void addCustomButton(CallbackInfo ci) {
-        ButtonTextures icon = getBookIcon();
-        this.addDrawableChild(new TexturedButtonWidget(this.width / 2 + 104, this.height / 4 + 96 + -16, 20, 20, icon, (button) -> this.client.setScreen(new NotebookScreen())));
+        TexturedButtonWidget b = new TexturedButtonWidget(
+                this.width / 2 + 104,
+                this.height / 4 + 96 + -16,
+                20,
+                20,
+                getBookIcon(),
+                (button) -> this.client.setScreen(new NotebookScreen())
+        );
+        b.setMessage(Text.translatable("key.notebook.open"));
+        this.addDrawableChild(b);
     }
 }
