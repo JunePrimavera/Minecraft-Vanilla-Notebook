@@ -189,7 +189,12 @@ public class NotebookScreen extends Screen {
     @Override
     public boolean charTyped(char chr, int modifiers) {
         if (!this.bookNameField.isSelected()) {
-            if (cursorIndex > DATA.content[pageIndex].length()) { cursorIndex = DATA.content[pageIndex].length(); }
+            if (DATA.content[pageIndex] == null) {
+                DATA.content[pageIndex] = " "; // Prevents it from crashing when null values are created, though this shouldn't be able to happen
+            }
+            if (cursorIndex > DATA.content[pageIndex].length()) {
+                cursorIndex = DATA.content[pageIndex].length();
+            }
             DATA.content[pageIndex] = DATA.content[pageIndex].substring(0, cursorIndex) + chr + DATA.content[pageIndex].substring(cursorIndex);
             DATA.write();
             this.cursorIndex += 1;
@@ -205,9 +210,9 @@ public class NotebookScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
         if (GAY) { context.drawText(this.textRenderer, Text.translatable("notebook.gay"), 5, this.height - 22, Colors.WHITE, true); }
         if (CONFIG.debug()) {
-            context.drawText(this.textRenderer, Text.of("Notebook v4.0.4 - " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v" + VERSION + " " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
         } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v4.0.4"), 5, this.height - 10, Colors.WHITE, true);
+            context.drawText(this.textRenderer, Text.of("Notebook v" + VERSION), 5, this.height - 10, Colors.WHITE, true);
         }
     }
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
