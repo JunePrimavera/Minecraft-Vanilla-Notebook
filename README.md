@@ -59,7 +59,7 @@ Go to the releases tab to see it here, or go to a different site;
 
 If you find bugs or issues with the mod, you can make an issue [on GitHub](https://github.com/JunePrimavera/Minecraft-Vanilla-Notebook) or [my forgejo instance](https://git.sillyjune.xyz/juniper/Minecraft-Vanilla-Notebook/issues).
 
-Alternatively, you can [join my discord](https://discord.gg/EqTwbVYEWx) if you have any questions, need help, or want to talk to me directly.
+Alternatively, you can [join my discord](https://discord.gg/t5YtYE3d5V) if you have any questions, need help, or want to talk to me directly.
 
 If you want to help support this mod, you can do so by translating it into other languages, improving textures. If you want to add textures/translations (and don't want/know how to use GitHub's PRs), contact me on discord.
 
