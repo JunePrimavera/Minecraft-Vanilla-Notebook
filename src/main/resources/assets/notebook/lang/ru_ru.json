@@ -1,0 +1,18 @@
+{
+  "category.notebook.keys": "Vanilla Notebook",
+  "category.notebook.presets": "Книги",
+  "category.notebook.config": "Конфигурация",
+  "key.notebook.open": "Открыть книгу",
+  "tooltip.notebook.delete": "Удалить страницу",
+  "tooltip.notebook.bookmark.goto": "Перейти к закладке",
+  "tooltip.notebook.bookmark.create": "Оставить закладку",
+  "tooltip.notebook.import": "Импорт",
+  "tooltip.notebook.export": "Экспорт",
+  "bookconfig.dir": "Хранилище книг (Default: Notebook/Default)",
+  "bookconfig.startpage": "Начальная страница (Default: 0)",
+  "bookconfig.limit": "Лимит страниц (Default: -1)",
+  "bookconfig.warning": "Осторожно: Изменения  могут повредить данные",
+  "bookconfig.warning_reset": "У вас могут быть ошибки если не перезапустите игру после изменений!",
+  "devwarning.info": "(Режим разработчика)",
+  "notebook.gay" : "§5H§9a§1p§3p§2y §ap§er§6i§cd§4e §bm§do§rn§dt§bh §5:§e3"
+} 
