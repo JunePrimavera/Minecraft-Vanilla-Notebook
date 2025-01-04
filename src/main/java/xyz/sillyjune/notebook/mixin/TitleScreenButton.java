@@ -27,7 +27,7 @@ public abstract class TitleScreenButton extends Screen {
     protected TitleScreenButton(Text title) {
         super(title);
     }
-    @Inject(at = @At("TAIL"), method="initWidgetsNormal")
+    @Inject(at = @At("TAIL"), method="init")
     private void addCustomButton(int y, int spacingY, CallbackInfo ci) {
         TexturedButtonWidget b = new TexturedButtonWidget(
                 (this.width / 2 + 104),

@@ -6,6 +6,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.*;
@@ -227,7 +228,8 @@ public class NotebookScreen extends Screen {
             this.cachedPage = this.textRenderer.wrapLines(StringVisitable.plain(pageContent), 114);
         }
         // Render book background
-        context.drawTexture(BOOK_TEXTURE, (this.width - 192) / 2, 2, 0, 0, 192, 192);
+        context.drawTexture(RenderLayer::getGuiTextured, BOOK_TEXTURE, (this.width - 192) / 2, 2, 0.0F, 0.0F, 192, 192, 256, 256);
+        //context.drawTexture(RenderLayer::getGuiTextured, BOOK_TEXTURE, (this.width - 192) / 2, 2, 0, 0, 192, 192);
         for(int m = 0; m < Math.min(128 / 9, this.cachedPage.size()); ++m) {
             context.drawText(this.textRenderer, this.cachedPage.get(m), ((this.width - 192) / 2) + 36, 32 + m * 9, 0, false);
         }
