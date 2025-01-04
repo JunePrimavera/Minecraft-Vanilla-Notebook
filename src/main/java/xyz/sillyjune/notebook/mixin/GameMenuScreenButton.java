@@ -18,7 +18,7 @@ public abstract class GameMenuScreenButton extends Screen {
     protected GameMenuScreenButton(Text title) {
         super(title);
     }
-    @Inject(at = @At("RETURN"), method="init")
+    @Inject(at = @At("RETURN"), method="initWidgets")
     private void addCustomButton(CallbackInfo ci) {
         TexturedButtonWidget b = new TexturedButtonWidget(
                 this.width / 2 + 104,
