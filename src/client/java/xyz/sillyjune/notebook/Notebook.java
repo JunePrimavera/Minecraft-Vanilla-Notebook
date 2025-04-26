@@ -2,6 +2,8 @@ package xyz.sillyjune.notebook;
 
 import com.google.gson.Gson;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -21,7 +23,7 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 
-
+@Environment(EnvType.CLIENT)
 public class Notebook implements ModInitializer {
     private static KeyBinding openBookKeybind;
     public static ButtonTextures b_id(String id) {
@@ -91,6 +93,6 @@ public class Notebook implements ModInitializer {
     public static NotebookConfig CONFIG;
     public static final Identifier BOOK_TEXTURE = Identifier.of("textures/gui/book.png");
     public static String BOOK_FOLDER = "Notebook";
-    public static final String VERSION = "4.0.7";
+    public static final String VERSION = "4.0.8";
     public static boolean GAY = true; // I might be straight but gay people are pretty cool
 }
