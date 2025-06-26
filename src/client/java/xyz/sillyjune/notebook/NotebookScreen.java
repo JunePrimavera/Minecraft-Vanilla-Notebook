@@ -26,6 +26,7 @@ public class NotebookScreen extends Screen {
     public static ButtonWidget buttonGo;
     public static ButtonWidget buttonNext;
     public static ButtonWidget buttonLast;
+    public ButtonWidget[] switchableBooks = { null, null, null, null, null };
     private int pageIndex;
     private int cursorIndex;
     private List<OrderedText> cachedPage;
@@ -77,6 +78,29 @@ public class NotebookScreen extends Screen {
             }
         }
         return 0;
+    }
+    void goto_book(String book) {
+        int bIdx = 0;
+        for (String iter : Objects.requireNonNull(new File(BOOK_FOLDER).list())) {
+            bIdx += 1;
+            if (Objects.equals(iter, book)) {
+                break;
+            }
+        }
+        DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER).list())[bIdx + 1]);
+        this.bookNameField.setText(DATA.location.replace(".json", ""));
+        this.pageIndex = 0;
+        this.updatePageButtons();
+
+    }
+    void get_book_idx(int index) {
+        int bookIndex = getBookIndex();
+        if (index < Objects.requireNonNull(new File(BOOK_FOLDER).list()).length - 1) {
+            DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER).list())[index + 1]);
+            this.bookNameField.setText(DATA.location.replace(".json", ""));
+            this.pageIndex = 0;
+            this.updatePageButtons();
+        }
     }
     void next_book() {
         int bookIndex = getBookIndex();
