@@ -1,5 +1,6 @@
 package xyz.sillyjune.notebook;
 
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -172,9 +173,7 @@ public class NotebookScreen extends Screen {
             if (!this.bookNameField.getText().isEmpty() && found) {
                 try {
                     delete(Path.of(BOOK_FOLDER + "/" + DATA.location));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                } catch (IOException ignored) {}
                 if (this.bookNameField.getText().equals("default")) {
                     DATA.content = new String[1];
                     DATA.write();
@@ -212,8 +211,7 @@ public class NotebookScreen extends Screen {
                 String[] bookData = DATA.content;
                 try {
                     delete(Path.of(BOOK_FOLDER + "/" + DATA.location));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException ignored) {
                 }
                 DATA = new NotebookData(bookData, getBookNameText() + ".json");
                 DATA.write();
@@ -297,18 +295,8 @@ public class NotebookScreen extends Screen {
         return false;
     }
     // The code I am going to avoid like the plague
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        if (GAY) { context.drawText(this.textRenderer, Text.translatable("notebook.gay"), 5, this.height - 22, Colors.WHITE, true); }
-        if (CONFIG.debug()) {
-            context.drawText(this.textRenderer, Text.of("Notebook v" + VERSION + " " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
-        } else {
-            context.drawText(this.textRenderer, Text.of("Notebook v" + VERSION), 5, this.height - 10, Colors.WHITE, true);
-        }
-    }
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.renderBackground(context, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+        super.render(context, mouseX, mouseY, deltaTicks);
         if (DATA.content.length > this.pageIndex) {
             String pageContent = readPage(pageIndex);
             // Cursor timing
@@ -319,12 +307,19 @@ public class NotebookScreen extends Screen {
             this.cachedPage = this.textRenderer.wrapLines(StringVisitable.plain(pageContent), 114);
         }
         // Render book background
-        context.drawTexture(RenderLayer::getGuiTextured, BOOK_TEXTURE, (this.width - 192) / 2, 2, 0.0F, 0.0F, 192, 192, 256, 256);
-        //context.drawTexture(RenderLayer::getGuiTextured, BOOK_TEXTURE, (this.width - 192) / 2, 2, 0, 0, 192, 192);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, BOOK_TEXTURE, (this.width - 192) / 2, 2, 0.0F, 0.0F, 192, 192, 256, 256);
+
         for(int m = 0; m < Math.min(128 / 9, this.cachedPage.size()); ++m) {
-            context.drawText(this.textRenderer, this.cachedPage.get(m), ((this.width - 192) / 2) + 36, 32 + m * 9, 0, false);
+            context.drawText(this.textRenderer, this.cachedPage.get(m), ((this.width - 192) / 2) + 36, 32 + m * 9, Colors.BLACK, false);
         }
         // long
-        context.drawText(this.textRenderer, Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1)), ((this.width - 192) / 2) - this.textRenderer.getWidth(Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1))) + 192 - 44, 18, 0, false);
+        context.drawText(this.textRenderer, Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1)), ((this.width - 192) / 2) - this.textRenderer.getWidth(Text.translatable("book.pageIndicator", this.pageIndex + 1, Math.max(DATA.content.length, 1))) + 192 - 44, 18, Colors.BLACK, false);
+        if (GAY) { context.drawText(this.textRenderer, Text.translatable("notebook.gay"), 5, this.height - 22, Colors.WHITE, true); }
+        if (CONFIG.debug()) {
+            context.drawText(this.textRenderer, Text.of("Notebook v" + VERSION + " " + Text.translatable("devwarning.info").getString()), 5, this.height - 10, Colors.WHITE, true);
+        } else {
+            context.drawText(this.textRenderer, Text.of("Notebook v" + VERSION), 5, this.height - 10, Colors.WHITE, true);
+        }
     }
+
 }
