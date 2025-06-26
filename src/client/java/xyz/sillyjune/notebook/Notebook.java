@@ -88,11 +88,12 @@ public class Notebook implements ModInitializer {
     public static final ButtonTextures NEW_PAGE_ICON = b_id("new_page");
     public static final ButtonTextures DEL_PAGE_ICON = b_id("delete_page");
     public static final ButtonTextures LAST_BOOK_ICON = b_id("last_book");
-    public static final ButtonTextures RENAME_BOOK_ICON = b_id("rename_book");
+    public static final ButtonTextures NEW_BOOK_ICON = b_id("new_book");
     public static final ButtonTextures NEXT_BOOK_ICON = b_id("next_book");
+    public static final ButtonTextures RENAME_BOOK_ICON = b_id("rename_book");
     public static NotebookConfig CONFIG;
     public static final Identifier BOOK_TEXTURE = Identifier.of("textures/gui/book.png");
     public static String BOOK_FOLDER = "Notebook";
-    public static final String VERSION = "4.0.8";
+    public static final String VERSION = "4.1.0";
     public static boolean GAY = true; // I might be straight but gay people are pretty cool
 }

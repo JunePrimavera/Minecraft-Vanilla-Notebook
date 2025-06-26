@@ -2,9 +2,7 @@ package xyz.sillyjune.notebook;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ButtonWidget.NarrationSupplier;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -15,19 +13,24 @@ import net.minecraft.text.*;
 import net.minecraft.util.Colors;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static java.nio.file.Files.*;
 import static xyz.sillyjune.notebook.Notebook.*;
 
 public class NotebookScreen extends Screen {
 
+    public int bookOffset = 0;
     private static NotebookData DATA;
     public static ButtonWidget closeButton;
-    public static ButtonWidget buttonGo;
-    public static ButtonWidget buttonNext;
-    public static ButtonWidget buttonLast;
+    public static ButtonWidget buttonRenameBook;
+    public static ButtonWidget buttonNewBook;
+    public static ButtonWidget buttonIncreaseOffset;
+    public static ButtonWidget buttonDecreaseOffset;
     public ButtonWidget[] switchableBooks = { null, null, null, null, null };
     private int pageIndex;
     private int cursorIndex;
@@ -72,15 +75,6 @@ public class NotebookScreen extends Screen {
         // Prevents a crash if pages become corrupted somehow
         return Objects.requireNonNullElse(DATA.content[pagei], "");
     }
-    // Get index of book in folder
-    protected int getBookIndex() {
-        for (int i = 0; i < Objects.requireNonNull(new File(BOOK_FOLDER + "/").list()).length; i++) {
-            if (Objects.equals(Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[i], DATA.location)) {
-                return i;
-            }
-        }
-        return 0;
-    }
     void goto_book(String book) {
         int bIdx = 0;
         for (String iter : Objects.requireNonNull(new File(BOOK_FOLDER).list())) {
@@ -94,36 +88,6 @@ public class NotebookScreen extends Screen {
         this.pageIndex = 0;
         this.updatePageButtons();
 
-    }
-    void get_book_idx(int index) {
-        int bookIndex = getBookIndex();
-        if (index < Objects.requireNonNull(new File(BOOK_FOLDER).list()).length - 1) {
-            DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER).list())[index + 1]);
-            this.bookNameField.setText(DATA.location.replace(".json", ""));
-            this.pageIndex = 0;
-            this.updatePageButtons();
-        }
-    }
-    void next_book() {
-        int bookIndex = getBookIndex();
-        if (bookIndex < Objects.requireNonNull(new File(BOOK_FOLDER).list()).length - 1) {
-            DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER).list())[bookIndex + 1]);
-            this.bookNameField.setText(DATA.location.replace(".json", ""));
-            this.pageIndex = 0;
-            this.updatePageButtons();
-        }
-    }
-    void last_book() {
-        int bookIndex = getBookIndex();
-        if (bookIndex > 0) {
-            DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER + "/").list())[bookIndex - 1]);
-            if (DATA != null) {
-                this.bookNameField.setText(DATA.location.replace(".json", ""));
-                this.pageIndex = 0;
-                this.updatePageButtons();
-            }
-
-        }
     }
     protected void goToPreviousPage() {
         if (this.pageIndex > 0) { --this.pageIndex; }
@@ -140,14 +104,24 @@ public class NotebookScreen extends Screen {
         return this.bookNameField.getText().replace(" ", "-");
     }
 
-    void initBookSwitching(int offset) {
+    void initBookSwitching() {
         String[] books = Objects.requireNonNull(new File(BOOK_FOLDER).list());
-        int it = 0;
-        for (String iter : books) {
-            this.switchableBooks[it] = this.addDrawableChild(ButtonWidget.builder(Text.literal(iter.replace(".json", "")), (button) -> goto_book(iter)).dimensions(5, 30 + (25 * it), 108, 20).build());
-            it += 1;
-            if (it == 5 || books.length > offset+it) {
+        int replaced = 0;
+        for (int it = 0; it != 5; it++) {
+            if (it+bookOffset > books.length - 1) {
                 break;
+            }
+            replaced = it;
+            String book = books[it+bookOffset];
+            if (this.switchableBooks[it] != null) {
+                this.switchableBooks[it].visible = false;
+            }
+            this.switchableBooks[it] = this.addDrawableChild(ButtonWidget.builder(Text.literal(book.replace(".json", "")), (button) -> goto_book(book)).dimensions(5, 30 + (25 * (it)), 108, 20).build());
+        }
+        for (int it = replaced+1; it != 5; it++) {
+            if (this.switchableBooks[it] != null) {
+                this.switchableBooks[it].visible = false;
+                this.switchableBooks[it] = null;
             }
         }
     }
@@ -170,14 +144,56 @@ public class NotebookScreen extends Screen {
         this.bookNameField.setEditable(true);
         this.bookNameField.setText("default");
 
-        buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 150, 20, 20, NEXT_BOOK_ICON, (button) -> next_book()));
-        buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 150, 20, 20, LAST_BOOK_ICON, (button) -> last_book()));
+        buttonIncreaseOffset = this.addDrawableChild(new TexturedButtonWidget(5, 155, 20, 20, LAST_BOOK_ICON, (button) -> {
+            bookOffset += 1;
+            initBookSwitching();
+        }));
+        buttonDecreaseOffset = this.addDrawableChild(new TexturedButtonWidget(30, 155, 20, 20, NEXT_BOOK_ICON, (button) -> {
+            if (bookOffset > 0) {
+                bookOffset -= 1;
+                initBookSwitching();
+            }
+        }));
 
-        buttonGo = this.addDrawableChild(new TexturedButtonWidget(118, 5, 20, 20, RENAME_BOOK_ICON, (button) -> {
-            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(new String[1], getBookNameText() + ".json"); }}
+        buttonNewBook = this.addDrawableChild(new TexturedButtonWidget(143, 5, 20, 20, NEW_BOOK_ICON, (button) -> {
+            String[] books = Objects.requireNonNull(new File(BOOK_FOLDER).list());
+            boolean found = false;
+            for (String iter : books) {
+                if (iter.equals(getBookNameText() + ".json")) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!this.bookNameField.getText().isEmpty() && !found) {
+                DATA = new NotebookData(new String[1], getBookNameText() + ".json");
+                DATA.write();
+            }
+            initBookSwitching();
+        }
         ));
-
-        initBookSwitching(0);
+        buttonRenameBook = this.addDrawableChild(new TexturedButtonWidget(118, 5, 20, 20, RENAME_BOOK_ICON, (button) -> {
+            String[] books = Objects.requireNonNull(new File(BOOK_FOLDER).list());
+            boolean found = false;
+            for (String iter : books) {
+                if (iter.equals(getBookNameText() + ".json")) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!this.bookNameField.getText().isEmpty() && !found) {
+                String[] bookData = DATA.content;
+                try {
+                    delete(Path.of(BOOK_FOLDER + "/" + DATA.location));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                DATA = new NotebookData(bookData, getBookNameText() + ".json");
+                DATA.write();
+            }
+            initBookSwitching();
+        }
+        ));
+        initBookSwitching();
 
         this.updatePageButtons();
         this.cursorIndex = readPage(pageIndex).length();
