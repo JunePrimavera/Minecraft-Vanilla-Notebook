@@ -173,9 +173,7 @@ public class NotebookScreen extends Screen {
             if (!this.bookNameField.getText().isEmpty() && found) {
                 try {
                     delete(Path.of(BOOK_FOLDER + "/" + DATA.location));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                } catch (IOException ignored) {}
                 if (this.bookNameField.getText().equals("default")) {
                     DATA.content = new String[1];
                     DATA.write();
@@ -213,8 +211,7 @@ public class NotebookScreen extends Screen {
                 String[] bookData = DATA.content;
                 try {
                     delete(Path.of(BOOK_FOLDER + "/" + DATA.location));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException ignored) {
                 }
                 DATA = new NotebookData(bookData, getBookNameText() + ".json");
                 DATA.write();
