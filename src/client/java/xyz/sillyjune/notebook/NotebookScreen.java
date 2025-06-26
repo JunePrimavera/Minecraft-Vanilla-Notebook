@@ -12,6 +12,11 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.*;
 import net.minecraft.util.Colors;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,6 +31,7 @@ public class NotebookScreen extends Screen {
 
     public int bookOffset = 0;
     private static NotebookData DATA;
+    public static ButtonWidget buttonDelBook;
     public static ButtonWidget closeButton;
     public static ButtonWidget buttonRenameBook;
     public static ButtonWidget buttonNewBook;
@@ -116,7 +122,7 @@ public class NotebookScreen extends Screen {
             if (this.switchableBooks[it] != null) {
                 this.switchableBooks[it].visible = false;
             }
-            this.switchableBooks[it] = this.addDrawableChild(ButtonWidget.builder(Text.literal(book.replace(".json", "")), (button) -> goto_book(book)).dimensions(5, 30 + (25 * (it)), 108, 20).build());
+            this.switchableBooks[it] = this.addDrawableChild(ButtonWidget.builder(Text.literal(book.replace(".json", "")), (button) -> goto_book(book)).dimensions(5, 55 + (25 * (it)), 108, 20).build());
         }
         for (int it = replaced+1; it != 5; it++) {
             if (this.switchableBooks[it] != null) {
@@ -144,18 +150,40 @@ public class NotebookScreen extends Screen {
         this.bookNameField.setEditable(true);
         this.bookNameField.setText("default");
 
-        buttonIncreaseOffset = this.addDrawableChild(new TexturedButtonWidget(5, 155, 20, 20, LAST_BOOK_ICON, (button) -> {
+        buttonIncreaseOffset = this.addDrawableChild(new TexturedButtonWidget(113, 155, 20, 20, LAST_BOOK_ICON, (button) -> {
             bookOffset += 1;
             initBookSwitching();
         }));
-        buttonDecreaseOffset = this.addDrawableChild(new TexturedButtonWidget(30, 155, 20, 20, NEXT_BOOK_ICON, (button) -> {
+        buttonDecreaseOffset = this.addDrawableChild(new TexturedButtonWidget(115, 130, 20, 20, NEXT_BOOK_ICON, (button) -> {
             if (bookOffset > 0) {
                 bookOffset -= 1;
                 initBookSwitching();
             }
         }));
-
-        buttonNewBook = this.addDrawableChild(new TexturedButtonWidget(143, 5, 20, 20, NEW_BOOK_ICON, (button) -> {
+        buttonDelBook = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, DEL_BOOK_ICON, (button) -> {
+            String[] books = Objects.requireNonNull(new File(BOOK_FOLDER).list());
+            boolean found = false;
+            for (String iter : books) {
+                if (iter.equals(getBookNameText() + ".json")) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!this.bookNameField.getText().isEmpty() && found) {
+                try {
+                    delete(Path.of(BOOK_FOLDER + "/" + DATA.location));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if (this.bookNameField.getText().equals("default")) {
+                    DATA.content = new String[1];
+                    DATA.write();
+                }
+            }
+            initBookSwitching();
+        }
+        ));
+        buttonNewBook = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEW_BOOK_ICON, (button) -> {
             String[] books = Objects.requireNonNull(new File(BOOK_FOLDER).list());
             boolean found = false;
             for (String iter : books) {
@@ -171,7 +199,7 @@ public class NotebookScreen extends Screen {
             initBookSwitching();
         }
         ));
-        buttonRenameBook = this.addDrawableChild(new TexturedButtonWidget(118, 5, 20, 20, RENAME_BOOK_ICON, (button) -> {
+        buttonRenameBook = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, RENAME_BOOK_ICON, (button) -> {
             String[] books = Objects.requireNonNull(new File(BOOK_FOLDER).list());
             boolean found = false;
             for (String iter : books) {
@@ -209,8 +237,12 @@ public class NotebookScreen extends Screen {
     // Special keys (delete, backspace, etc)
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (CONFIG.debug()) {
+            System.out.println(keyCode);
+            System.out.println(scanCode);
+            System.out.println(modifiers);
+        }
         if (!this.bookNameField.isSelected()) {
-            if (CONFIG.debug()) { LOGGER.debug(String.valueOf(keyCode)); }
             switch (keyCode) {
                 case 266 -> this.previousPageButton.onPress();
                 case 267 -> this.nextPageButton.onPress();

@@ -84,6 +84,7 @@ public class Notebook implements ModInitializer {
     }
     public static final Logger LOGGER = LoggerFactory.getLogger("notebook");
     public static final ButtonTextures MAIN_BUTTON_ICON_GAY = b_id("book_gay");
+    public static final ButtonTextures DEL_BOOK_ICON = b_id("delete_book");
     public static final ButtonTextures MAIN_BUTTON_ICON = b_id("book");
     public static final ButtonTextures NEW_PAGE_ICON = b_id("new_page");
     public static final ButtonTextures DEL_PAGE_ICON = b_id("delete_page");
