@@ -2,7 +2,9 @@ package xyz.sillyjune.notebook;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget.NarrationSupplier;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -82,12 +84,12 @@ public class NotebookScreen extends Screen {
     void goto_book(String book) {
         int bIdx = 0;
         for (String iter : Objects.requireNonNull(new File(BOOK_FOLDER).list())) {
-            bIdx += 1;
             if (Objects.equals(iter, book)) {
                 break;
             }
+            bIdx += 1;
         }
-        DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER).list())[bIdx + 1]);
+        DATA = NotebookData.read(Objects.requireNonNull(new File(BOOK_FOLDER).list())[bIdx]);
         this.bookNameField.setText(DATA.location.replace(".json", ""));
         this.pageIndex = 0;
         this.updatePageButtons();
@@ -137,6 +139,19 @@ public class NotebookScreen extends Screen {
     String getBookNameText() {
         return this.bookNameField.getText().replace(" ", "-");
     }
+
+    void initBookSwitching(int offset) {
+        String[] books = Objects.requireNonNull(new File(BOOK_FOLDER).list());
+        int it = 0;
+        for (String iter : books) {
+            this.switchableBooks[it] = this.addDrawableChild(ButtonWidget.builder(Text.literal(iter.replace(".json", "")), (button) -> goto_book(iter)).dimensions(5, 30 + (25 * it), 108, 20).build());
+            it += 1;
+            if (it == 5 || books.length > offset+it) {
+                break;
+            }
+        }
+    }
+
     // Innit mate
     protected void init() {
         DATA = NotebookData.read("default.json");
@@ -154,11 +169,15 @@ public class NotebookScreen extends Screen {
         this.bookNameField = this.addDrawableChild(new TextFieldWidget(this.textRenderer, 5, 5, 108, 20, Text.translatable("notebook.text.field")));
         this.bookNameField.setEditable(true);
         this.bookNameField.setText("default");
-        buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 30, 20, 20, NEXT_BOOK_ICON, (button) -> next_book()));
-        buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 30, 20, 20, LAST_BOOK_ICON, (button) -> last_book()));
-        buttonGo = this.addDrawableChild(new TexturedButtonWidget(55, 30, 20, 20, RENAME_BOOK_ICON, (button) -> {
-            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(DATA.content, getBookNameText() + ".json"); }}
+
+        buttonNext = this.addDrawableChild(new TexturedButtonWidget(5, 150, 20, 20, NEXT_BOOK_ICON, (button) -> next_book()));
+        buttonLast = this.addDrawableChild(new TexturedButtonWidget(30, 150, 20, 20, LAST_BOOK_ICON, (button) -> last_book()));
+
+        buttonGo = this.addDrawableChild(new TexturedButtonWidget(118, 5, 20, 20, RENAME_BOOK_ICON, (button) -> {
+            if (!this.bookNameField.getText().isEmpty()) { DATA = new NotebookData(new String[1], getBookNameText() + ".json"); }}
         ));
+
+        initBookSwitching(0);
 
         this.updatePageButtons();
         this.cursorIndex = readPage(pageIndex).length();
